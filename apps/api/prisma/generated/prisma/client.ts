@@ -105,6 +105,11 @@ export type ApartmentFeePricing = Prisma.ApartmentFeePricingModel
  */
 export type Room = Prisma.RoomModel
 /**
+ * Model RoomFacility
+ * 
+ */
+export type RoomFacility = Prisma.RoomFacilityModel
+/**
  * Model RoomPricingPlan
  * 
  */

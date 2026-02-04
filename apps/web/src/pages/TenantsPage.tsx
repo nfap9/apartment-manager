@@ -131,15 +131,29 @@ export function TenantsPage() {
         confirmLoading={saving}
         destroyOnClose
       >
-        <Form form={form} layout="vertical">
-          <Form.Item label="姓名" name="name" rules={[{ required: true, message: '请输入姓名' }]}>
-            <Input />
+        <Form form={form} layout="vertical" style={{ marginTop: 16 }}>
+          <Form.Item 
+            label="姓名" 
+            name="name" 
+            rules={[{ required: true, message: '请输入姓名' }]}
+            style={{ marginBottom: 16 }}
+          >
+            <Input placeholder="请输入租客姓名" />
           </Form.Item>
-          <Form.Item label="手机号" name="phone" rules={[{ required: true, message: '请输入手机号' }]}>
-            <Input />
+          <Form.Item 
+            label="手机号" 
+            name="phone" 
+            rules={[{ required: true, message: '请输入手机号' }]}
+            style={{ marginBottom: 16 }}
+          >
+            <Input placeholder="请输入手机号" />
           </Form.Item>
-          <Form.Item label="身份证号" name="idNumber">
-            <Input />
+          <Form.Item 
+            label="身份证号" 
+            name="idNumber"
+            style={{ marginBottom: 0 }}
+          >
+            <Input placeholder="选填" />
           </Form.Item>
         </Form>
       </Modal>

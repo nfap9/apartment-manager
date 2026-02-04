@@ -248,7 +248,14 @@ orgRouter.put(
       throw new HttpError(404, 'ROLE_NOT_FOUND', '角色不存在');
     }
 
-    const permissions = await prisma.permission.findMany({ where: { key: { in: body.permissionKeys } } });
+    // 如果是管理员角色，强制保留组织管理和角色管理权限
+    const isAdminRole = role.name === 'Admin' && role.isSystem;
+    const requiredPermissions = isAdminRole ? ['org.manage', 'org.role.manage'] : [];
+    
+    // 确保必需权限包含在请求的权限列表中
+    const finalPermissionKeys = [...new Set([...body.permissionKeys, ...requiredPermissions])];
+
+    const permissions = await prisma.permission.findMany({ where: { key: { in: finalPermissionKeys } } });
     const permissionIds = permissions.map((p) => p.id);
 
     await prisma.$transaction(async (tx) => {

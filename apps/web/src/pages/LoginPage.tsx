@@ -52,24 +52,26 @@ export function LoginPage() {
             <Typography.Text type="secondary">手机号 + 密码</Typography.Text>
           </div>
 
-          <Form layout="vertical" onFinish={onFinish} requiredMark={false}>
+          <Form layout="vertical" onFinish={onFinish} requiredMark={false} style={{ marginTop: 8 }}>
             <Form.Item
               label="手机号"
               name="phone"
               rules={[{ required: true, message: '请输入手机号' }]}
+              style={{ marginBottom: 16 }}
             >
-              <Input placeholder="例如：13800000000" autoComplete="username" />
+              <Input placeholder="例如：13800000000" autoComplete="username" size="large" />
             </Form.Item>
 
             <Form.Item
               label="密码"
               name="password"
               rules={[{ required: true, message: '请输入密码' }]}
+              style={{ marginBottom: 20 }}
             >
-              <Input.Password placeholder="请输入密码" autoComplete="current-password" />
+              <Input.Password placeholder="请输入密码" autoComplete="current-password" size="large" />
             </Form.Item>
 
-            <Button type="primary" htmlType="submit" block loading={loading}>
+            <Button type="primary" htmlType="submit" block loading={loading} size="large">
               登录
             </Button>
           </Form>

@@ -3,18 +3,22 @@ import type { AxiosError } from 'axios';
 import {
   Button,
   Card,
-  Checkbox,
+  Col,
   Form,
   Input,
+  List,
   Modal,
+  Row,
   Select,
   Space,
   Table,
   Tabs,
   Tag,
+  Tree,
   Typography,
   message,
 } from 'antd';
+import type { DataNode } from 'antd/es/tree';
 import { useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -80,6 +84,34 @@ export function OrgPage() {
   const permissions = permissionsQuery.data?.permissions ?? [];
   const members = membersQuery.data?.members ?? [];
 
+  const permissionLabelByKey = useMemo(
+    () => ({
+      'org.manage': '组织管理',
+      'org.invite': '邀请成员',
+      'org.role.manage': '角色管理',
+      'org.member.manage': '成员管理',
+      'apartment.read': '查看公寓',
+      'apartment.write': '编辑公寓',
+      'apartment.upstream.read': '查看上游公寓',
+      'apartment.upstream.write': '编辑上游公寓',
+      'room.read': '查看房间',
+      'room.write': '编辑房间',
+      'room.pricing.manage': '房间定价管理',
+      'tenant.read': '查看租客',
+      'tenant.write': '编辑租客',
+      'lease.read': '查看租约',
+      'lease.write': '编辑租约',
+      'billing.read': '查看账单',
+      'billing.manage': '账单管理',
+      'notification.read': '查看通知',
+      'dashboard.read': '查看看板',
+    }),
+    [],
+  );
+
+  const getPermissionLabel = (perm: Permission) =>
+    perm.description?.trim() || (permissionLabelByKey as Record<string, string>)[perm.key] || '未配置权限名称';
+
   const [createRoleOpen, setCreateRoleOpen] = useState(false);
   const [createRoleSaving, setCreateRoleSaving] = useState(false);
   const [createRoleForm] = Form.useForm<{ name: string; description?: string }>();
@@ -87,6 +119,119 @@ export function OrgPage() {
   const [selectedRoleId, setSelectedRoleId] = useState<string | null>(null);
   const [rolePermKeys, setRolePermKeys] = useState<string[]>([]);
   const [savingPerms, setSavingPerms] = useState(false);
+
+  // 获取当前选中的角色信息
+  const selectedRole = useMemo(() => {
+    return roles.find((r) => r.id === selectedRoleId) ?? null;
+  }, [roles, selectedRoleId]);
+
+  // 判断是否是管理员角色
+  const isAdminRole = selectedRole?.name === 'Admin' && selectedRole?.isSystem;
+  // 管理员角色必须保留的权限
+  const requiredPermissions = ['org.manage', 'org.role.manage'];
+
+  // 构建权限树结构
+  const permissionTree = useMemo<DataNode[]>(() => {
+    const moduleMap = new Map<string, { label: string; children: Permission[] }>();
+
+    permissions.forEach((perm) => {
+      const parts = perm.key.split('.');
+      const moduleKey = parts[0]; // 获取模块名，如 'org', 'apartment', 'room' 等
+
+      if (!moduleMap.has(moduleKey)) {
+        const moduleLabels: Record<string, string> = {
+          org: '组织管理',
+          apartment: '公寓管理',
+          room: '房间管理',
+          tenant: '租客管理',
+          lease: '租约管理',
+          billing: '账单管理',
+          notification: '通知管理',
+          dashboard: '看板管理',
+        };
+        moduleMap.set(moduleKey, {
+          label: moduleLabels[moduleKey] || moduleKey,
+          children: [],
+        });
+      }
+
+      moduleMap.get(moduleKey)!.children.push(perm);
+    });
+
+    return Array.from(moduleMap.entries()).map(([moduleKey, { label, children }]) => ({
+      title: label,
+      key: `module-${moduleKey}`,
+      children: children.map((perm) => ({
+        title: getPermissionLabel(perm),
+        key: perm.key,
+        isLeaf: true,
+        // 如果是管理员角色且是必需权限，则禁用取消操作
+        disabled: isAdminRole && requiredPermissions.includes(perm.key),
+      })),
+    }));
+  }, [permissions, permissionLabelByKey, isAdminRole, requiredPermissions]);
+
+  // 获取所有子节点的权限键
+  const getChildrenKeys = (node: DataNode): string[] => {
+    if (node.isLeaf) {
+      return [node.key as string];
+    }
+    return node.children?.flatMap(getChildrenKeys) ?? [];
+  };
+
+  // 处理树节点勾选
+  const onTreeCheck = (checkedKeys: React.Key[] | { checked: React.Key[]; halfChecked: React.Key[] }) => {
+    const checked = Array.isArray(checkedKeys) ? checkedKeys : checkedKeys.checked;
+    const allCheckedKeys = new Set<string>();
+
+    // 处理所有选中的节点
+    checked.forEach((key) => {
+      const keyStr = key as string;
+      if (keyStr.startsWith('module-')) {
+        // 如果是模块节点，添加所有子权限
+        const moduleNode = permissionTree.find((n) => n.key === keyStr);
+        if (moduleNode) {
+          const childrenKeys = getChildrenKeys(moduleNode);
+          childrenKeys.forEach((k) => allCheckedKeys.add(k));
+        }
+      } else {
+        // 如果是权限节点，直接添加
+        allCheckedKeys.add(keyStr);
+      }
+    });
+
+    // 如果是管理员角色，强制保留必需权限
+    if (isAdminRole) {
+      requiredPermissions.forEach((perm) => allCheckedKeys.add(perm));
+    }
+
+    setRolePermKeys(Array.from(allCheckedKeys));
+  };
+
+  // 计算应该选中的树节点键（包括模块节点）
+  const checkedTreeKeys = useMemo(() => {
+    const checked = new Set<React.Key>();
+
+    // 检查每个模块是否所有子权限都被选中
+    permissionTree.forEach((moduleNode) => {
+      const childrenKeys = getChildrenKeys(moduleNode);
+      const allChildrenChecked = childrenKeys.every((k) => rolePermKeys.includes(k));
+
+      if (allChildrenChecked && childrenKeys.length > 0) {
+        // 所有子权限都被选中，选中模块节点
+        checked.add(moduleNode.key);
+      } else {
+        // 部分选中或未选中，只添加被选中的子节点
+        childrenKeys.forEach((k) => {
+          if (rolePermKeys.includes(k)) {
+            checked.add(k);
+          }
+        });
+      }
+    });
+
+    return Array.from(checked);
+  }, [rolePermKeys, permissionTree]);
 
   const [inviteOpen, setInviteOpen] = useState(false);
   const [inviteSaving, setInviteSaving] = useState(false);
@@ -235,12 +380,20 @@ export function OrgPage() {
                         confirmLoading={inviteSaving}
                         destroyOnClose
                       >
-                        <Form form={inviteForm} layout="vertical">
-                          <Form.Item label="最大使用次数(可选)" name="maxUses">
-                            <Input type="number" />
+                        <Form form={inviteForm} layout="vertical" style={{ marginTop: 16 }}>
+                          <Form.Item 
+                            label="最大使用次数(可选)" 
+                            name="maxUses"
+                            style={{ marginBottom: 16 }}
+                          >
+                            <Input type="number" placeholder="留空表示无限制" />
                           </Form.Item>
-                          <Form.Item label="有效期(天，可选)" name="expiresInDays">
-                            <Input type="number" />
+                          <Form.Item 
+                            label="有效期(天，可选)" 
+                            name="expiresInDays"
+                            style={{ marginBottom: 0 }}
+                          >
+                            <Input type="number" placeholder="留空表示永不过期" />
                           </Form.Item>
                         </Form>
                       </Modal>
@@ -256,41 +409,76 @@ export function OrgPage() {
                   label: '角色与权限',
                   children: (
                     <Space direction="vertical" style={{ width: '100%' }} size={16}>
-                      <Space>
-                        <Button type="primary" onClick={() => setCreateRoleOpen(true)}>
-                          新建角色
-                        </Button>
-                        <Select
-                          placeholder="选择角色"
-                          style={{ width: 260 }}
-                          options={roles.map((r) => ({ value: r.id, label: r.name }))}
-                          value={selectedRoleId ?? undefined}
-                          onChange={(v) => {
-                            setSelectedRoleId(v);
-                            void loadRolePermissions(v);
-                          }}
-                          loading={rolesQuery.isLoading}
-                        />
-                        <Button disabled={!selectedRoleId} onClick={onSaveRolePerms} loading={savingPerms}>
-                          保存权限
-                        </Button>
-                      </Space>
+                      <Button type="primary" onClick={() => setCreateRoleOpen(true)}>
+                        新建角色
+                      </Button>
 
-                      <Card size="small" title="权限列表" loading={permissionsQuery.isLoading}>
-                        <Checkbox.Group
-                          style={{ width: '100%' }}
-                          value={rolePermKeys}
-                          onChange={(vals) => setRolePermKeys(vals as string[])}
-                        >
-                          <Space direction="vertical" style={{ width: '100%' }}>
-                            {permissions.map((p) => (
-                              <Checkbox key={p.key} value={p.key}>
-                                <Typography.Text code>{p.key}</Typography.Text>
-                              </Checkbox>
-                            ))}
-                          </Space>
-                        </Checkbox.Group>
-                      </Card>
+                      <Row gutter={16}>
+                        <Col span={8}>
+                          <Card
+                            title="角色列表"
+                            size="small"
+                            loading={rolesQuery.isLoading}
+                            style={{ height: '600px', overflow: 'auto' }}
+                          >
+                            <List
+                              dataSource={roles}
+                              renderItem={(role) => (
+                                <List.Item
+                                  style={{
+                                    cursor: 'pointer',
+                                    backgroundColor: selectedRoleId === role.id ? '#e6f7ff' : 'transparent',
+                                    padding: '12px',
+                                    borderRadius: '4px',
+                                    marginBottom: '8px',
+                                  }}
+                                  onClick={() => {
+                                    setSelectedRoleId(role.id);
+                                    void loadRolePermissions(role.id);
+                                  }}
+                                >
+                                  <List.Item.Meta
+                                    title={
+                                      <Space>
+                                        <Typography.Text strong>{role.name}</Typography.Text>
+                                        {role.isSystem && <Tag color="blue">系统</Tag>}
+                                      </Space>
+                                    }
+                                    description={role.description || '无描述'}
+                                  />
+                                </List.Item>
+                              )}
+                            />
+                          </Card>
+                        </Col>
+                        <Col span={16}>
+                          <Card
+                            title={selectedRoleId ? '权限配置' : '请选择角色'}
+                            size="small"
+                            loading={permissionsQuery.isLoading}
+                            extra={
+                              selectedRoleId ? (
+                                <Button type="primary" onClick={onSaveRolePerms} loading={savingPerms}>
+                                  保存权限
+                                </Button>
+                              ) : null
+                            }
+                            style={{ height: '600px', overflow: 'auto' }}
+                          >
+                            {selectedRoleId ? (
+                              <Tree
+                                checkable
+                                checkedKeys={checkedTreeKeys}
+                                treeData={permissionTree}
+                                onCheck={onTreeCheck}
+                                style={{ width: '100%' }}
+                              />
+                            ) : (
+                              <Typography.Text type="secondary">请从左侧选择一个角色来配置权限</Typography.Text>
+                            )}
+                          </Card>
+                        </Col>
+                      </Row>
 
                       <Modal
                         open={createRoleOpen}
@@ -300,12 +488,21 @@ export function OrgPage() {
                         confirmLoading={createRoleSaving}
                         destroyOnClose
                       >
-                        <Form form={createRoleForm} layout="vertical">
-                          <Form.Item label="名称" name="name" rules={[{ required: true, message: '请输入名称' }]}>
-                            <Input />
+                        <Form form={createRoleForm} layout="vertical" style={{ marginTop: 16 }}>
+                          <Form.Item 
+                            label="名称" 
+                            name="name" 
+                            rules={[{ required: true, message: '请输入名称' }]}
+                            style={{ marginBottom: 16 }}
+                          >
+                            <Input placeholder="请输入角色名称" />
                           </Form.Item>
-                          <Form.Item label="描述" name="description">
-                            <Input />
+                          <Form.Item 
+                            label="描述" 
+                            name="description"
+                            style={{ marginBottom: 0 }}
+                          >
+                            <Input placeholder="选填" />
                           </Form.Item>
                         </Form>
                       </Modal>

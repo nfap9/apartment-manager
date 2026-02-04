@@ -397,6 +397,7 @@ export const ModelName = {
   ApartmentUpstream: 'ApartmentUpstream',
   ApartmentFeePricing: 'ApartmentFeePricing',
   Room: 'Room',
+  RoomFacility: 'RoomFacility',
   RoomPricingPlan: 'RoomPricingPlan',
   Tenant: 'Tenant',
   Lease: 'Lease',
@@ -420,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "organization" | "membership" | "role" | "permission" | "rolePermission" | "membershipRole" | "orgInvite" | "orgInviteUse" | "apartment" | "apartmentUpstream" | "apartmentFeePricing" | "room" | "roomPricingPlan" | "tenant" | "lease" | "leaseCharge" | "invoice" | "invoiceItem" | "notification" | "auditLog"
+    modelProps: "user" | "organization" | "membership" | "role" | "permission" | "rolePermission" | "membershipRole" | "orgInvite" | "orgInviteUse" | "apartment" | "apartmentUpstream" | "apartmentFeePricing" | "room" | "roomFacility" | "roomPricingPlan" | "tenant" | "lease" | "leaseCharge" | "invoice" | "invoiceItem" | "notification" | "auditLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1386,6 +1387,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    RoomFacility: {
+      payload: Prisma.$RoomFacilityPayload<ExtArgs>
+      fields: Prisma.RoomFacilityFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RoomFacilityFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomFacilityPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RoomFacilityFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomFacilityPayload>
+        }
+        findFirst: {
+          args: Prisma.RoomFacilityFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomFacilityPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RoomFacilityFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomFacilityPayload>
+        }
+        findMany: {
+          args: Prisma.RoomFacilityFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomFacilityPayload>[]
+        }
+        create: {
+          args: Prisma.RoomFacilityCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomFacilityPayload>
+        }
+        createMany: {
+          args: Prisma.RoomFacilityCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RoomFacilityCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomFacilityPayload>[]
+        }
+        delete: {
+          args: Prisma.RoomFacilityDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomFacilityPayload>
+        }
+        update: {
+          args: Prisma.RoomFacilityUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomFacilityPayload>
+        }
+        deleteMany: {
+          args: Prisma.RoomFacilityDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RoomFacilityUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RoomFacilityUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomFacilityPayload>[]
+        }
+        upsert: {
+          args: Prisma.RoomFacilityUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomFacilityPayload>
+        }
+        aggregate: {
+          args: Prisma.RoomFacilityAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRoomFacility>
+        }
+        groupBy: {
+          args: Prisma.RoomFacilityGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoomFacilityGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RoomFacilityCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoomFacilityCountAggregateOutputType> | number
+        }
+      }
+    }
     RoomPricingPlan: {
       payload: Prisma.$RoomPricingPlanPayload<ExtArgs>
       fields: Prisma.RoomPricingPlanFieldRefs
@@ -2170,13 +2245,27 @@ export const RoomScalarFieldEnum = {
   name: 'name',
   layout: 'layout',
   area: 'area',
-  facilities: 'facilities',
+  notes: 'notes',
   isActive: 'isActive',
+  isRented: 'isRented',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type RoomScalarFieldEnum = (typeof RoomScalarFieldEnum)[keyof typeof RoomScalarFieldEnum]
+
+
+export const RoomFacilityScalarFieldEnum = {
+  id: 'id',
+  roomId: 'roomId',
+  name: 'name',
+  quantity: 'quantity',
+  valueCents: 'valueCents',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RoomFacilityScalarFieldEnum = (typeof RoomFacilityScalarFieldEnum)[keyof typeof RoomFacilityScalarFieldEnum]
 
 
 export const RoomPricingPlanScalarFieldEnum = {
@@ -2482,20 +2571,6 @@ export type ListEnumFeeModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
 
 
 /**
- * Reference to a field of type 'Json'
- */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-/**
- * Reference to a field of type 'QueryMode'
- */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-    
-
-
-/**
  * Reference to a field of type 'LeaseStatus'
  */
 export type EnumLeaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeaseStatus'>
@@ -2562,6 +2637,20 @@ export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
  * Reference to a field of type 'NotificationType[]'
  */
 export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 /**
@@ -2672,6 +2761,7 @@ export type GlobalOmitConfig = {
   apartmentUpstream?: Prisma.ApartmentUpstreamOmit
   apartmentFeePricing?: Prisma.ApartmentFeePricingOmit
   room?: Prisma.RoomOmit
+  roomFacility?: Prisma.RoomFacilityOmit
   roomPricingPlan?: Prisma.RoomPricingPlanOmit
   tenant?: Prisma.TenantOmit
   lease?: Prisma.LeaseOmit

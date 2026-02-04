@@ -100,7 +100,7 @@ export const openapi = {
     '/orgs/{orgId}/invoices': { get: { summary: '账单列表', responses: { 200: { description: 'OK' } } } },
     '/orgs/{orgId}/invoices/{invoiceId}': { get: { summary: '账单详情', responses: { 200: { description: 'OK' } } } },
     '/orgs/{orgId}/invoices/{invoiceId}/items/{itemId}/confirm-reading': {
-      post: { summary: '抄表确认', responses: { 200: { description: 'OK' } } },
+      post: { summary: '确认读数', responses: { 200: { description: 'OK' } } },
     },
 
     '/orgs/{orgId}/notifications': { get: { summary: '站内通知列表', responses: { 200: { description: 'OK' } } } },

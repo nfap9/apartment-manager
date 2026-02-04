@@ -221,7 +221,7 @@ export async function confirmInvoiceItemReading(params: {
   });
 
   if (!item) throw new HttpError(404, 'INVOICE_ITEM_NOT_FOUND', '账单明细不存在');
-  if (item.status !== 'PENDING_READING') throw new HttpError(400, 'INVALID_STATUS', '该明细不需要抄表确认');
+  if (item.status !== 'PENDING_READING') throw new HttpError(400, 'INVALID_STATUS', '该明细不需要记录读数');
   if (item.unitPriceCents == null) throw new HttpError(400, 'INVALID_ITEM', '缺少 unitPriceCents');
 
   const meterStart = params.meterStart ?? 0;

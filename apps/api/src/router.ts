@@ -8,6 +8,7 @@ import { dashboardRouter } from './modules/dashboard/dashboard.router';
 import { leaseRouter } from './modules/lease/lease.router';
 import { notificationRouter } from './modules/notification/notification.router';
 import { orgRouter } from './modules/org/org.router';
+import { signingRouter } from './modules/signing/signing.router';
 import { tenantRouter } from './modules/tenant/tenant.router';
 import { openapi } from './openapi';
 
@@ -25,5 +26,6 @@ router.use('/orgs', billingRouter);
 router.use('/orgs', dashboardRouter);
 router.use('/orgs', tenantRouter);
 router.use('/orgs', leaseRouter);
+router.use('/orgs', signingRouter);
 router.use('/orgs', notificationRouter);
 

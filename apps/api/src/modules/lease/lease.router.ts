@@ -46,10 +46,10 @@ const createLeaseSchema = z
 function validateCharges(charges: z.infer<typeof chargeSchema>[]) {
   for (const it of charges) {
     if (it.mode === 'FIXED' && (it.fixedAmountCents == null || it.fixedAmountCents < 0)) {
-      throw new HttpError(400, 'INVALID_CHARGE', `杂费 ${it.name} 固定收费必须提供 fixedAmountCents`);
+      throw new HttpError(400, 'INVALID_CHARGE', `费用 ${it.name} 固定计费必须提供 fixedAmountCents`);
     }
     if (it.mode === 'METERED' && (it.unitPriceCents == null || it.unitPriceCents < 0)) {
-      throw new HttpError(400, 'INVALID_CHARGE', `杂费 ${it.name} 抄表计费必须提供 unitPriceCents`);
+      throw new HttpError(400, 'INVALID_CHARGE', `费用 ${it.name} 按用量计费必须提供 unitPriceCents`);
     }
   }
 }
@@ -168,6 +168,12 @@ leaseRouter.post('/:orgId/leases', requirePermission('lease.write'), async (req,
       });
     }
 
+    // 更新房间为已租出状态
+    await tx.room.update({
+      where: { id: body.roomId },
+      data: { isRented: true },
+    });
+
     return created;
   });
 
@@ -193,7 +199,7 @@ leaseRouter.put('/:orgId/leases/:leaseId', requirePermission('lease.write'), asy
 
   const lease = await prisma.lease.findFirst({
     where: { id: leaseId, organizationId: orgId },
-    select: { id: true, roomId: true, startDate: true, endDate: true },
+    select: { id: true, roomId: true, startDate: true, endDate: true, status: true },
   });
   if (!lease) throw new HttpError(404, 'LEASE_NOT_FOUND', '租约不存在');
 
@@ -205,13 +211,27 @@ leaseRouter.put('/:orgId/leases/:leaseId', requirePermission('lease.write'), asy
 
   await assertNoOverlappingLease(orgId, lease.roomId, nextStart, nextEnd, leaseId);
 
-  const updated = await prisma.lease.update({
-    where: { id: leaseId },
-    data: {
-      status: body.status,
-      endDate: body.endDate,
-      notes: body.notes,
-    },
+  const updated = await prisma.$transaction(async (tx) => {
+    const nextLease = await tx.lease.update({
+      where: { id: leaseId },
+      data: {
+        status: body.status,
+        endDate: body.endDate,
+        notes: body.notes,
+      },
+    });
+
+    // 根据该房间是否存在 ACTIVE/DRAFT 租约，自动同步房间出租状态
+    const activeLeaseCount = await tx.lease.count({
+      where: { roomId: lease.roomId, status: { in: ['ACTIVE', 'DRAFT'] } },
+    });
+    const shouldBeRented = activeLeaseCount > 0;
+    await tx.room.update({
+      where: { id: lease.roomId },
+      data: { isRented: shouldBeRented },
+    });
+
+    return nextLease;
   });
 
   return res.json({ lease: updated });

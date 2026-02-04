@@ -134,13 +134,57 @@ export function InvoicesPage() {
 
   const itemColumns: ColumnsType<InvoiceItem> = useMemo(
     () => [
-      { title: '项目', dataIndex: 'name' },
+      { title: '项目', dataIndex: 'name', width: 120 },
       {
-        title: '状态',
-        dataIndex: 'status',
-        width: 120,
-        render: (v: InvoiceItem['status']) =>
-          v === 'PENDING_READING' ? <Tag color="orange">待抄表</Tag> : <Tag color="green">已确认</Tag>,
+        title: '计费模式',
+        dataIndex: 'mode',
+        width: 100,
+        render: (v: InvoiceItem['mode']) => {
+          if (!v) return '-';
+          return v === 'FIXED' ? <Tag>固定计费</Tag> : <Tag color="blue">按用量计费</Tag>;
+        },
+      },
+      {
+        title: '读数',
+        key: 'reading',
+        width: 150,
+        render: (_: unknown, item: InvoiceItem) => {
+          if (item.mode === 'METERED') {
+            if (item.status === 'PENDING_READING') {
+              return <Typography.Text type="warning">待记录读数</Typography.Text>;
+            }
+            if (item.meterStart != null && item.meterEnd != null) {
+              return (
+                <Typography.Text>
+                  {item.meterStart.toFixed(2)} → {item.meterEnd.toFixed(2)} {item.unitName ?? ''}
+                </Typography.Text>
+              );
+            }
+          }
+          return '-';
+        },
+      },
+      {
+        title: '用量',
+        dataIndex: 'quantity',
+        width: 100,
+        render: (v: number | null | undefined, item: InvoiceItem) => {
+          if (item.mode === 'METERED' && v != null) {
+            return `${v.toFixed(2)} ${item.unitName ?? ''}`;
+          }
+          return '-';
+        },
+      },
+      {
+        title: '单价',
+        key: 'unitPrice',
+        width: 100,
+        render: (_: unknown, item: InvoiceItem) => {
+          if (item.mode === 'METERED' && item.unitPriceCents != null) {
+            return `¥${(item.unitPriceCents / 100).toFixed(2)}/${item.unitName ?? '单位'}`;
+          }
+          return '-';
+        },
       },
       {
         title: '金额',
@@ -149,9 +193,16 @@ export function InvoicesPage() {
         render: (v: number | null | undefined) => (v == null ? '-' : `¥${(v / 100).toFixed(2)}`),
       },
       {
+        title: '状态',
+        dataIndex: 'status',
+        width: 100,
+        render: (v: InvoiceItem['status']) =>
+          v === 'PENDING_READING' ? <Tag color="orange">待记录读数</Tag> : <Tag color="green">已确认</Tag>,
+      },
+      {
         title: '操作',
         key: 'actions',
-        width: 220,
+        width: 280,
         render: (_: unknown, item: InvoiceItem) => {
           if (!canManage) return null;
           if (item.status !== 'PENDING_READING') return null;
@@ -259,7 +310,7 @@ function ConfirmReadingInline(props: { orgId: string; invoiceId: string; item: I
         values,
       );
 
-      message.success('已确认抄表');
+      message.success('已确认读数');
       await qc.invalidateQueries({ queryKey: ['invoice', props.orgId, props.invoiceId] });
       await qc.invalidateQueries({ queryKey: ['invoices', props.orgId] });
     } catch (err) {
@@ -270,20 +321,31 @@ function ConfirmReadingInline(props: { orgId: string; invoiceId: string; item: I
     }
   };
 
+  const unitName = props.item.unitName ?? '度';
+  const isWater = props.item.name.includes('水');
+  const isElectricity = props.item.name.includes('电');
+
   return (
-    <Form form={form} layout="inline">
-      <Form.Item name="meterStart" initialValue={props.item.meterStart ?? 0}>
-        <InputNumber min={0} placeholder="起度" />
+    <Form form={form} layout="inline" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <Form.Item
+        name="meterStart"
+        label={isWater ? '水表起度' : isElectricity ? '电表起度' : '起度'}
+        initialValue={props.item.meterStart ?? 0}
+        style={{ margin: 0 }}
+      >
+        <InputNumber min={0} precision={2} placeholder={`起度(${unitName})`} style={{ width: 120 }} />
       </Form.Item>
       <Form.Item
         name="meterEnd"
+        label={isWater ? '水表止度' : isElectricity ? '电表止度' : '止度'}
         initialValue={props.item.meterEnd ?? undefined}
-        rules={[{ required: true, message: '请输入止度' }]}
+        rules={[{ required: true, message: `请输入止度(${unitName})` }]}
+        style={{ margin: 0 }}
       >
-        <InputNumber min={0} placeholder="止度" />
+        <InputNumber min={0} precision={2} placeholder={`止度(${unitName})`} style={{ width: 120 }} />
       </Form.Item>
       <Button size="small" type="primary" onClick={onSubmit} loading={loading}>
-        确认
+        确认读数
       </Button>
     </Form>
   );

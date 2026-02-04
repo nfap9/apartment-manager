@@ -116,18 +116,36 @@ export function ApartmentsPage() {
         confirmLoading={saving}
         destroyOnClose
       >
-        <Form form={form} layout="vertical">
-          <Form.Item label="名称" name="name" rules={[{ required: true, message: '请输入名称' }]}>
-            <Input />
+        <Form form={form} layout="vertical" style={{ marginTop: 16 }}>
+          <Form.Item 
+            label="名称" 
+            name="name" 
+            rules={[{ required: true, message: '请输入名称' }]}
+            style={{ marginBottom: 16 }}
+          >
+            <Input placeholder="请输入公寓名称" />
           </Form.Item>
-          <Form.Item label="地址" name="address" rules={[{ required: true, message: '请输入地址' }]}>
-            <Input />
+          <Form.Item 
+            label="地址" 
+            name="address" 
+            rules={[{ required: true, message: '请输入地址' }]}
+            style={{ marginBottom: 16 }}
+          >
+            <Input placeholder="请输入公寓地址" />
           </Form.Item>
-          <Form.Item label="总面积" name="totalArea">
-            <InputNumber min={0} style={{ width: '100%' }} />
+          <Form.Item 
+            label="总面积(㎡)" 
+            name="totalArea"
+            style={{ marginBottom: 16 }}
+          >
+            <InputNumber min={0} style={{ width: '100%' }} placeholder="选填" />
           </Form.Item>
-          <Form.Item label="楼层" name="floor">
-            <InputNumber style={{ width: '100%' }} />
+          <Form.Item 
+            label="楼层" 
+            name="floor"
+            style={{ marginBottom: 0 }}
+          >
+            <InputNumber style={{ width: '100%' }} placeholder="选填" />
           </Form.Item>
         </Form>
       </Modal>

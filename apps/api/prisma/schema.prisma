@@ -263,10 +263,12 @@ model Room {
   name        String
   layout      String?
   area        Float?
-  facilities  Json?
+  notes       String?
   isActive    Boolean @default(true)
+  isRented    Boolean @default(false)
 
   apartment    Apartment @relation(fields: [apartmentId], references: [id], onDelete: Cascade)
+  facilities   RoomFacility[]
   pricingPlans RoomPricingPlan[]
   leases       Lease[]
 
@@ -275,6 +277,22 @@ model Room {
 
   @@unique([apartmentId, name])
   @@index([apartmentId])
+}
+
+model RoomFacility {
+  id      String @id @default(uuid())
+  roomId  String
+  name    String
+  quantity Int @default(1)
+  valueCents Int @default(0)
+
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([roomId, name])
+  @@index([roomId])
 }
 
 model RoomPricingPlan {

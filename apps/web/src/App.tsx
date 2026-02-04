@@ -10,6 +10,7 @@ import { LeasesPage } from './pages/LeasesPage';
 import { LoginPage } from './pages/LoginPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { OrgPage } from './pages/OrgPage';
+import { SigningPage } from './pages/SigningPage';
 import { TenantsPage } from './pages/TenantsPage';
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/apartments/:apartmentId" element={<ApartmentDetailPage />} />
           <Route path="/tenants" element={<TenantsPage />} />
           <Route path="/leases" element={<LeasesPage />} />
+          <Route path="/signing" element={<SigningPage />} />
           <Route path="/invoices" element={<InvoicesPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/org" element={<OrgPage />} />

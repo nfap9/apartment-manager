@@ -83,6 +83,7 @@ export function AppLayout() {
   const menuItems = useMemo(() => {
     const all = [
       { key: '/dashboard', label: '看板', perm: 'dashboard.read' },
+      { key: '/signing', label: '✍️ 签约', perm: 'lease.write' },
       { key: '/apartments', label: '公寓', perm: 'apartment.read' },
       { key: '/tenants', label: '租客', perm: 'tenant.read' },
       { key: '/leases', label: '租约', perm: 'lease.read' },
@@ -116,8 +117,8 @@ export function AppLayout() {
   };
 
   return (
-    <Layout style={{ minHeight: '100%' }}>
-      <Sider width={220} theme="light">
+    <Layout style={{ height: '100vh', overflow: 'hidden' }}>
+      <Sider width={220} theme="light" style={{ overflow: 'auto' }}>
         <div style={{ padding: '16px 16px 8px' }}>
           <Typography.Title level={5} style={{ margin: 0 }}>
             公寓管理系统
@@ -131,7 +132,7 @@ export function AppLayout() {
         />
       </Sider>
 
-      <Layout>
+      <Layout style={{ minHeight: 0, overflow: 'hidden' }}>
         <Header style={{ background: '#fff', padding: '0 16px' }}>
           <Space style={{ width: '100%', justifyContent: 'space-between' }}>
             <Space>
@@ -158,7 +159,7 @@ export function AppLayout() {
           </Space>
         </Header>
 
-        <Content style={{ padding: 16 }}>
+        <Content style={{ padding: 16, overflow: 'auto', minHeight: 0 }}>
           <Outlet />
         </Content>
       </Layout>

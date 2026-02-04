@@ -40,7 +40,9 @@ export type RoomMinAggregateOutputType = {
   name: string | null
   layout: string | null
   area: number | null
+  notes: string | null
   isActive: boolean | null
+  isRented: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -51,7 +53,9 @@ export type RoomMaxAggregateOutputType = {
   name: string | null
   layout: string | null
   area: number | null
+  notes: string | null
   isActive: boolean | null
+  isRented: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,8 +66,9 @@ export type RoomCountAggregateOutputType = {
   name: number
   layout: number
   area: number
-  facilities: number
+  notes: number
   isActive: number
+  isRented: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -84,7 +89,9 @@ export type RoomMinAggregateInputType = {
   name?: true
   layout?: true
   area?: true
+  notes?: true
   isActive?: true
+  isRented?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -95,7 +102,9 @@ export type RoomMaxAggregateInputType = {
   name?: true
   layout?: true
   area?: true
+  notes?: true
   isActive?: true
+  isRented?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -106,8 +115,9 @@ export type RoomCountAggregateInputType = {
   name?: true
   layout?: true
   area?: true
-  facilities?: true
+  notes?: true
   isActive?: true
+  isRented?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -205,8 +215,9 @@ export type RoomGroupByOutputType = {
   name: string
   layout: string | null
   area: number | null
-  facilities: runtime.JsonValue | null
+  notes: string | null
   isActive: boolean
+  isRented: boolean
   createdAt: Date
   updatedAt: Date
   _count: RoomCountAggregateOutputType | null
@@ -240,11 +251,13 @@ export type RoomWhereInput = {
   name?: Prisma.StringFilter<"Room"> | string
   layout?: Prisma.StringNullableFilter<"Room"> | string | null
   area?: Prisma.FloatNullableFilter<"Room"> | number | null
-  facilities?: Prisma.JsonNullableFilter<"Room">
+  notes?: Prisma.StringNullableFilter<"Room"> | string | null
   isActive?: Prisma.BoolFilter<"Room"> | boolean
+  isRented?: Prisma.BoolFilter<"Room"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Room"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Room"> | Date | string
   apartment?: Prisma.XOR<Prisma.ApartmentScalarRelationFilter, Prisma.ApartmentWhereInput>
+  facilities?: Prisma.RoomFacilityListRelationFilter
   pricingPlans?: Prisma.RoomPricingPlanListRelationFilter
   leases?: Prisma.LeaseListRelationFilter
 }
@@ -255,11 +268,13 @@ export type RoomOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   layout?: Prisma.SortOrderInput | Prisma.SortOrder
   area?: Prisma.SortOrderInput | Prisma.SortOrder
-  facilities?: Prisma.SortOrderInput | Prisma.SortOrder
+  notes?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isRented?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   apartment?: Prisma.ApartmentOrderByWithRelationInput
+  facilities?: Prisma.RoomFacilityOrderByRelationAggregateInput
   pricingPlans?: Prisma.RoomPricingPlanOrderByRelationAggregateInput
   leases?: Prisma.LeaseOrderByRelationAggregateInput
 }
@@ -274,11 +289,13 @@ export type RoomWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Room"> | string
   layout?: Prisma.StringNullableFilter<"Room"> | string | null
   area?: Prisma.FloatNullableFilter<"Room"> | number | null
-  facilities?: Prisma.JsonNullableFilter<"Room">
+  notes?: Prisma.StringNullableFilter<"Room"> | string | null
   isActive?: Prisma.BoolFilter<"Room"> | boolean
+  isRented?: Prisma.BoolFilter<"Room"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Room"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Room"> | Date | string
   apartment?: Prisma.XOR<Prisma.ApartmentScalarRelationFilter, Prisma.ApartmentWhereInput>
+  facilities?: Prisma.RoomFacilityListRelationFilter
   pricingPlans?: Prisma.RoomPricingPlanListRelationFilter
   leases?: Prisma.LeaseListRelationFilter
 }, "id" | "apartmentId_name">
@@ -289,8 +306,9 @@ export type RoomOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   layout?: Prisma.SortOrderInput | Prisma.SortOrder
   area?: Prisma.SortOrderInput | Prisma.SortOrder
-  facilities?: Prisma.SortOrderInput | Prisma.SortOrder
+  notes?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isRented?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.RoomCountOrderByAggregateInput
@@ -309,8 +327,9 @@ export type RoomScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Room"> | string
   layout?: Prisma.StringNullableWithAggregatesFilter<"Room"> | string | null
   area?: Prisma.FloatNullableWithAggregatesFilter<"Room"> | number | null
-  facilities?: Prisma.JsonNullableWithAggregatesFilter<"Room">
+  notes?: Prisma.StringNullableWithAggregatesFilter<"Room"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"Room"> | boolean
+  isRented?: Prisma.BoolWithAggregatesFilter<"Room"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Room"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Room"> | Date | string
 }
@@ -320,11 +339,13 @@ export type RoomCreateInput = {
   name: string
   layout?: string | null
   area?: number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
   isActive?: boolean
+  isRented?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   apartment: Prisma.ApartmentCreateNestedOneWithoutRoomsInput
+  facilities?: Prisma.RoomFacilityCreateNestedManyWithoutRoomInput
   pricingPlans?: Prisma.RoomPricingPlanCreateNestedManyWithoutRoomInput
   leases?: Prisma.LeaseCreateNestedManyWithoutRoomInput
 }
@@ -335,10 +356,12 @@ export type RoomUncheckedCreateInput = {
   name: string
   layout?: string | null
   area?: number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
   isActive?: boolean
+  isRented?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  facilities?: Prisma.RoomFacilityUncheckedCreateNestedManyWithoutRoomInput
   pricingPlans?: Prisma.RoomPricingPlanUncheckedCreateNestedManyWithoutRoomInput
   leases?: Prisma.LeaseUncheckedCreateNestedManyWithoutRoomInput
 }
@@ -348,11 +371,13 @@ export type RoomUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   layout?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isRented?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   apartment?: Prisma.ApartmentUpdateOneRequiredWithoutRoomsNestedInput
+  facilities?: Prisma.RoomFacilityUpdateManyWithoutRoomNestedInput
   pricingPlans?: Prisma.RoomPricingPlanUpdateManyWithoutRoomNestedInput
   leases?: Prisma.LeaseUpdateManyWithoutRoomNestedInput
 }
@@ -363,10 +388,12 @@ export type RoomUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   layout?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isRented?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  facilities?: Prisma.RoomFacilityUncheckedUpdateManyWithoutRoomNestedInput
   pricingPlans?: Prisma.RoomPricingPlanUncheckedUpdateManyWithoutRoomNestedInput
   leases?: Prisma.LeaseUncheckedUpdateManyWithoutRoomNestedInput
 }
@@ -377,8 +404,9 @@ export type RoomCreateManyInput = {
   name: string
   layout?: string | null
   area?: number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
   isActive?: boolean
+  isRented?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -388,8 +416,9 @@ export type RoomUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   layout?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isRented?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -400,8 +429,9 @@ export type RoomUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   layout?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isRented?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -427,8 +457,9 @@ export type RoomCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   layout?: Prisma.SortOrder
   area?: Prisma.SortOrder
-  facilities?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isRented?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -443,7 +474,9 @@ export type RoomMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   layout?: Prisma.SortOrder
   area?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isRented?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -454,7 +487,9 @@ export type RoomMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   layout?: Prisma.SortOrder
   area?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isRented?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -510,6 +545,20 @@ export type RoomUncheckedUpdateManyWithoutApartmentNestedInput = {
   deleteMany?: Prisma.RoomScalarWhereInput | Prisma.RoomScalarWhereInput[]
 }
 
+export type RoomCreateNestedOneWithoutFacilitiesInput = {
+  create?: Prisma.XOR<Prisma.RoomCreateWithoutFacilitiesInput, Prisma.RoomUncheckedCreateWithoutFacilitiesInput>
+  connectOrCreate?: Prisma.RoomCreateOrConnectWithoutFacilitiesInput
+  connect?: Prisma.RoomWhereUniqueInput
+}
+
+export type RoomUpdateOneRequiredWithoutFacilitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.RoomCreateWithoutFacilitiesInput, Prisma.RoomUncheckedCreateWithoutFacilitiesInput>
+  connectOrCreate?: Prisma.RoomCreateOrConnectWithoutFacilitiesInput
+  upsert?: Prisma.RoomUpsertWithoutFacilitiesInput
+  connect?: Prisma.RoomWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RoomUpdateToOneWithWhereWithoutFacilitiesInput, Prisma.RoomUpdateWithoutFacilitiesInput>, Prisma.RoomUncheckedUpdateWithoutFacilitiesInput>
+}
+
 export type RoomCreateNestedOneWithoutPricingPlansInput = {
   create?: Prisma.XOR<Prisma.RoomCreateWithoutPricingPlansInput, Prisma.RoomUncheckedCreateWithoutPricingPlansInput>
   connectOrCreate?: Prisma.RoomCreateOrConnectWithoutPricingPlansInput
@@ -543,10 +592,12 @@ export type RoomCreateWithoutApartmentInput = {
   name: string
   layout?: string | null
   area?: number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
   isActive?: boolean
+  isRented?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  facilities?: Prisma.RoomFacilityCreateNestedManyWithoutRoomInput
   pricingPlans?: Prisma.RoomPricingPlanCreateNestedManyWithoutRoomInput
   leases?: Prisma.LeaseCreateNestedManyWithoutRoomInput
 }
@@ -556,10 +607,12 @@ export type RoomUncheckedCreateWithoutApartmentInput = {
   name: string
   layout?: string | null
   area?: number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
   isActive?: boolean
+  isRented?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  facilities?: Prisma.RoomFacilityUncheckedCreateNestedManyWithoutRoomInput
   pricingPlans?: Prisma.RoomPricingPlanUncheckedCreateNestedManyWithoutRoomInput
   leases?: Prisma.LeaseUncheckedCreateNestedManyWithoutRoomInput
 }
@@ -599,10 +652,87 @@ export type RoomScalarWhereInput = {
   name?: Prisma.StringFilter<"Room"> | string
   layout?: Prisma.StringNullableFilter<"Room"> | string | null
   area?: Prisma.FloatNullableFilter<"Room"> | number | null
-  facilities?: Prisma.JsonNullableFilter<"Room">
+  notes?: Prisma.StringNullableFilter<"Room"> | string | null
   isActive?: Prisma.BoolFilter<"Room"> | boolean
+  isRented?: Prisma.BoolFilter<"Room"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Room"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Room"> | Date | string
+}
+
+export type RoomCreateWithoutFacilitiesInput = {
+  id?: string
+  name: string
+  layout?: string | null
+  area?: number | null
+  notes?: string | null
+  isActive?: boolean
+  isRented?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  apartment: Prisma.ApartmentCreateNestedOneWithoutRoomsInput
+  pricingPlans?: Prisma.RoomPricingPlanCreateNestedManyWithoutRoomInput
+  leases?: Prisma.LeaseCreateNestedManyWithoutRoomInput
+}
+
+export type RoomUncheckedCreateWithoutFacilitiesInput = {
+  id?: string
+  apartmentId: string
+  name: string
+  layout?: string | null
+  area?: number | null
+  notes?: string | null
+  isActive?: boolean
+  isRented?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pricingPlans?: Prisma.RoomPricingPlanUncheckedCreateNestedManyWithoutRoomInput
+  leases?: Prisma.LeaseUncheckedCreateNestedManyWithoutRoomInput
+}
+
+export type RoomCreateOrConnectWithoutFacilitiesInput = {
+  where: Prisma.RoomWhereUniqueInput
+  create: Prisma.XOR<Prisma.RoomCreateWithoutFacilitiesInput, Prisma.RoomUncheckedCreateWithoutFacilitiesInput>
+}
+
+export type RoomUpsertWithoutFacilitiesInput = {
+  update: Prisma.XOR<Prisma.RoomUpdateWithoutFacilitiesInput, Prisma.RoomUncheckedUpdateWithoutFacilitiesInput>
+  create: Prisma.XOR<Prisma.RoomCreateWithoutFacilitiesInput, Prisma.RoomUncheckedCreateWithoutFacilitiesInput>
+  where?: Prisma.RoomWhereInput
+}
+
+export type RoomUpdateToOneWithWhereWithoutFacilitiesInput = {
+  where?: Prisma.RoomWhereInput
+  data: Prisma.XOR<Prisma.RoomUpdateWithoutFacilitiesInput, Prisma.RoomUncheckedUpdateWithoutFacilitiesInput>
+}
+
+export type RoomUpdateWithoutFacilitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  layout?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  area?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isRented?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  apartment?: Prisma.ApartmentUpdateOneRequiredWithoutRoomsNestedInput
+  pricingPlans?: Prisma.RoomPricingPlanUpdateManyWithoutRoomNestedInput
+  leases?: Prisma.LeaseUpdateManyWithoutRoomNestedInput
+}
+
+export type RoomUncheckedUpdateWithoutFacilitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  apartmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  layout?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  area?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isRented?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pricingPlans?: Prisma.RoomPricingPlanUncheckedUpdateManyWithoutRoomNestedInput
+  leases?: Prisma.LeaseUncheckedUpdateManyWithoutRoomNestedInput
 }
 
 export type RoomCreateWithoutPricingPlansInput = {
@@ -610,11 +740,13 @@ export type RoomCreateWithoutPricingPlansInput = {
   name: string
   layout?: string | null
   area?: number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
   isActive?: boolean
+  isRented?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   apartment: Prisma.ApartmentCreateNestedOneWithoutRoomsInput
+  facilities?: Prisma.RoomFacilityCreateNestedManyWithoutRoomInput
   leases?: Prisma.LeaseCreateNestedManyWithoutRoomInput
 }
 
@@ -624,10 +756,12 @@ export type RoomUncheckedCreateWithoutPricingPlansInput = {
   name: string
   layout?: string | null
   area?: number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
   isActive?: boolean
+  isRented?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  facilities?: Prisma.RoomFacilityUncheckedCreateNestedManyWithoutRoomInput
   leases?: Prisma.LeaseUncheckedCreateNestedManyWithoutRoomInput
 }
 
@@ -652,11 +786,13 @@ export type RoomUpdateWithoutPricingPlansInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   layout?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isRented?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   apartment?: Prisma.ApartmentUpdateOneRequiredWithoutRoomsNestedInput
+  facilities?: Prisma.RoomFacilityUpdateManyWithoutRoomNestedInput
   leases?: Prisma.LeaseUpdateManyWithoutRoomNestedInput
 }
 
@@ -666,10 +802,12 @@ export type RoomUncheckedUpdateWithoutPricingPlansInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   layout?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isRented?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  facilities?: Prisma.RoomFacilityUncheckedUpdateManyWithoutRoomNestedInput
   leases?: Prisma.LeaseUncheckedUpdateManyWithoutRoomNestedInput
 }
 
@@ -678,11 +816,13 @@ export type RoomCreateWithoutLeasesInput = {
   name: string
   layout?: string | null
   area?: number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
   isActive?: boolean
+  isRented?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   apartment: Prisma.ApartmentCreateNestedOneWithoutRoomsInput
+  facilities?: Prisma.RoomFacilityCreateNestedManyWithoutRoomInput
   pricingPlans?: Prisma.RoomPricingPlanCreateNestedManyWithoutRoomInput
 }
 
@@ -692,10 +832,12 @@ export type RoomUncheckedCreateWithoutLeasesInput = {
   name: string
   layout?: string | null
   area?: number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
   isActive?: boolean
+  isRented?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  facilities?: Prisma.RoomFacilityUncheckedCreateNestedManyWithoutRoomInput
   pricingPlans?: Prisma.RoomPricingPlanUncheckedCreateNestedManyWithoutRoomInput
 }
 
@@ -720,11 +862,13 @@ export type RoomUpdateWithoutLeasesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   layout?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isRented?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   apartment?: Prisma.ApartmentUpdateOneRequiredWithoutRoomsNestedInput
+  facilities?: Prisma.RoomFacilityUpdateManyWithoutRoomNestedInput
   pricingPlans?: Prisma.RoomPricingPlanUpdateManyWithoutRoomNestedInput
 }
 
@@ -734,10 +878,12 @@ export type RoomUncheckedUpdateWithoutLeasesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   layout?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isRented?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  facilities?: Prisma.RoomFacilityUncheckedUpdateManyWithoutRoomNestedInput
   pricingPlans?: Prisma.RoomPricingPlanUncheckedUpdateManyWithoutRoomNestedInput
 }
 
@@ -746,8 +892,9 @@ export type RoomCreateManyApartmentInput = {
   name: string
   layout?: string | null
   area?: number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
   isActive?: boolean
+  isRented?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -757,10 +904,12 @@ export type RoomUpdateWithoutApartmentInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   layout?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isRented?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  facilities?: Prisma.RoomFacilityUpdateManyWithoutRoomNestedInput
   pricingPlans?: Prisma.RoomPricingPlanUpdateManyWithoutRoomNestedInput
   leases?: Prisma.LeaseUpdateManyWithoutRoomNestedInput
 }
@@ -770,10 +919,12 @@ export type RoomUncheckedUpdateWithoutApartmentInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   layout?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isRented?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  facilities?: Prisma.RoomFacilityUncheckedUpdateManyWithoutRoomNestedInput
   pricingPlans?: Prisma.RoomPricingPlanUncheckedUpdateManyWithoutRoomNestedInput
   leases?: Prisma.LeaseUncheckedUpdateManyWithoutRoomNestedInput
 }
@@ -783,8 +934,9 @@ export type RoomUncheckedUpdateManyWithoutApartmentInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   layout?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  facilities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isRented?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -795,11 +947,13 @@ export type RoomUncheckedUpdateManyWithoutApartmentInput = {
  */
 
 export type RoomCountOutputType = {
+  facilities: number
   pricingPlans: number
   leases: number
 }
 
 export type RoomCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  facilities?: boolean | RoomCountOutputTypeCountFacilitiesArgs
   pricingPlans?: boolean | RoomCountOutputTypeCountPricingPlansArgs
   leases?: boolean | RoomCountOutputTypeCountLeasesArgs
 }
@@ -812,6 +966,13 @@ export type RoomCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the RoomCountOutputType
    */
   select?: Prisma.RoomCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * RoomCountOutputType without action
+ */
+export type RoomCountOutputTypeCountFacilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RoomFacilityWhereInput
 }
 
 /**
@@ -835,11 +996,13 @@ export type RoomSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   name?: boolean
   layout?: boolean
   area?: boolean
-  facilities?: boolean
+  notes?: boolean
   isActive?: boolean
+  isRented?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   apartment?: boolean | Prisma.ApartmentDefaultArgs<ExtArgs>
+  facilities?: boolean | Prisma.Room$facilitiesArgs<ExtArgs>
   pricingPlans?: boolean | Prisma.Room$pricingPlansArgs<ExtArgs>
   leases?: boolean | Prisma.Room$leasesArgs<ExtArgs>
   _count?: boolean | Prisma.RoomCountOutputTypeDefaultArgs<ExtArgs>
@@ -851,8 +1014,9 @@ export type RoomSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   layout?: boolean
   area?: boolean
-  facilities?: boolean
+  notes?: boolean
   isActive?: boolean
+  isRented?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   apartment?: boolean | Prisma.ApartmentDefaultArgs<ExtArgs>
@@ -864,8 +1028,9 @@ export type RoomSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   layout?: boolean
   area?: boolean
-  facilities?: boolean
+  notes?: boolean
   isActive?: boolean
+  isRented?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   apartment?: boolean | Prisma.ApartmentDefaultArgs<ExtArgs>
@@ -877,15 +1042,17 @@ export type RoomSelectScalar = {
   name?: boolean
   layout?: boolean
   area?: boolean
-  facilities?: boolean
+  notes?: boolean
   isActive?: boolean
+  isRented?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type RoomOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "apartmentId" | "name" | "layout" | "area" | "facilities" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["room"]>
+export type RoomOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "apartmentId" | "name" | "layout" | "area" | "notes" | "isActive" | "isRented" | "createdAt" | "updatedAt", ExtArgs["result"]["room"]>
 export type RoomInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   apartment?: boolean | Prisma.ApartmentDefaultArgs<ExtArgs>
+  facilities?: boolean | Prisma.Room$facilitiesArgs<ExtArgs>
   pricingPlans?: boolean | Prisma.Room$pricingPlansArgs<ExtArgs>
   leases?: boolean | Prisma.Room$leasesArgs<ExtArgs>
   _count?: boolean | Prisma.RoomCountOutputTypeDefaultArgs<ExtArgs>
@@ -901,6 +1068,7 @@ export type $RoomPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "Room"
   objects: {
     apartment: Prisma.$ApartmentPayload<ExtArgs>
+    facilities: Prisma.$RoomFacilityPayload<ExtArgs>[]
     pricingPlans: Prisma.$RoomPricingPlanPayload<ExtArgs>[]
     leases: Prisma.$LeasePayload<ExtArgs>[]
   }
@@ -910,8 +1078,9 @@ export type $RoomPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     name: string
     layout: string | null
     area: number | null
-    facilities: runtime.JsonValue | null
+    notes: string | null
     isActive: boolean
+    isRented: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["room"]>
@@ -1309,6 +1478,7 @@ readonly fields: RoomFieldRefs;
 export interface Prisma__RoomClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   apartment<T extends Prisma.ApartmentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ApartmentDefaultArgs<ExtArgs>>): Prisma.Prisma__ApartmentClient<runtime.Types.Result.GetResult<Prisma.$ApartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  facilities<T extends Prisma.Room$facilitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Room$facilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoomFacilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pricingPlans<T extends Prisma.Room$pricingPlansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Room$pricingPlansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoomPricingPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   leases<T extends Prisma.Room$leasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Room$leasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1345,8 +1515,9 @@ export interface RoomFieldRefs {
   readonly name: Prisma.FieldRef<"Room", 'String'>
   readonly layout: Prisma.FieldRef<"Room", 'String'>
   readonly area: Prisma.FieldRef<"Room", 'Float'>
-  readonly facilities: Prisma.FieldRef<"Room", 'Json'>
+  readonly notes: Prisma.FieldRef<"Room", 'String'>
   readonly isActive: Prisma.FieldRef<"Room", 'Boolean'>
+  readonly isRented: Prisma.FieldRef<"Room", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Room", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Room", 'DateTime'>
 }
@@ -1742,6 +1913,30 @@ export type RoomDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Rooms to delete.
    */
   limit?: number
+}
+
+/**
+ * Room.facilities
+ */
+export type Room$facilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RoomFacility
+   */
+  select?: Prisma.RoomFacilitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RoomFacility
+   */
+  omit?: Prisma.RoomFacilityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoomFacilityInclude<ExtArgs> | null
+  where?: Prisma.RoomFacilityWhereInput
+  orderBy?: Prisma.RoomFacilityOrderByWithRelationInput | Prisma.RoomFacilityOrderByWithRelationInput[]
+  cursor?: Prisma.RoomFacilityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RoomFacilityScalarFieldEnum | Prisma.RoomFacilityScalarFieldEnum[]
 }
 
 /**
