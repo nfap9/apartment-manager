@@ -1,0 +1,12 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# Allow build scripts for required native packages.
+# This is needed for tools like Prisma and esbuild.
+onlyBuiltDependencies:
+  - "@prisma/engines"
+  - "esbuild"
+  - "msgpackr-extract"
+  - "prisma"
+

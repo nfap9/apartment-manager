@@ -1,0 +1,149 @@
+import type { ColumnsType } from 'antd/es/table';
+import type { AxiosError } from 'axios';
+import { Button, Card, Form, Input, Modal, Space, Table, Typography, message } from 'antd';
+import { useMemo, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { api } from '../lib/api';
+import type { ApiErrorResponse } from '../lib/apiTypes';
+import { useAuthStore } from '../stores/auth';
+
+type Tenant = {
+  id: string;
+  name: string;
+  phone: string;
+  idNumber?: string | null;
+  createdAt: string;
+};
+
+type TenantsResponse = {
+  tenants: Tenant[];
+};
+
+export function TenantsPage() {
+  const orgId = useAuthStore((s) => s.activeOrgId);
+  const qc = useQueryClient();
+
+  const [q, setQ] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editing, setEditing] = useState<Tenant | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  const [form] = Form.useForm<{ name: string; phone: string; idNumber?: string | null }>();
+
+  const query = useQuery({
+    queryKey: ['tenants', orgId, q],
+    enabled: !!orgId,
+    queryFn: async () => {
+      const r = await api.get(`/api/orgs/${orgId}/tenants${q ? `?q=${encodeURIComponent(q)}` : ''}`);
+      return r.data as TenantsResponse;
+    },
+  });
+
+  const tenants = query.data?.tenants ?? [];
+
+  const columns: ColumnsType<Tenant> = useMemo(
+    () => [
+      { title: '姓名', dataIndex: 'name' },
+      { title: '手机号', dataIndex: 'phone', width: 140 },
+      { title: '身份证号', dataIndex: 'idNumber', width: 220 },
+      {
+        title: '操作',
+        key: 'actions',
+        width: 120,
+        render: (_: unknown, row) => (
+          <Button
+            size="small"
+            onClick={() => {
+              setEditing(row);
+              form.setFieldsValue({ name: row.name, phone: row.phone, idNumber: row.idNumber ?? null });
+              setModalOpen(true);
+            }}
+          >
+            编辑
+          </Button>
+        ),
+      },
+    ],
+    [form],
+  );
+
+  const openCreate = () => {
+    setEditing(null);
+    form.resetFields();
+    setModalOpen(true);
+  };
+
+  const onSave = async () => {
+    if (!orgId) return;
+    setSaving(true);
+    try {
+      const values = await form.validateFields();
+      if (editing) {
+        await api.put(`/api/orgs/${orgId}/tenants/${editing.id}`, values);
+      } else {
+        await api.post(`/api/orgs/${orgId}/tenants`, values);
+      }
+      message.success('已保存');
+      setModalOpen(false);
+      await qc.invalidateQueries({ queryKey: ['tenants', orgId] });
+    } catch (err) {
+      const e = err as AxiosError<ApiErrorResponse>;
+      message.error(e.response?.data?.error?.message ?? '保存失败');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (!orgId) return <Typography.Text type="secondary">请先选择组织</Typography.Text>;
+
+  return (
+    <>
+      <Card
+        title={
+          <Space>
+            <span>租客</span>
+            <Button size="small" type="primary" onClick={openCreate}>
+              新增租客
+            </Button>
+          </Space>
+        }
+        extra={
+          <Input.Search
+            placeholder="搜索姓名/手机号"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            onSearch={(v) => setQ(v)}
+            style={{ width: 260 }}
+            allowClear
+          />
+        }
+        loading={query.isLoading}
+      >
+        <Table<Tenant> rowKey="id" dataSource={tenants} columns={columns} pagination={{ pageSize: 10 }} />
+      </Card>
+
+      <Modal
+        open={modalOpen}
+        title={editing ? '编辑租客' : '新增租客'}
+        onCancel={() => setModalOpen(false)}
+        onOk={onSave}
+        confirmLoading={saving}
+        destroyOnClose
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item label="姓名" name="name" rules={[{ required: true, message: '请输入姓名' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="手机号" name="phone" rules={[{ required: true, message: '请输入手机号' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="身份证号" name="idNumber">
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
+    </>
+  );
+}
+

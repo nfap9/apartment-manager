@@ -1,0 +1,465 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum MembershipStatus {
+  PENDING
+  ACTIVE
+  DISABLED
+}
+
+enum RentIncreaseType {
+  NONE
+  FIXED
+  PERCENT
+}
+
+enum FeeMode {
+  FIXED
+  METERED
+}
+
+enum FeeType {
+  WATER
+  ELECTRICITY
+  MANAGEMENT
+  INTERNET
+  GAS
+  OTHER
+}
+
+enum LeaseStatus {
+  DRAFT
+  ACTIVE
+  ENDED
+  TERMINATED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  ISSUED
+  PAID
+  VOID
+  OVERDUE
+}
+
+enum InvoiceItemKind {
+  RENT
+  DEPOSIT
+  CHARGE
+}
+
+enum InvoiceItemStatus {
+  PENDING_READING
+  CONFIRMED
+}
+
+enum NotificationType {
+  INVOICE_CREATED
+  LEASE_EXPIRING
+  SYSTEM
+}
+
+model User {
+  id           String   @id @default(uuid())
+  phone        String   @unique
+  passwordHash String
+  displayName  String?
+  tokenVersion Int      @default(0)
+
+  memberships   Membership[]
+  notifications Notification[]
+  createdInvites OrgInvite[] @relation("OrgInviteCreatedBy")
+  inviteUses    OrgInviteUse[]
+  auditLogs     AuditLog[]   @relation("AuditLogActor")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships   Membership[]
+  roles         Role[]
+  invites       OrgInvite[]
+  apartments    Apartment[]
+  tenants       Tenant[]
+  leases        Lease[]
+  invoices      Invoice[]
+  notifications Notification[]
+  auditLogs     AuditLog[]
+}
+
+model Membership {
+  id             String           @id @default(uuid())
+  userId         String
+  organizationId String
+  status         MembershipStatus @default(ACTIVE)
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  roles        MembershipRole[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, organizationId])
+  @@index([organizationId])
+  @@index([userId])
+}
+
+model Role {
+  id             String @id @default(uuid())
+  organizationId String
+  name           String
+  description    String?
+  isSystem       Boolean @default(false)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  permissions  RolePermission[]
+  members      MembershipRole[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([organizationId, name])
+  @@index([organizationId])
+}
+
+model Permission {
+  id          String  @id @default(uuid())
+  key         String  @unique
+  description String?
+
+  roles RolePermission[]
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+  createdAt    DateTime @default(now())
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@index([permissionId])
+}
+
+model MembershipRole {
+  membershipId String
+  roleId       String
+  createdAt    DateTime @default(now())
+
+  membership Membership @relation(fields: [membershipId], references: [id], onDelete: Cascade)
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([membershipId, roleId])
+  @@index([roleId])
+}
+
+model OrgInvite {
+  id              String   @id @default(uuid())
+  organizationId  String
+  code            String   @unique
+  createdByUserId String
+  expiresAt       DateTime?
+  maxUses         Int?
+  usedCount       Int      @default(0)
+  createdAt       DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy    User         @relation("OrgInviteCreatedBy", fields: [createdByUserId], references: [id], onDelete: Restrict)
+  uses         OrgInviteUse[]
+
+  @@index([organizationId])
+  @@index([createdByUserId])
+}
+
+model OrgInviteUse {
+  id       String   @id @default(uuid())
+  inviteId String
+  userId   String
+  usedAt   DateTime @default(now())
+
+  invite OrgInvite @relation(fields: [inviteId], references: [id], onDelete: Cascade)
+  user   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([inviteId, userId])
+  @@index([userId])
+}
+
+model Apartment {
+  id             String  @id @default(uuid())
+  organizationId String
+  name           String
+  address        String
+  totalArea      Float?
+  floor          Int?
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  upstream      ApartmentUpstream?
+  rooms         Room[]
+  feePricings   ApartmentFeePricing[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+}
+
+model ApartmentUpstream {
+  apartmentId String @id
+
+  transferFeeCents       Int @default(0)
+  renovationFeeCents     Int @default(0)
+  renovationDepositCents Int @default(0)
+  upfrontOtherCents      Int @default(0)
+
+  upstreamDepositCents            Int              @default(0)
+  upstreamRentBaseCents           Int              @default(0)
+  upstreamRentIncreaseType        RentIncreaseType @default(NONE)
+  upstreamRentIncreaseValue       Int              @default(0)
+  upstreamRentIncreaseIntervalMonths Int           @default(12)
+
+  notes String?
+
+  apartment Apartment @relation(fields: [apartmentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ApartmentFeePricing {
+  id          String  @id @default(uuid())
+  apartmentId String
+  feeType     FeeType
+  mode        FeeMode
+  fixedAmountCents Int?
+  unitPriceCents   Int?
+  unitName    String?
+
+  apartment Apartment @relation(fields: [apartmentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([apartmentId, feeType])
+  @@index([apartmentId])
+}
+
+model Room {
+  id          String @id @default(uuid())
+  apartmentId String
+  name        String
+  layout      String?
+  area        Float?
+  facilities  Json?
+  isActive    Boolean @default(true)
+
+  apartment    Apartment @relation(fields: [apartmentId], references: [id], onDelete: Cascade)
+  pricingPlans RoomPricingPlan[]
+  leases       Lease[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([apartmentId, name])
+  @@index([apartmentId])
+}
+
+model RoomPricingPlan {
+  id             String @id @default(uuid())
+  roomId         String
+  durationMonths Int
+  rentCents      Int
+  depositCents   Int @default(0)
+  isActive       Boolean @default(true)
+
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([roomId, durationMonths])
+  @@index([roomId])
+}
+
+model Tenant {
+  id             String @id @default(uuid())
+  organizationId String
+  name           String
+  phone          String
+  idNumber       String?
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  leases       Lease[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([phone])
+}
+
+model Lease {
+  id             String @id @default(uuid())
+  organizationId String
+  roomId         String
+  tenantId       String
+  status         LeaseStatus @default(ACTIVE)
+
+  startDate DateTime
+  endDate   DateTime
+
+  billingCycleMonths Int @default(1)
+
+  depositCents Int @default(0)
+
+  baseRentCents              Int
+  rentIncreaseType           RentIncreaseType @default(NONE)
+  rentIncreaseValue          Int              @default(0)
+  rentIncreaseIntervalMonths Int              @default(12)
+
+  notes String?
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  room         Room         @relation(fields: [roomId], references: [id], onDelete: Restrict)
+  tenant       Tenant       @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  charges LeaseCharge[]
+  invoices Invoice[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([roomId])
+  @@index([tenantId])
+}
+
+model LeaseCharge {
+  id       String @id @default(uuid())
+  leaseId  String
+  name     String
+  feeType  FeeType?
+  mode     FeeMode
+  fixedAmountCents Int?
+  unitPriceCents   Int?
+  unitName         String?
+  billingCycleMonths Int @default(1)
+  isActive Boolean @default(true)
+
+  lease Lease @relation(fields: [leaseId], references: [id], onDelete: Cascade)
+  invoiceItems InvoiceItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([leaseId])
+}
+
+model Invoice {
+  id             String @id @default(uuid())
+  organizationId String
+  leaseId        String
+  status         InvoiceStatus @default(ISSUED)
+
+  periodStart DateTime
+  periodEnd   DateTime
+  dueDate     DateTime
+
+  totalAmountCents Int @default(0)
+
+  issuedAt DateTime @default(now())
+  paidAt   DateTime?
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  lease        Lease        @relation(fields: [leaseId], references: [id], onDelete: Cascade)
+  items        InvoiceItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([leaseId, periodStart, periodEnd])
+  @@index([organizationId])
+  @@index([leaseId])
+  @@index([status])
+}
+
+model InvoiceItem {
+  id        String @id @default(uuid())
+  invoiceId String
+  leaseChargeId String?
+
+  name   String
+  kind   InvoiceItemKind
+  mode   FeeMode?
+  status InvoiceItemStatus @default(CONFIRMED)
+
+  amountCents    Int?
+  quantity       Float?
+  unitPriceCents Int?
+  unitName       String?
+  meterStart     Float?
+  meterEnd       Float?
+
+  invoice     Invoice     @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  leaseCharge LeaseCharge? @relation(fields: [leaseChargeId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([invoiceId])
+  @@index([leaseChargeId])
+  @@index([status])
+}
+
+model Notification {
+  id             String           @id @default(uuid())
+  organizationId String
+  userId         String
+  type           NotificationType
+  title          String
+  body           String
+  entityType     String?
+  entityId       String?
+  readAt         DateTime?
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([readAt])
+}
+
+model AuditLog {
+  id             String  @id @default(uuid())
+  organizationId String
+  actorUserId    String?
+  action         String
+  entityType     String?
+  entityId       String?
+  metadata       Json?
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  actor        User?        @relation("AuditLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([actorUserId])
+}
+
