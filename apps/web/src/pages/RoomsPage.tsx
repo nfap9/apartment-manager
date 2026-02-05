@@ -1,5 +1,5 @@
 import type { AxiosError } from 'axios';
-import { Card, Tabs, Space, message, Modal, Form, Input, InputNumber, Switch, Typography } from 'antd';
+import { Tabs, Space, message, Modal, Form, Input, InputNumber, Switch, Typography } from 'antd';
 import { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -184,61 +184,37 @@ export function RoomsPage() {
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
-        <Card
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%',
-            minHeight: 0,
-            overflow: 'hidden',
-          }}
-          bodyStyle={{
-            display: 'flex',
-            flexDirection: 'column',
-            padding: 0,
-            height: '100%',
-            minHeight: 0,
-            overflow: 'hidden',
-          }}
-        >
-          <div 
-            style={{ 
-              flexShrink: 0, 
-              padding: '12px 16px',
-              borderBottom: '1px solid #f0f0f0',
-            }}
-          >
-            {apartmentsQuery.isLoading ? (
-              <div style={{ padding: '20px', textAlign: 'center' }}>
-                <Typography.Text type="secondary">加载中...</Typography.Text>
-              </div>
-            ) : (
-              <Tabs
-                activeKey={activeTab ?? undefined}
-                onChange={setActiveTab}
-                items={tabItems}
-              />
-            )}
-          </div>
-          
-          <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            {activeTab && (
-              <RoomTable
-                rooms={rooms}
-                canEdit={canEdit}
-                canPricingManage={canPricingManage}
-                onEdit={handleEdit}
-                onFacility={handleFacility}
-                onPricing={handlePricing}
-                onDownloadTemplate={handleDownloadTemplate}
-                onImport={handleImport}
-                importUploading={importUploading}
-                showImportExport={false}
-              />
-            )}
-          </div>
-        </Card>
+      <div>
+        <div>
+          {apartmentsQuery.isLoading ? (
+            <div style={{ padding: '20px', textAlign: 'center' }}>
+              <Typography.Text type="secondary">加载中...</Typography.Text>
+            </div>
+          ) : (
+            <Tabs
+              activeKey={activeTab ?? undefined}
+              onChange={setActiveTab}
+              items={tabItems}
+            />
+          )}
+        </div>
+        
+        <div>
+          {activeTab && (
+            <RoomTable
+              rooms={rooms}
+              canEdit={canEdit}
+              canPricingManage={canPricingManage}
+              onEdit={handleEdit}
+              onFacility={handleFacility}
+              onPricing={handlePricing}
+              onDownloadTemplate={handleDownloadTemplate}
+              onImport={handleImport}
+              importUploading={importUploading}
+              showImportExport={false}
+            />
+          )}
+        </div>
       </div>
 
       {/* 编辑房间Modal */}

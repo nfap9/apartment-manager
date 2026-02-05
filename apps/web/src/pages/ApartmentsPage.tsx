@@ -60,13 +60,13 @@ export function ApartmentsPage() {
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
-        <div style={{ flexShrink: 0, marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
+      <div>
+        <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
           <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalOpen(true)}>
             新增公寓
           </Button>
         </div>
-        <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
+        <div>
           <Spin spinning={query.isLoading}>
             {apartments.length === 0 ? (
               <Empty

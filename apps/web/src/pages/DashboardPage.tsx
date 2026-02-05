@@ -104,9 +104,8 @@ export function DashboardPage() {
   const occupancyRate = Math.round(((k?.occupancyRate ?? 0) * 10000)) / 100;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
-      <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
-        <Row gutter={[24, 24]}>
+    <div>
+      <Row gutter={[24, 24]}>
         {/* KPI 统计 */}
         <Col xs={24} sm={12} lg={6}>
           <Spin spinning={kpisQuery.isLoading}>
@@ -319,7 +318,6 @@ export function DashboardPage() {
           </Card>
         </Col>
       </Row>
-      </div>
     </div>
   );
 }

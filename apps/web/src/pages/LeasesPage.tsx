@@ -401,15 +401,15 @@ export function LeasesPage() {
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+      <div>
         {canWrite && (
-          <div style={{ flexShrink: 0, marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
+          <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
             <Button type="primary" icon={<PlusOutlined />} onClick={openCreate}>
               新建租约
             </Button>
           </div>
         )}
-        <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
+        <div>
           <Spin spinning={leasesQuery.isLoading}>
             <Table<LeaseRow>
               rowKey="id"

@@ -1011,16 +1011,16 @@ export function SigningPage() {
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
-        <div style={{ flexShrink: 0 }}>
+      <div>
+        <div>
           <Steps current={currentStep} items={steps.map((s) => ({ title: s.title, icon: s.icon }))} />
         </div>
 
-        <div style={{ flex: 1, minHeight: 0, overflow: 'auto', marginTop: 24 }}>
+        <div style={{ marginTop: 24 }}>
           {steps[currentStep].content}
         </div>
 
-        <div style={{ flexShrink: 0, paddingTop: 16, borderTop: '1px solid #f0f0f0' }}>
+        <div style={{ paddingTop: 16, borderTop: '1px solid #f0f0f0' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button disabled={currentStep === 0} onClick={prevStep}>
               上一步

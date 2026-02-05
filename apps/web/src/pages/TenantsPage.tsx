@@ -104,8 +104,8 @@ export function TenantsPage() {
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
-        <div style={{ flexShrink: 0, marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
+      <div>
+        <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
           <Space>
             <Input.Search
               placeholder="搜索姓名/手机号"
@@ -121,7 +121,7 @@ export function TenantsPage() {
             </Button>
           </Space>
         </div>
-        <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
+        <div>
           <Spin spinning={query.isLoading}>
             <Table<Tenant>
               rowKey="id"

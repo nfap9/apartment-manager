@@ -291,9 +291,9 @@ export function InvoicesPage() {
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+      <div>
         {canManage && (
-          <div style={{ flexShrink: 0, marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
+          <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               type="primary"
               icon={<PlayCircleOutlined />}
@@ -304,61 +304,63 @@ export function InvoicesPage() {
             </Button>
           </div>
         )}
-        <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
-          <Spin spinning={listQuery.isLoading}>
-            <Tabs
-              activeKey={statusFilter ?? ''}
-              onChange={(key) => setStatusFilter(key === '' ? undefined : key)}
-              items={statusTabs.map((tab) => {
-              let count = 0;
-              if (tab.key === '') {
-                count = invoices.length;
-              } else if (tab.key === 'PENDING_READING') {
-                count = invoices.filter((inv) => inv.hasPendingReading).length;
-              } else if (tab.key === 'OVERDUE') {
-                count = overdueCount;
-              } else {
-                count = invoices.filter((inv) => inv.status === tab.key).length;
-              }
+        <div>
+          <Tabs
+            activeKey={statusFilter ?? ''}
+            onChange={(key) => setStatusFilter(key === '' ? undefined : key)}
+            items={statusTabs.map((tab) => {
+            let count = 0;
+            if (tab.key === '') {
+              count = invoices.length;
+            } else if (tab.key === 'PENDING_READING') {
+              count = invoices.filter((inv) => inv.hasPendingReading).length;
+            } else if (tab.key === 'OVERDUE') {
+              count = overdueCount;
+            } else {
+              count = invoices.filter((inv) => inv.status === tab.key).length;
+            }
 
-              return {
-                key: tab.key,
-                label: (
-                  <span>
-                    {tab.label}
-                    {count > 0 && (
-                      <Tag
-                        color={tab.key === 'OVERDUE' ? 'red' : tab.key === 'PENDING_READING' ? 'orange' : 'default'}
-                        style={{ marginLeft: 8 }}
-                      >
-                        {count}
-                      </Tag>
-                    )}
-                  </span>
-                ),
-                children: (
-                  <Table<InvoiceRow>
-                    rowKey="id"
-                    dataSource={filteredInvoices}
-                    columns={invoiceColumns}
-                    pagination={{
-                      pageSize: 10,
-                      showSizeChanger: true,
-                      showTotal: (total) => `共 ${total} 条`,
-                    }}
-                    scroll={{ x: 'max-content' }}
-                    rowClassName={(record) => {
-                      if (record.status === 'OVERDUE') {
-                        return 'invoice-row-overdue';
-                      }
-                      return '';
-                    }}
-                  />
-                ),
-              };
-            })}
-          />
-          </Spin>
+            return {
+              key: tab.key,
+              label: (
+                <span>
+                  {tab.label}
+                  {count > 0 && (
+                    <Tag
+                      color={tab.key === 'OVERDUE' ? 'red' : tab.key === 'PENDING_READING' ? 'orange' : 'default'}
+                      style={{ marginLeft: 8 }}
+                    >
+                      {count}
+                    </Tag>
+                  )}
+                </span>
+              ),
+              children: (
+                <div>
+                  <Spin spinning={listQuery.isLoading}>
+                    <Table<InvoiceRow>
+                      rowKey="id"
+                      dataSource={filteredInvoices}
+                      columns={invoiceColumns}
+                      pagination={{
+                        pageSize: 10,
+                        showSizeChanger: true,
+                        showTotal: (total) => `共 ${total} 条`,
+                      }}
+                      scroll={{ x: 'max-content' }}
+                      rowClassName={(record) => {
+                        if (record.status === 'OVERDUE') {
+                          return 'invoice-row-overdue';
+                        }
+                        return '';
+                      }}
+                    />
+                  </Spin>
+                </div>
+              ),
+            };
+          })}
+        />
         </div>
       </div>
 
