@@ -1,5 +1,5 @@
 import type { ColumnsType } from 'antd/es/table';
-import { Button, Card, Space, Switch, Table, Tag, Typography, message } from 'antd';
+import { Button, Space, Switch, Table, Tag, Typography, message, Spin } from 'antd';
 import { useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
@@ -7,7 +7,6 @@ import type { AxiosError } from 'axios';
 import { api } from '../lib/api';
 import type { ApiErrorResponse } from '../lib/apiTypes';
 import { useAuthStore } from '../stores/auth';
-import { PageContainer } from '../components/PageContainer';
 
 type NotificationRow = {
   id: string;
@@ -88,41 +87,36 @@ export function NotificationsPage() {
 
   if (!orgId) {
     return (
-      <PageContainer>
-        <Typography.Text type="secondary">请先选择组织</Typography.Text>
-      </PageContainer>
+      <Typography.Text type="secondary">请先选择组织</Typography.Text>
     );
   }
 
   return (
-    <PageContainer
-      extra={
-        <Space>
-          <span style={{ color: 'rgba(0, 0, 0, 0.65)' }}>只看未读</span>
-          <Switch checked={unreadOnly} onChange={setUnreadOnly} />
-        </Space>
-      }
-    >
-      <Card
-        loading={query.isLoading}
-        style={{
-          borderRadius: 8,
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-        }}
-      >
-        <Table<NotificationRow>
-          rowKey="id"
-          dataSource={dataSource}
-          columns={columns}
-          pagination={{
-            pageSize: 10,
-            showSizeChanger: true,
-            showTotal: (total) => `共 ${total} 条`,
-          }}
-          scroll={{ x: 'max-content' }}
-        />
-      </Card>
-    </PageContainer>
+    <>
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+        <div style={{ flexShrink: 0, marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
+          <Space>
+            <span style={{ color: 'rgba(0, 0, 0, 0.65)' }}>只看未读</span>
+            <Switch checked={unreadOnly} onChange={setUnreadOnly} />
+          </Space>
+        </div>
+        <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
+          <Spin spinning={query.isLoading}>
+            <Table<NotificationRow>
+              rowKey="id"
+              dataSource={dataSource}
+              columns={columns}
+              pagination={{
+                pageSize: 10,
+                showSizeChanger: true,
+                showTotal: (total) => `共 ${total} 条`,
+              }}
+              scroll={{ x: 'max-content' }}
+            />
+          </Spin>
+        </div>
+      </div>
+    </>
   );
 }
 

@@ -29,6 +29,7 @@ body {
   margin: 0 auto;
   padding: var(--layout-content-padding);
   min-height: 100%;
+  background: transparent;
 }
 
 .page-header {

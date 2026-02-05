@@ -1,4 +1,4 @@
-import { Card, Col, Row, Statistic, Table, Typography, Tag } from 'antd';
+import { Card, Col, Row, Statistic, Table, Typography, Tag, Spin } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import ReactECharts from 'echarts-for-react';
 import { useMemo } from 'react';
@@ -6,7 +6,6 @@ import { useQuery } from '@tanstack/react-query';
 
 import { api } from '../lib/api';
 import { useAuthStore } from '../stores/auth';
-import { PageContainer } from '../components/PageContainer';
 
 type KpisResponse = {
   asOf: string;
@@ -97,9 +96,7 @@ export function DashboardPage() {
 
   if (!orgId) {
     return (
-      <PageContainer>
-        <Typography.Text type="secondary">请先选择组织</Typography.Text>
-      </PageContainer>
+      <Typography.Text type="secondary">请先选择组织</Typography.Text>
     );
   }
 
@@ -107,86 +104,55 @@ export function DashboardPage() {
   const occupancyRate = Math.round(((k?.occupancyRate ?? 0) * 10000)) / 100;
 
   return (
-    <PageContainer>
-      <Row gutter={[24, 24]}>
-        {/* KPI 卡片 */}
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+      <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
+        <Row gutter={[24, 24]}>
+        {/* KPI 统计 */}
         <Col xs={24} sm={12} lg={6}>
-          <Card
-            hoverable
-            style={{
-              height: '100%',
-              borderRadius: 8,
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-            }}
-          >
+          <Spin spinning={kpisQuery.isLoading}>
             <Statistic
               title={<span style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)' }}>公寓数</span>}
               value={k?.apartmentCount ?? 0}
-              loading={kpisQuery.isLoading}
               valueStyle={{
                 fontSize: 32,
                 fontWeight: 600,
                 color: '#1890ff',
               }}
             />
-          </Card>
+          </Spin>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card
-            hoverable
-            style={{
-              height: '100%',
-              borderRadius: 8,
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-            }}
-          >
+          <Spin spinning={kpisQuery.isLoading}>
             <Statistic
               title={<span style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)' }}>房间数</span>}
               value={k?.totalRoomCount ?? 0}
-              loading={kpisQuery.isLoading}
               valueStyle={{
                 fontSize: 32,
                 fontWeight: 600,
                 color: '#1890ff',
               }}
             />
-          </Card>
+          </Spin>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card
-            hoverable
-            style={{
-              height: '100%',
-              borderRadius: 8,
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-            }}
-          >
+          <Spin spinning={kpisQuery.isLoading}>
             <Statistic
               title={<span style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)' }}>已出租</span>}
               value={k?.occupiedRoomCount ?? 0}
-              loading={kpisQuery.isLoading}
               valueStyle={{
                 fontSize: 32,
                 fontWeight: 600,
                 color: '#52c41a',
               }}
             />
-          </Card>
+          </Spin>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card
-            hoverable
-            style={{
-              height: '100%',
-              borderRadius: 8,
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-            }}
-          >
+          <Spin spinning={kpisQuery.isLoading}>
             <Statistic
               title={<span style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)' }}>入住率</span>}
               value={occupancyRate}
               suffix="%"
-              loading={kpisQuery.isLoading}
               valueStyle={{
                 fontSize: 32,
                 fontWeight: 600,
@@ -194,7 +160,7 @@ export function DashboardPage() {
               }}
               prefix={occupancyRate >= 80 ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
             />
-          </Card>
+          </Spin>
         </Col>
 
         {/* 图表和账单概览 */}
@@ -353,7 +319,8 @@ export function DashboardPage() {
           </Card>
         </Col>
       </Row>
-    </PageContainer>
+      </div>
+    </div>
   );
 }
 

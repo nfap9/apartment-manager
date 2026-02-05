@@ -1,13 +1,12 @@
 import type { ColumnsType } from 'antd/es/table';
 import type { AxiosError } from 'axios';
-import { Button, Card, Form, Input, Modal, Space, Table, Typography, message } from 'antd';
+import { Button, Form, Input, Modal, Space, Table, Typography, message, Spin } from 'antd';
 import { useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { api } from '../lib/api';
 import type { ApiErrorResponse } from '../lib/apiTypes';
 import { useAuthStore } from '../stores/auth';
-import { PageContainer } from '../components/PageContainer';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 
 type Tenant = {
@@ -99,16 +98,14 @@ export function TenantsPage() {
 
   if (!orgId) {
     return (
-      <PageContainer>
-        <Typography.Text type="secondary">请先选择组织</Typography.Text>
-      </PageContainer>
+      <Typography.Text type="secondary">请先选择组织</Typography.Text>
     );
   }
 
   return (
     <>
-      <PageContainer
-        extra={
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+        <div style={{ flexShrink: 0, marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
           <Space>
             <Input.Search
               placeholder="搜索姓名/手机号"
@@ -123,28 +120,23 @@ export function TenantsPage() {
               新增租客
             </Button>
           </Space>
-        }
-      >
-        <Card
-          loading={query.isLoading}
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-          }}
-        >
-          <Table<Tenant>
-            rowKey="id"
-            dataSource={tenants}
-            columns={columns}
-            pagination={{
-              pageSize: 10,
-              showSizeChanger: true,
-              showTotal: (total) => `共 ${total} 条`,
-            }}
-            scroll={{ x: 'max-content' }}
-          />
-        </Card>
-      </PageContainer>
+        </div>
+        <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
+          <Spin spinning={query.isLoading}>
+            <Table<Tenant>
+              rowKey="id"
+              dataSource={tenants}
+              columns={columns}
+              pagination={{
+                pageSize: 10,
+                showSizeChanger: true,
+                showTotal: (total) => `共 ${total} 条`,
+              }}
+              scroll={{ x: 'max-content' }}
+            />
+          </Spin>
+        </div>
+      </div>
 
       <Modal
         open={modalOpen}

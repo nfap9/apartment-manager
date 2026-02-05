@@ -1,5 +1,5 @@
 import type { ColumnsType } from 'antd/es/table';
-import { Button, Card, Space, Table, Upload } from 'antd';
+import { Button, Space, Table, Upload } from 'antd';
 import { DownloadOutlined, UploadOutlined } from '@ant-design/icons';
 import { useMemo, useRef, useEffect, useState } from 'react';
 import type { Room } from '../../../lib/api/types';
@@ -109,9 +109,9 @@ export function RoomTable({
   );
 
   return (
-    <Card
-      extra={
-        canEdit && showImportExport ? (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden', padding: '16px' }}>
+      {(canEdit && showImportExport) && (
+        <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
           <Space>
             <Button icon={<DownloadOutlined />} onClick={onDownloadTemplate}>
               下载模板
@@ -127,18 +127,8 @@ export function RoomTable({
               </Button>
             </Upload>
           </Space>
-        ) : null
-      }
-      style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-      bodyStyle={{ 
-        flex: 1, 
-        display: 'flex', 
-        flexDirection: 'column', 
-        padding: '16px', 
-        overflow: 'hidden',
-        minHeight: 0
-      }}
-    >
+        </div>
+      )}
       <div 
         ref={tableContainerRef}
         style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}
@@ -151,6 +141,6 @@ export function RoomTable({
           scroll={{ x: 900, y: scrollHeight }}
         />
       </div>
-    </Card>
+    </div>
   );
 }

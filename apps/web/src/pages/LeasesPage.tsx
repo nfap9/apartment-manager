@@ -2,7 +2,6 @@ import type { ColumnsType } from 'antd/es/table';
 import type { AxiosError } from 'axios';
 import {
   Button,
-  Card,
   DatePicker,
   Divider,
   Form,
@@ -15,6 +14,7 @@ import {
   Tag,
   Typography,
   message,
+  Spin,
 } from 'antd';
 import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
@@ -25,7 +25,6 @@ import { api } from '../lib/api';
 import type { ApiErrorResponse } from '../lib/apiTypes';
 import { useAuthStore } from '../stores/auth';
 import { usePermissionStore } from '../stores/permissions';
-import { PageContainer } from '../components/PageContainer';
 import { PlusOutlined } from '@ant-design/icons';
 
 type LeaseCharge = {
@@ -396,43 +395,36 @@ export function LeasesPage() {
 
   if (!orgId) {
     return (
-      <PageContainer>
-        <Typography.Text type="secondary">请先选择组织</Typography.Text>
-      </PageContainer>
+      <Typography.Text type="secondary">请先选择组织</Typography.Text>
     );
   }
 
   return (
     <>
-      <PageContainer
-        extra={
-          canWrite ? (
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+        {canWrite && (
+          <div style={{ flexShrink: 0, marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
             <Button type="primary" icon={<PlusOutlined />} onClick={openCreate}>
               新建租约
             </Button>
-          ) : null
-        }
-      >
-        <Card
-          loading={leasesQuery.isLoading}
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-          }}
-        >
-          <Table<LeaseRow>
-            rowKey="id"
-            dataSource={leases}
-            columns={columns}
-            pagination={{
-              pageSize: 10,
-              showSizeChanger: true,
-              showTotal: (total) => `共 ${total} 条`,
-            }}
-            scroll={{ x: 'max-content' }}
-          />
-        </Card>
-      </PageContainer>
+          </div>
+        )}
+        <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
+          <Spin spinning={leasesQuery.isLoading}>
+            <Table<LeaseRow>
+              rowKey="id"
+              dataSource={leases}
+              columns={columns}
+              pagination={{
+                pageSize: 10,
+                showSizeChanger: true,
+                showTotal: (total) => `共 ${total} 条`,
+              }}
+              scroll={{ x: 'max-content' }}
+            />
+          </Spin>
+        </div>
+      </div>
 
       <Modal
         open={createOpen}
@@ -732,7 +724,7 @@ export function LeasesPage() {
               {(fields, { add, remove }) => (
                 <Space direction="vertical" style={{ width: '100%' }} size="small">
                   {fields.map((f) => (
-                    <Card key={f.key} size="small" style={{ marginBottom: 8 }}>
+                    <div key={f.key} style={{ marginBottom: 8, padding: 12, border: '1px solid #f0f0f0', borderRadius: 4 }}>
                       <Space wrap align="baseline">
                         <Form.Item
                           {...f}
@@ -786,7 +778,7 @@ export function LeasesPage() {
                           </Button>
                         </Form.Item>
                       </Space>
-                    </Card>
+                    </div>
                   ))}
                   <Button type="dashed" onClick={() => add()} style={{ width: '100%' }}>
                     添加其他费用

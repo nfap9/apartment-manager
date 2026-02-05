@@ -1,5 +1,5 @@
 import type { AxiosError } from 'axios';
-import { Tabs, Card, Space, message, Modal, Form, Input, InputNumber, Switch, Typography } from 'antd';
+import { Card, Tabs, Space, message, Modal, Form, Input, InputNumber, Switch, Typography } from 'antd';
 import { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -10,7 +10,6 @@ import { usePermissions } from '../hooks/usePermissions';
 import { apartmentsApi, roomsApi } from '../lib/api/apartments';
 import type { Apartment, Room } from '../lib/api/types';
 import { RoomTable } from './apartments/components/RoomTable';
-import { PageContainer } from '../components/PageContainer';
 
 type ApartmentsResponse = {
   apartments: Apartment[];
@@ -161,9 +160,7 @@ export function RoomsPage() {
 
   if (!orgId) {
     return (
-      <PageContainer>
-        <Typography.Text type="secondary">请先选择组织</Typography.Text>
-      </PageContainer>
+      <Typography.Text type="secondary">请先选择组织</Typography.Text>
     );
   }
 
@@ -187,29 +184,43 @@ export function RoomsPage() {
 
   return (
     <>
-      <PageContainer>
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
-          <Card 
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+        <Card
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            minHeight: 0,
+            overflow: 'hidden',
+          }}
+          bodyStyle={{
+            display: 'flex',
+            flexDirection: 'column',
+            padding: 0,
+            height: '100%',
+            minHeight: 0,
+            overflow: 'hidden',
+          }}
+        >
+          <div 
             style={{ 
               flexShrink: 0, 
-              marginBottom: 16,
-              borderRadius: 8,
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+              padding: '12px 16px',
+              borderBottom: '1px solid #f0f0f0',
             }}
-            styles={{ body: { padding: '12px 16px' } }}
           >
-          {apartmentsQuery.isLoading ? (
-            <div style={{ padding: '20px', textAlign: 'center' }}>
-              <Typography.Text type="secondary">加载中...</Typography.Text>
-            </div>
-          ) : (
-            <Tabs
-              activeKey={activeTab ?? undefined}
-              onChange={setActiveTab}
-              items={tabItems}
-            />
-          )}
-          </Card>
+            {apartmentsQuery.isLoading ? (
+              <div style={{ padding: '20px', textAlign: 'center' }}>
+                <Typography.Text type="secondary">加载中...</Typography.Text>
+              </div>
+            ) : (
+              <Tabs
+                activeKey={activeTab ?? undefined}
+                onChange={setActiveTab}
+                items={tabItems}
+              />
+            )}
+          </div>
           
           <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             {activeTab && (
@@ -227,8 +238,8 @@ export function RoomsPage() {
               />
             )}
           </div>
-        </div>
-      </PageContainer>
+        </Card>
+      </div>
 
       {/* 编辑房间Modal */}
       <Modal

@@ -34,7 +34,6 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../lib/api';
 import type { ApiErrorResponse } from '../lib/apiTypes';
 import { useAuthStore } from '../stores/auth';
-import { PageContainer } from '../components/PageContainer';
 
 type PricingPlan = {
   id: string;
@@ -408,47 +407,36 @@ export function SigningPage() {
 
   if (!orgId) {
     return (
-      <PageContainer>
-        <Typography.Text type="secondary">请先选择组织</Typography.Text>
-      </PageContainer>
+      <Typography.Text type="secondary">请先选择组织</Typography.Text>
     );
   }
 
   if (success) {
     return (
-      <PageContainer>
-        <Card
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-          }}
-        >
-          <Result
-            status="success"
-            title="签约成功！"
-            subTitle="租约已创建，房间状态已更新为已租出"
-            extra={[
-              <Button key="leases" type="primary" onClick={() => navigate('/leases')}>
-                查看租约列表
-              </Button>,
-              <Button
-                key="new"
-                onClick={() => {
-                  setSuccess(false);
-                  setCurrentStep(0);
-                  setSelectedTenant(null);
-                  setSelectedRoom(null);
-                  setTenantMode('select');
-                  newTenantForm.resetFields();
-                  leaseForm.resetFields();
-                }}
-              >
-                继续签约
-              </Button>,
-            ]}
-          />
-        </Card>
-      </PageContainer>
+      <Result
+        status="success"
+        title="签约成功！"
+        subTitle="租约已创建，房间状态已更新为已租出"
+        extra={[
+          <Button key="leases" type="primary" onClick={() => navigate('/leases')}>
+            查看租约列表
+          </Button>,
+          <Button
+            key="new"
+            onClick={() => {
+              setSuccess(false);
+              setCurrentStep(0);
+              setSelectedTenant(null);
+              setSelectedRoom(null);
+              setTenantMode('select');
+              newTenantForm.resetFields();
+              leaseForm.resetFields();
+            }}
+          >
+            继续签约
+          </Button>,
+        ]}
+      />
     );
   }
 
@@ -1022,37 +1010,36 @@ export function SigningPage() {
   ];
 
   return (
-    <PageContainer>
-      <Card
-        style={{
-          borderRadius: 8,
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-        }}
-      >
-      <Steps current={currentStep} items={steps.map((s) => ({ title: s.title, icon: s.icon }))} />
+    <>
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+        <div style={{ flexShrink: 0 }}>
+          <Steps current={currentStep} items={steps.map((s) => ({ title: s.title, icon: s.icon }))} />
+        </div>
 
-      <div style={{ marginTop: 24, minHeight: 400 }}>{steps[currentStep].content}</div>
+        <div style={{ flex: 1, minHeight: 0, overflow: 'auto', marginTop: 24 }}>
+          {steps[currentStep].content}
+        </div>
 
-      <Divider />
-
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Button disabled={currentStep === 0} onClick={prevStep}>
-          上一步
-        </Button>
-        <Space>
-          <Button onClick={() => navigate('/leases')}>取消</Button>
-          {currentStep < steps.length - 1 ? (
-            <Button type="primary" onClick={nextStep}>
-              下一步
+        <div style={{ flexShrink: 0, paddingTop: 16, borderTop: '1px solid #f0f0f0' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Button disabled={currentStep === 0} onClick={prevStep}>
+              上一步
             </Button>
-          ) : (
-            <Button type="primary" loading={submitting} onClick={handleSubmit}>
-              确认签约
-            </Button>
-          )}
-        </Space>
+            <Space>
+              <Button onClick={() => navigate('/leases')}>取消</Button>
+              {currentStep < steps.length - 1 ? (
+                <Button type="primary" onClick={nextStep}>
+                  下一步
+                </Button>
+              ) : (
+                <Button type="primary" loading={submitting} onClick={handleSubmit}>
+                  确认签约
+                </Button>
+              )}
+            </Space>
+          </div>
+        </div>
       </div>
-      </Card>
-    </PageContainer>
+    </>
   );
 }

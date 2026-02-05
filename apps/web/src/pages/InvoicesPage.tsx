@@ -2,12 +2,12 @@ import type { ColumnsType } from 'antd/es/table';
 import type { AxiosError } from 'axios';
 import {
   Button,
-  Card,
   Descriptions,
   Drawer,
   Form,
   InputNumber,
   Modal,
+  Spin,
   Space,
   Table,
   Tabs,
@@ -23,7 +23,6 @@ import type { ApiErrorResponse } from '../lib/apiTypes';
 import { StatusTag } from '../components/StatusTag';
 import { useAuthStore } from '../stores/auth';
 import { usePermissionStore } from '../stores/permissions';
-import { PageContainer } from '../components/PageContainer';
 import { PlayCircleOutlined } from '@ant-design/icons';
 
 type InvoiceItem = {
@@ -262,9 +261,7 @@ export function InvoicesPage() {
 
   if (!orgId) {
     return (
-      <PageContainer>
-        <Typography.Text type="secondary">请先选择组织</Typography.Text>
-      </PageContainer>
+      <Typography.Text type="secondary">请先选择组织</Typography.Text>
     );
   }
 
@@ -294,9 +291,9 @@ export function InvoicesPage() {
 
   return (
     <>
-      <PageContainer
-        extra={
-          canManage ? (
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+        {canManage && (
+          <div style={{ flexShrink: 0, marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               type="primary"
               icon={<PlayCircleOutlined />}
@@ -305,20 +302,14 @@ export function InvoicesPage() {
             >
               运行出账
             </Button>
-          ) : null
-        }
-      >
-        <Card
-          loading={listQuery.isLoading}
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-          }}
-        >
-          <Tabs
-            activeKey={statusFilter ?? ''}
-            onChange={(key) => setStatusFilter(key === '' ? undefined : key)}
-            items={statusTabs.map((tab) => {
+          </div>
+        )}
+        <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
+          <Spin spinning={listQuery.isLoading}>
+            <Tabs
+              activeKey={statusFilter ?? ''}
+              onChange={(key) => setStatusFilter(key === '' ? undefined : key)}
+              items={statusTabs.map((tab) => {
               let count = 0;
               if (tab.key === '') {
                 count = invoices.length;
@@ -367,8 +358,9 @@ export function InvoicesPage() {
               };
             })}
           />
-        </Card>
-      </PageContainer>
+          </Spin>
+        </div>
+      </div>
 
       <Drawer
         title="账单详情"
@@ -380,7 +372,7 @@ export function InvoicesPage() {
         {detailQuery.isLoading ? <Typography.Text>加载中...</Typography.Text> : null}
         {invoice ? (
           <Space orientation="vertical" style={{ width: '100%' }} size={16}>
-            <Card size="small">
+            <div style={{ padding: 12, border: '1px solid #f0f0f0', borderRadius: 4 }}>
               <Space orientation="vertical" style={{ width: '100%' }}>
                 <Typography.Text>
                   公寓/房间：{invoice.lease.room.apartment.name} / {invoice.lease.room.name}
@@ -393,19 +385,21 @@ export function InvoicesPage() {
                 </Typography.Text>
                 <Typography.Text strong>金额：¥{(invoice.totalAmountCents / 100).toFixed(2)}</Typography.Text>
               </Space>
-            </Card>
+            </div>
 
-            <Card size="small" title="明细">
+            <div>
+              <Typography.Title level={5} style={{ marginBottom: 12 }}>明细</Typography.Title>
               <Table<InvoiceItem>
                 rowKey="id"
                 dataSource={invoice.items}
                 columns={itemColumns}
                 pagination={false}
               />
-            </Card>
+            </div>
 
             {canManage && (
-              <Card size="small" title="操作">
+              <div>
+                <Typography.Title level={5} style={{ marginBottom: 12 }}>操作</Typography.Title>
                 <Space>
                   {invoice.items.some((item) => item.mode === 'METERED' && item.status === 'PENDING_READING') ? (
                     <Button
@@ -472,7 +466,7 @@ export function InvoicesPage() {
                     </Button>
                   ) : null}
                 </Space>
-              </Card>
+              </div>
             )}
           </Space>
         ) : (
@@ -563,7 +557,7 @@ function MeterReadingModal(props: {
       >
         <Space orientation="vertical" style={{ width: '100%' }} size={16}>
           {props.invoice && (
-            <Card size="small">
+            <div style={{ padding: 12, border: '1px solid #f0f0f0', borderRadius: 4 }}>
               <Descriptions column={1} size="small">
                 <Descriptions.Item label="账期">
                   {new Date(props.invoice.periodStart).toLocaleDateString()} ~{' '}
@@ -578,7 +572,7 @@ function MeterReadingModal(props: {
                   </Descriptions.Item>
                 )}
               </Descriptions>
-            </Card>
+            </div>
           )}
 
           <Form.Item
@@ -639,7 +633,7 @@ function MeterReadingModal(props: {
               if (quantity == null || amount == null) return null;
 
               return (
-                <Card size="small" style={{ background: '#f5f5f5' }}>
+                <div style={{ padding: 12, border: '1px solid #f0f0f0', borderRadius: 4, background: '#f5f5f5' }}>
                   <Descriptions column={1} size="small">
                     <Descriptions.Item label="用量">
                       <Typography.Text strong>{quantity.toFixed(2)} {unitName}</Typography.Text>
@@ -654,7 +648,7 @@ function MeterReadingModal(props: {
                       {(amount / 100).toFixed(2)}
                     </Descriptions.Item>
                   </Descriptions>
-                </Card>
+                </div>
               );
             }}
           </Form.Item>
