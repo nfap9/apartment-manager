@@ -3,11 +3,14 @@ import type { AxiosError } from 'axios';
 import {
   Button,
   Card,
+  Descriptions,
   Drawer,
   Form,
   InputNumber,
+  Modal,
   Space,
   Table,
+  Tabs,
   Tag,
   Typography,
   message,
@@ -17,6 +20,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { api } from '../lib/api';
 import type { ApiErrorResponse } from '../lib/apiTypes';
+import { StatusTag } from '../components/StatusTag';
 import { useAuthStore } from '../stores/auth';
 import { usePermissionStore } from '../stores/permissions';
 
@@ -41,6 +45,7 @@ type InvoiceRow = {
   periodEnd: string;
   dueDate: string;
   totalAmountCents: number;
+  hasPendingReading?: boolean; // 是否有待确认的读数
   lease: {
     room: { name: string; apartment: { name: string } };
     tenant: { name: string; phone: string };
@@ -63,14 +68,19 @@ export function InvoicesPage() {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeInvoiceId, setActiveInvoiceId] = useState<string | null>(null);
+  const [readingModalOpen, setReadingModalOpen] = useState(false);
+  const [readingItem, setReadingItem] = useState<InvoiceItem | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined);
 
   const canManage = permissionKeys.includes('billing.manage');
 
   const listQuery = useQuery({
-    queryKey: ['invoices', orgId],
+    queryKey: ['invoices', orgId, statusFilter],
     enabled: !!orgId,
     queryFn: async () => {
-      const r = await api.get(`/api/orgs/${orgId}/invoices`);
+      // PENDING_READING 是前端计算的，不需要传递给后端
+      const params = statusFilter && statusFilter !== 'PENDING_READING' ? `?status=${statusFilter}` : '';
+      const r = await api.get(`/api/orgs/${orgId}/invoices${params}`);
       return r.data as InvoicesResponse;
     },
   });
@@ -106,11 +116,17 @@ export function InvoicesPage() {
       {
         title: '状态',
         dataIndex: 'status',
-        width: 90,
-        render: (v: InvoiceRow['status']) => {
-          const color = v === 'ISSUED' ? 'blue' : v === 'PAID' ? 'green' : 'default';
-          return <Tag color={color}>{v}</Tag>;
-        },
+        width: 120,
+        render: (v: InvoiceRow['status'], record: InvoiceRow) => (
+          <Space size={4}>
+            <StatusTag status={v} type="invoice" />
+            {record.hasPendingReading && (
+              <Tag color="orange" size="small">
+                待确认读数
+              </Tag>
+            )}
+          </Space>
+        ),
       },
       {
         title: '操作',
@@ -202,12 +218,23 @@ export function InvoicesPage() {
       {
         title: '操作',
         key: 'actions',
-        width: 280,
+        width: 150,
         render: (_: unknown, item: InvoiceItem) => {
           if (!canManage) return null;
           if (item.status !== 'PENDING_READING') return null;
 
-          return <ConfirmReadingInline orgId={orgId!} invoiceId={activeInvoiceId!} item={item} />;
+          return (
+            <Button
+              size="small"
+              type="primary"
+              onClick={() => {
+                setReadingItem(item);
+                setReadingModalOpen(true);
+              }}
+            >
+              录入读数
+            </Button>
+          );
         },
       },
     ],
@@ -230,6 +257,25 @@ export function InvoicesPage() {
 
   const invoice = detailQuery.data?.invoice ?? null;
 
+  const statusTabs = [
+    { key: '', label: '全部' },
+    { key: 'PENDING_READING', label: '待确认读数' },
+    { key: 'ISSUED', label: '已发出' },
+    { key: 'PAID', label: '已支付' },
+    { key: 'OVERDUE', label: '已逾期' },
+    { key: 'DRAFT', label: '草稿' },
+    { key: 'VOID', label: '已作废' },
+  ];
+
+  // 根据状态筛选过滤账单
+  const filteredInvoices = useMemo(() => {
+    if (!statusFilter) return invoices;
+    if (statusFilter === 'PENDING_READING') {
+      return invoices.filter((inv) => inv.hasPendingReading);
+    }
+    return invoices.filter((inv) => inv.status === statusFilter);
+  }, [invoices, statusFilter]);
+
   return (
     <>
       <Card
@@ -245,11 +291,21 @@ export function InvoicesPage() {
         }
         loading={listQuery.isLoading}
       >
-        <Table<InvoiceRow>
-          rowKey="id"
-          dataSource={invoices}
-          columns={invoiceColumns}
-          pagination={{ pageSize: 10 }}
+        <Tabs
+          activeKey={statusFilter ?? ''}
+          onChange={(key) => setStatusFilter(key === '' ? undefined : key)}
+          items={statusTabs.map((tab) => ({
+            key: tab.key,
+            label: tab.label,
+            children: (
+              <Table<InvoiceRow>
+                rowKey="id"
+                dataSource={filteredInvoices}
+                columns={invoiceColumns}
+                pagination={{ pageSize: 10 }}
+              />
+            ),
+          }))}
         />
       </Card>
 
@@ -257,14 +313,14 @@ export function InvoicesPage() {
         title="账单详情"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        width={720}
+        size="large"
         destroyOnClose
       >
         {detailQuery.isLoading ? <Typography.Text>加载中...</Typography.Text> : null}
         {invoice ? (
-          <Space direction="vertical" style={{ width: '100%' }} size={16}>
+          <Space orientation="vertical" style={{ width: '100%' }} size={16}>
             <Card size="small">
-              <Space direction="vertical" style={{ width: '100%' }}>
+              <Space orientation="vertical" style={{ width: '100%' }}>
                 <Typography.Text>
                   公寓/房间：{invoice.lease.room.apartment.name} / {invoice.lease.room.name}
                 </Typography.Text>
@@ -291,15 +347,40 @@ export function InvoicesPage() {
           <Typography.Text type="secondary">未找到账单</Typography.Text>
         )}
       </Drawer>
+
+      {readingItem && activeInvoiceId && (
+        <MeterReadingModal
+          orgId={orgId!}
+          invoiceId={activeInvoiceId}
+          item={readingItem}
+          invoice={invoice}
+          open={readingModalOpen}
+          onClose={() => {
+            setReadingModalOpen(false);
+            setReadingItem(null);
+          }}
+        />
+      )}
     </>
   );
 }
 
-function ConfirmReadingInline(props: { orgId: string; invoiceId: string; item: InvoiceItem }) {
+function MeterReadingModal(props: {
+  orgId: string;
+  invoiceId: string;
+  item: InvoiceItem;
+  invoice: InvoiceRow | null;
+  open: boolean;
+  onClose: () => void;
+}) {
   const qc = useQueryClient();
   const [loading, setLoading] = useState(false);
-
   const [form] = Form.useForm<{ meterStart?: number; meterEnd: number }>();
+
+  const unitName = props.item.unitName ?? '度';
+  const isWater = props.item.name.includes('水');
+  const isElectricity = props.item.name.includes('电');
+  const unitPrice = props.item.unitPriceCents ? props.item.unitPriceCents / 100 : 0;
 
   const onSubmit = async () => {
     setLoading(true);
@@ -313,6 +394,7 @@ function ConfirmReadingInline(props: { orgId: string; invoiceId: string; item: I
       message.success('已确认读数');
       await qc.invalidateQueries({ queryKey: ['invoice', props.orgId, props.invoiceId] });
       await qc.invalidateQueries({ queryKey: ['invoices', props.orgId] });
+      props.onClose();
     } catch (err) {
       const e = err as AxiosError<ApiErrorResponse>;
       message.error(e.response?.data?.error?.message ?? '确认失败');
@@ -321,33 +403,127 @@ function ConfirmReadingInline(props: { orgId: string; invoiceId: string; item: I
     }
   };
 
-  const unitName = props.item.unitName ?? '度';
-  const isWater = props.item.name.includes('水');
-  const isElectricity = props.item.name.includes('电');
+  // 获取上一个账期的读数作为参考
+  const previousReading = props.item.meterStart ?? 0;
 
   return (
-    <Form form={form} layout="inline" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-      <Form.Item
-        name="meterStart"
-        label={isWater ? '水表起度' : isElectricity ? '电表起度' : '起度'}
-        initialValue={props.item.meterStart ?? 0}
-        style={{ margin: 0 }}
+    <Modal
+      open={props.open}
+      title={`录入${props.item.name}读数`}
+      onCancel={props.onClose}
+      onOk={onSubmit}
+      confirmLoading={loading}
+      destroyOnHidden
+      width={600}
+    >
+      <Form
+        form={form}
+        layout="vertical"
+        initialValues={{
+          meterStart: props.item.meterStart ?? undefined,
+          meterEnd: undefined,
+        }}
       >
-        <InputNumber min={0} precision={2} placeholder={`起度(${unitName})`} style={{ width: 120 }} />
-      </Form.Item>
-      <Form.Item
-        name="meterEnd"
-        label={isWater ? '水表止度' : isElectricity ? '电表止度' : '止度'}
-        initialValue={props.item.meterEnd ?? undefined}
-        rules={[{ required: true, message: `请输入止度(${unitName})` }]}
-        style={{ margin: 0 }}
-      >
-        <InputNumber min={0} precision={2} placeholder={`止度(${unitName})`} style={{ width: 120 }} />
-      </Form.Item>
-      <Button size="small" type="primary" onClick={onSubmit} loading={loading}>
-        确认读数
-      </Button>
-    </Form>
+        <Space orientation="vertical" style={{ width: '100%' }} size={16}>
+          {props.invoice && (
+            <Card size="small">
+              <Descriptions column={1} size="small">
+                <Descriptions.Item label="账期">
+                  {new Date(props.invoice.periodStart).toLocaleDateString()} ~{' '}
+                  {new Date(props.invoice.periodEnd).toLocaleDateString()}
+                </Descriptions.Item>
+                <Descriptions.Item label="单价">
+                  ¥{unitPrice.toFixed(2)}/{unitName}
+                </Descriptions.Item>
+                {previousReading > 0 && (
+                  <Descriptions.Item label="上期止度">
+                    <Typography.Text strong>{previousReading.toFixed(2)} {unitName}</Typography.Text>
+                  </Descriptions.Item>
+                )}
+              </Descriptions>
+            </Card>
+          )}
+
+          <Form.Item
+            name="meterStart"
+            label={isWater ? '水表起度' : isElectricity ? '电表起度' : '起度'}
+            rules={[{ required: true, message: `请输入起度(${unitName})` }]}
+            tooltip={previousReading > 0 ? `上期止度：${previousReading.toFixed(2)} ${unitName}` : undefined}
+          >
+            <Space.Compact style={{ width: '100%' }}>
+              <InputNumber
+                min={0}
+                precision={2}
+                placeholder={`起度(${unitName})`}
+                style={{ width: '100%' }}
+              />
+              <Button disabled style={{ pointerEvents: 'none' }}>
+                {unitName}
+              </Button>
+            </Space.Compact>
+          </Form.Item>
+
+          <Form.Item
+            name="meterEnd"
+            label={isWater ? '水表止度' : isElectricity ? '电表止度' : '止度'}
+            rules={[
+              { required: true, message: `请输入止度(${unitName})` },
+              ({ getFieldValue }) => ({
+                validator: (_, value) => {
+                  const start = getFieldValue('meterStart');
+                  if (value != null && start != null && value < start) {
+                    return Promise.reject(new Error('止度不能小于起度'));
+                  }
+                  return Promise.resolve();
+                },
+              }),
+            ]}
+          >
+            <Space.Compact style={{ width: '100%' }}>
+              <InputNumber
+                min={0}
+                precision={2}
+                placeholder={`止度(${unitName})`}
+                style={{ width: '100%' }}
+              />
+              <Button disabled style={{ pointerEvents: 'none' }}>
+                {unitName}
+              </Button>
+            </Space.Compact>
+          </Form.Item>
+
+          <Form.Item shouldUpdate noStyle>
+            {({ getFieldsValue }) => {
+              const { meterStart, meterEnd } = getFieldsValue(['meterStart', 'meterEnd']);
+              const quantity =
+                meterStart != null && meterEnd != null && meterEnd >= meterStart ? meterEnd - meterStart : null;
+              const amount = quantity != null ? Math.round(quantity * unitPrice * 100) : null;
+
+              if (quantity == null || amount == null) return null;
+
+              return (
+                <Card size="small" style={{ background: '#f5f5f5' }}>
+                  <Descriptions column={1} size="small">
+                    <Descriptions.Item label="用量">
+                      <Typography.Text strong>{quantity.toFixed(2)} {unitName}</Typography.Text>
+                    </Descriptions.Item>
+                    <Descriptions.Item label="金额">
+                      <Typography.Text strong type="success">
+                        ¥{(amount / 100).toFixed(2)}
+                      </Typography.Text>
+                    </Descriptions.Item>
+                    <Descriptions.Item label="计算方式">
+                      {quantity.toFixed(2)} {unitName} × ¥{unitPrice.toFixed(2)}/{unitName} = ¥
+                      {(amount / 100).toFixed(2)}
+                    </Descriptions.Item>
+                  </Descriptions>
+                </Card>
+              );
+            }}
+          </Form.Item>
+        </Space>
+      </Form>
+    </Modal>
   );
 }
 

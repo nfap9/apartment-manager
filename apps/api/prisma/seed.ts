@@ -468,8 +468,25 @@ async function main() {
       where: { leaseId: lease.id, isActive: true },
     });
 
-    // 创建最近3个月的发票
-    for (let i = 0; i < 3; i++) {
+    // 为每个租约维护读数历史记录（按leaseChargeId）
+    const meterReadings = new Map<string, number>();
+    
+    // 初始化每个METERED费用的起始读数
+    for (const charge of charges) {
+      if (charge.mode === 'METERED') {
+        // 根据费用类型设置不同的起始读数
+        if (charge.feeType === 'WATER') {
+          meterReadings.set(charge.id, 0); // 水表从0开始
+        } else if (charge.feeType === 'ELECTRICITY') {
+          meterReadings.set(charge.id, 0); // 电表从0开始
+        } else {
+          meterReadings.set(charge.id, 0);
+        }
+      }
+    }
+
+    // 创建最近6个月的发票（提供更多历史数据）
+    for (let i = 0; i < 6; i++) {
       const periodStart = now.subtract(i, 'month').startOf('month').toDate();
       const periodEnd = now.subtract(i, 'month').endOf('month').toDate();
       const dueDate = now.subtract(i, 'month').add(7, 'day').toDate();
@@ -485,7 +502,23 @@ async function main() {
         },
       });
 
-      if (existingInvoice) continue;
+      if (existingInvoice) {
+        // 如果发票已存在，更新读数历史记录
+        const existingItems = await prisma.invoiceItem.findMany({
+          where: {
+            invoiceId: existingInvoice.id,
+            mode: 'METERED',
+            status: 'CONFIRMED',
+            meterEnd: { not: null },
+          },
+        });
+        for (const item of existingItems) {
+          if (item.leaseChargeId && item.meterEnd != null) {
+            meterReadings.set(item.leaseChargeId, item.meterEnd);
+          }
+        }
+        continue;
+      }
 
       const invoiceItems = [];
       let totalAmount = 0;
@@ -514,24 +547,47 @@ async function main() {
           });
           totalAmount += charge.fixedAmountCents;
         } else if (charge.mode === 'METERED') {
-          // 模拟抄表数据
-          const quantity = 10 + Math.floor(Math.random() * 20); // 10-30之间
-          const amount = Math.round(quantity * (charge.unitPriceCents || 0));
-          const itemStatus = i === 0 ? 'PENDING_READING' : 'CONFIRMED'; // 最近一个月待确认
+          const meterStart = meterReadings.get(charge.id) ?? 0;
+          
+          // 根据费用类型生成更真实的用量
+          let usage: number;
+          if (charge.feeType === 'WATER') {
+            // 水费：每月5-15吨，夏季稍高
+            const isSummer = i <= 2; // 最近3个月是夏季
+            usage = isSummer ? 8 + Math.floor(Math.random() * 7) : 5 + Math.floor(Math.random() * 5);
+          } else if (charge.feeType === 'ELECTRICITY') {
+            // 电费：每月50-150度，夏季和冬季较高
+            const isSummerOrWinter = i <= 2 || i >= 4;
+            usage = isSummerOrWinter ? 100 + Math.floor(Math.random() * 50) : 50 + Math.floor(Math.random() * 50);
+          } else {
+            usage = 10 + Math.floor(Math.random() * 20);
+          }
+          
+          const meterEnd = meterStart + usage;
+          const amount = Math.round(usage * (charge.unitPriceCents || 0));
+          
+          // 最近一个月待确认读数，其他月份已确认
+          const itemStatus = i === 0 ? 'PENDING_READING' : 'CONFIRMED';
+          
           invoiceItems.push({
             name: charge.name,
             kind: 'CHARGE' as const,
             mode: 'METERED' as const,
             status: itemStatus as 'PENDING_READING' | 'CONFIRMED',
-            amountCents: amount,
-            quantity,
+            amountCents: itemStatus === 'CONFIRMED' ? amount : null,
+            quantity: itemStatus === 'CONFIRMED' ? usage : null,
             unitPriceCents: charge.unitPriceCents || 0,
             unitName: charge.unitName || '',
-            meterStart: quantity - 5,
-            meterEnd: quantity,
+            meterStart: itemStatus === 'CONFIRMED' ? meterStart : meterStart, // 已确认的保存起度，待确认的也保存起度以便前端显示
+            meterEnd: itemStatus === 'CONFIRMED' ? meterEnd : null,
             leaseChargeId: charge.id,
           });
-          totalAmount += amount;
+          
+          if (itemStatus === 'CONFIRMED') {
+            totalAmount += amount;
+            // 更新读数历史记录
+            meterReadings.set(charge.id, meterEnd);
+          }
         }
       }
 
@@ -540,7 +596,7 @@ async function main() {
         data: {
           organizationId: org.id,
           leaseId: lease.id,
-          status: i === 0 ? 'ISSUED' : i === 1 ? 'PAID' : 'PAID', // 最近一个月已发出，前两个月已支付
+          status: i === 0 ? 'ISSUED' : i <= 2 ? 'PAID' : 'PAID', // 最近一个月已发出，前两个月已支付
           periodStart,
           periodEnd,
           dueDate,

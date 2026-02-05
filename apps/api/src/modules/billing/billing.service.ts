@@ -133,6 +133,33 @@ async function createInvoiceForLeasePeriod(
       },
     });
 
+    // 获取上一个账期的读数，用于自动填充起度
+    const previousInvoice = await tx.invoice.findFirst({
+      where: {
+        leaseId: lease.id,
+        periodEnd: { lt: periodStart },
+      },
+      include: {
+        items: {
+          where: {
+            mode: 'METERED',
+            status: 'CONFIRMED',
+          },
+        },
+      },
+      orderBy: { periodEnd: 'desc' },
+    });
+
+    // 构建上一个账期的读数映射表（按leaseChargeId）
+    const previousReadings = new Map<string, number>();
+    if (previousInvoice) {
+      for (const item of previousInvoice.items) {
+        if (item.leaseChargeId && item.meterEnd != null) {
+          previousReadings.set(item.leaseChargeId, item.meterEnd);
+        }
+      }
+    }
+
     const items = [
       {
         invoiceId: created.id,
@@ -161,6 +188,7 @@ async function createInvoiceForLeasePeriod(
         amountCents: null,
         unitPriceCents: c.unitPriceCents ?? null,
         unitName: c.unitName ?? null,
+        meterStart: previousReadings.get(c.id) ?? null, // 自动填充上一个账期的止度作为起度
       })),
     ];
 
@@ -224,7 +252,33 @@ export async function confirmInvoiceItemReading(params: {
   if (item.status !== 'PENDING_READING') throw new HttpError(400, 'INVALID_STATUS', '该明细不需要记录读数');
   if (item.unitPriceCents == null) throw new HttpError(400, 'INVALID_ITEM', '缺少 unitPriceCents');
 
-  const meterStart = params.meterStart ?? 0;
+  // 如果meterStart未提供，尝试从上一个账期获取，或者使用当前item的meterStart，或者默认为0
+  let meterStart = params.meterStart;
+  if (meterStart == null) {
+    if (item.meterStart != null) {
+      // 使用当前item已保存的meterStart（可能是生成发票时自动填充的）
+      meterStart = item.meterStart;
+    } else if (item.leaseChargeId) {
+      // 从上一个账期获取止度作为起度
+      const previousItem = await prisma.invoiceItem.findFirst({
+        where: {
+          leaseChargeId: item.leaseChargeId,
+          invoice: {
+            leaseId: item.invoice.leaseId,
+            periodEnd: { lt: item.invoice.periodStart },
+          },
+          status: 'CONFIRMED',
+          meterEnd: { not: null },
+        },
+        include: { invoice: true },
+        orderBy: { invoice: { periodEnd: 'desc' } },
+      });
+      meterStart = previousItem?.meterEnd ?? 0;
+    } else {
+      meterStart = 0;
+    }
+  }
+
   const meterEnd = params.meterEnd;
   if (meterEnd < meterStart) throw new HttpError(400, 'INVALID_READING', 'meterEnd 必须大于等于 meterStart');
 

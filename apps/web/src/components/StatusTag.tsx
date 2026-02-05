@@ -79,11 +79,11 @@ function getLeaseStatusConfig(status: LeaseStatus): { color: string; text: strin
 
 function getInvoiceStatusConfig(status: InvoiceStatus): { color: string; text: string } {
   const configs: Record<InvoiceStatus, { color: string; text: string }> = {
-    DRAFT: { color: 'default', text: 'DRAFT' },
-    ISSUED: { color: 'blue', text: 'ISSUED' },
-    PAID: { color: 'green', text: 'PAID' },
-    VOID: { color: 'default', text: 'VOID' },
-    OVERDUE: { color: 'red', text: 'OVERDUE' },
+    DRAFT: { color: 'default', text: '草稿' },
+    ISSUED: { color: 'blue', text: '已发出' },
+    PAID: { color: 'green', text: '已支付' },
+    VOID: { color: 'default', text: '已作废' },
+    OVERDUE: { color: 'red', text: '已逾期' },
   };
   return configs[status];
 }

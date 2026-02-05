@@ -51,7 +51,18 @@ billingRouter.get('/:orgId/invoices', requirePermission('billing.read'), async (
     orderBy: { issuedAt: 'desc' },
   });
 
-  return res.json({ invoices });
+  // 为每个账单添加是否有待确认读数的标识
+  const invoicesWithPendingReading = invoices.map((invoice) => {
+    const hasPendingReading = invoice.items.some(
+      (item) => item.mode === 'METERED' && item.status === 'PENDING_READING',
+    );
+    return {
+      ...invoice,
+      hasPendingReading,
+    };
+  });
+
+  return res.json({ invoices: invoicesWithPendingReading });
 });
 
 billingRouter.get('/:orgId/invoices/:invoiceId', requirePermission('billing.read'), async (req, res) => {
