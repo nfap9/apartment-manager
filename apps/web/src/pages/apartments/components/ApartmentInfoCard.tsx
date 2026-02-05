@@ -1,5 +1,5 @@
 import { Button, Card, Descriptions, Form, Input, InputNumber, Modal } from 'antd';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { Apartment } from '../../../lib/api/types';
 import { useApiMutation } from '../../../hooks/useApiMutation';
 import { apartmentsApi } from '../../../lib/api/index';
@@ -18,13 +18,26 @@ export function ApartmentInfoCard({ apartment, loading, canEdit, onUpdate }: Apa
   const [editOpen, setEditOpen] = useState(false);
   const [form] = Form.useForm<{ name: string; address: string; totalArea?: number; floor?: number }>();
 
+  const mutationFn = useMemo(() => {
+    return (data: { name: string; address: string; totalArea?: number; floor?: number }) => {
+      if (!apartment?.id) {
+        throw new Error('Apartment is not loaded');
+      }
+      return apartmentsApi.update(orgId!, apartment.id, data);
+    };
+  }, [apartment, orgId]);
+  
+  const invalidateQueries = useMemo(() => {
+    const queries: Array<readonly unknown[]> = [queryKeys.apartments.all(orgId!)];
+    if (apartment?.id) {
+      queries.push(queryKeys.apartments.detail(orgId!, apartment.id));
+    }
+    return queries;
+  }, [apartment, orgId]);
+
   const updateMutation = useApiMutation({
-    mutationFn: (data: { name: string; address: string; totalArea?: number; floor?: number }) =>
-      apartmentsApi.update(orgId!, apartment!.id, data),
-    invalidateQueries: [
-      queryKeys.apartments.detail(orgId!, apartment!.id),
-      queryKeys.apartments.all(orgId!),
-    ],
+    mutationFn,
+    invalidateQueries,
     successMessage: '已保存',
     errorMessage: '保存失败',
     onSuccess: () => {

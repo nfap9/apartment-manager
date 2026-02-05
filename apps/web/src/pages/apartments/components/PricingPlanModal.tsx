@@ -1,5 +1,5 @@
 import { Button, Form, InputNumber, Modal, Space } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import type { Room, PricingPlan } from '../../../lib/api/types';
 import { useApiMutation } from '../../../hooks/useApiMutation';
 import { roomsApi } from '../../../lib/api/index';
@@ -26,10 +26,26 @@ export function PricingPlanModal({ open, room, onClose, onSuccess }: PricingPlan
     }
   }, [form, open, pricingPlansQuery.data?.pricingPlans]);
 
+  const mutationFn = useMemo(() => {
+    return (plans: PricingPlan[]) => {
+      if (!room?.id) {
+        throw new Error('Room is not loaded');
+      }
+      return roomsApi.updatePricingPlans(orgId!, room.id, plans);
+    };
+  }, [room, orgId]);
+
+  const invalidateQueries = useMemo(() => {
+    const queries: Array<readonly unknown[]> = [];
+    if (room?.id && orgId) {
+      queries.push(queryKeys.rooms.pricingPlans(orgId, room.id));
+    }
+    return queries;
+  }, [room, orgId]);
+
   const updateMutation = useApiMutation({
-    mutationFn: (plans: PricingPlan[]) =>
-      roomsApi.updatePricingPlans(orgId!, room!.id, plans),
-    invalidateQueries: [queryKeys.rooms.pricingPlans(orgId!, room!.id)],
+    mutationFn,
+    invalidateQueries,
     successMessage: '已保存',
     errorMessage: '保存失败',
     onSuccess: () => {

@@ -1,5 +1,5 @@
 import { Button, Form, Input, InputNumber, Modal, Space } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import type { Room } from '../../../lib/api/types';
 import { useApiMutation } from '../../../hooks/useApiMutation';
 import { roomsApi } from '../../../lib/api/index';
@@ -40,13 +40,26 @@ export function RoomFacilityModal({
     }
   }, [form, open, facilitiesQuery.data?.facilities]);
 
+  const mutationFn = useMemo(() => {
+    return (facilities: Array<{ name: string; quantity: number; valueCents: number }>) => {
+      if (!room?.id) {
+        throw new Error('Room is not loaded');
+      }
+      return roomsApi.updateFacilities(orgId!, room.id, facilities);
+    };
+  }, [room, orgId]);
+
+  const invalidateQueries = useMemo(() => {
+    const queries: Array<readonly unknown[]> = [queryKeys.apartments.detail(orgId!, apartmentId)];
+    if (room?.id && orgId) {
+      queries.push(queryKeys.rooms.facilities(orgId, room.id));
+    }
+    return queries;
+  }, [room, orgId, apartmentId]);
+
   const updateMutation = useApiMutation({
-    mutationFn: (facilities: Array<{ name: string; quantity: number; valueCents: number }>) =>
-      roomsApi.updateFacilities(orgId!, room!.id, facilities),
-    invalidateQueries: [
-      queryKeys.rooms.facilities(orgId!, room!.id),
-      queryKeys.apartments.detail(orgId!, apartmentId),
-    ],
+    mutationFn,
+    invalidateQueries,
     successMessage: '已保存',
     errorMessage: '保存失败',
     onSuccess: () => {
