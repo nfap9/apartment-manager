@@ -431,7 +431,7 @@ apartmentRouter.post(
       throw new HttpError(400, 'INVALID_EXCEL', '未找到"房间"工作表');
     }
 
-    const roomRows = XLSX.utils.sheet_to_json<Record<string, unknown>>(roomSheet, { header: 1 }) as unknown[][];
+    const roomRows = XLSX.utils.sheet_to_json(roomSheet, { header: 1 }) as unknown[][];
     if (roomRows.length < 2) {
       throw new HttpError(400, 'EMPTY_DATA', '房间数据为空');
     }
@@ -440,7 +440,7 @@ apartmentRouter.post(
     const facilitySheet = wb.Sheets['设施'];
     let facilityRows: unknown[][] = [];
     if (facilitySheet) {
-      facilityRows = XLSX.utils.sheet_to_json<Record<string, unknown>>(facilitySheet, { header: 1 }) as unknown[][];
+      facilityRows = XLSX.utils.sheet_to_json(facilitySheet, { header: 1 }) as unknown[][];
     }
 
     // 解析房间数据 (跳过标题行)
