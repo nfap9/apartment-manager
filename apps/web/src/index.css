@@ -142,4 +142,11 @@ body {
   margin: 0 !important;
 }
 
+/* 确保侧边栏子元素使用 flex 布局，使按钮固定在底部 */
+.ant-layout-sider-children {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+}
+
 

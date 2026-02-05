@@ -11,7 +11,7 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, Select, Space, Typography, Button, Breadcrumb } from 'antd';
+import { Layout, Menu, Select, Space, Typography, Button, Breadcrumb, Dropdown } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
@@ -182,20 +182,20 @@ export function AppLayout() {
         width={220}
         collapsedWidth={80}
         collapsed={collapsed}
-        onCollapse={setCollapsed}
         theme="light"
         style={{
-          overflow: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
           boxShadow: '2px 0 8px rgba(0, 0, 0, 0.06)',
         }}
       >
         <div
           style={{
-            padding: collapsed ? '16px 8px' : '16px 16px 8px',
+            height: 64,
+            padding: collapsed ? '0 8px' : '0 16px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: collapsed ? 'center' : 'flex-start',
-            borderBottom: '1px solid #f0f0f0',
             marginBottom: 8,
           }}
         >
@@ -223,13 +223,31 @@ export function AppLayout() {
             </div>
           )}
         </div>
-        <Menu
-          mode="inline"
-          items={menuItems}
-          selectedKeys={selectedKeys}
-          onClick={menuClickHandler}
-          style={{ borderRight: 0 }}
-        />
+        <div style={{ flex: 1, overflow: 'auto' }}>
+          <Menu
+            mode="inline"
+            items={menuItems}
+            selectedKeys={selectedKeys}
+            onClick={menuClickHandler}
+            style={{ borderRight: 0 }}
+          />
+        </div>
+        <div
+          style={{
+            padding: '8px',
+            borderTop: '1px solid #f0f0f0',
+            display: 'flex',
+            justifyContent: collapsed ? 'center' : 'flex-end',
+            flexShrink: 0,
+          }}
+        >
+          <Button
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+            style={{ width: collapsed ? '100%' : 'auto' }}
+          />
+        </div>
       </Sider>
 
       <Layout style={{ minHeight: 0, overflow: 'hidden' }}>
@@ -246,35 +264,45 @@ export function AppLayout() {
           }}
         >
           <Space style={{ flex: 1, minWidth: 0 }} align="center">
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-            />
             <Breadcrumb
               items={breadcrumbItems}
               style={{ margin: 0 }}
             />
+          </Space>
+
+          <Space align="center">
             <Select
               placeholder="选择组织"
-              style={{ width: 260, minWidth: 200 }}
+              style={{ width: 150 }}
               options={orgOptions}
               value={activeOrgId ?? undefined}
               onChange={(v) => setActiveOrgId(v)}
-              loading={loadingMe}
+              loading={loadingMe && organizations.length === 0}
               disabled={loadingMe || orgOptions.length === 0}
               size="middle"
             />
-            {loadingMe && <Typography.Text type="secondary">加载中...</Typography.Text>}
-          </Space>
-
-          <Space>
-            <Typography.Text strong style={{ color: 'rgba(0, 0, 0, 0.85)' }}>
-              {user?.displayName ?? user?.phone ?? '未登录'}
-            </Typography.Text>
-            <Button icon={<LogoutOutlined />} onClick={onLogout} size="middle">
-              退出
-            </Button>
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: 'logout',
+                    label: '退出登录',
+                    icon: <LogoutOutlined />,
+                    onClick: onLogout,
+                  },
+                ],
+              }}
+              placement="bottomRight"
+            >
+              <Button type="text" style={{ padding: '0 8px', height: 'auto' }}>
+                <Space>
+                  <UserOutlined />
+                  <Typography.Text strong style={{ color: 'rgba(0, 0, 0, 0.85)' }}>
+                    {user?.displayName ?? user?.phone ?? '未登录'}
+                  </Typography.Text>
+                </Space>
+              </Button>
+            </Dropdown>
           </Space>
         </Header>
 
