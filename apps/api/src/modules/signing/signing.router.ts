@@ -158,18 +158,19 @@ signingRouter.post('/:orgId/signing', requirePermission('lease.write'), async (r
   }
 
   // 检查租期冲突
+  // 只有未终止的租约(TERMINATED)才会阻止创建新租约
   const overlapping = await prisma.lease.findFirst({
     where: {
       organizationId: orgId,
       roomId: body.roomId,
-      status: { in: ['ACTIVE', 'DRAFT'] },
+      status: { not: 'TERMINATED' }, // 排除已终止的租约
       startDate: { lt: body.endDate },
       endDate: { gt: body.startDate },
     },
     select: { id: true, startDate: true, endDate: true, status: true },
   });
   if (overlapping) {
-    throw new HttpError(409, 'LEASE_OVERLAP', '该房间在租期内已存在生效/草稿租约', overlapping);
+    throw new HttpError(409, 'LEASE_OVERLAP', '该房间在租期内已存在未终止的租约', overlapping);
   }
 
   // 执行事务：创建租客（可选）、创建租约、更新房间状态

@@ -73,12 +73,14 @@ async function assertTenantBelongsToOrg(orgId: string, tenantId: string) {
 }
 
 async function assertNoOverlappingLease(orgId: string, roomId: string, startDate: Date, endDate: Date, excludeLeaseId?: string) {
+  // 检查是否有未终止的租约在时间范围内重叠
+  // 只有未终止的租约(TERMINATED)才会阻止创建新租约
   const overlapping = await prisma.lease.findFirst({
     where: {
       organizationId: orgId,
       roomId,
       ...(excludeLeaseId ? { id: { not: excludeLeaseId } } : {}),
-      status: { in: ['ACTIVE', 'DRAFT'] },
+      status: { not: 'TERMINATED' }, // 排除已终止的租约
       startDate: { lt: endDate },
       endDate: { gt: startDate },
     },
@@ -86,7 +88,7 @@ async function assertNoOverlappingLease(orgId: string, roomId: string, startDate
   });
 
   if (overlapping) {
-    throw new HttpError(409, 'LEASE_OVERLAP', '该房间在租期内已存在生效/草稿租约', overlapping);
+    throw new HttpError(409, 'LEASE_OVERLAP', '该房间在租期内已存在未终止的租约', overlapping);
   }
 }
 
