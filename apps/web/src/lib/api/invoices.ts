@@ -42,4 +42,28 @@ export const invoicesApi = {
   runBilling: async (orgId: string): Promise<void> => {
     await api.post(`/api/orgs/${orgId}/billing/run`);
   },
+
+  /**
+   * 确认账单
+   */
+  confirmInvoice: async (orgId: string, invoiceId: string): Promise<void> => {
+    await api.post(`/api/orgs/${orgId}/invoices/${invoiceId}/confirm`);
+  },
+
+  /**
+   * 导出账单Excel
+   */
+  exportExcel: async (orgId: string, invoiceId: string): Promise<Blob> => {
+    const r = await api.get(`/api/orgs/${orgId}/invoices/${invoiceId}/export`, {
+      responseType: 'blob',
+    });
+    return r.data;
+  },
+
+  /**
+   * 标记账单为已支付
+   */
+  markPaid: async (orgId: string, invoiceId: string): Promise<void> => {
+    await api.post(`/api/orgs/${orgId}/invoices/${invoiceId}/mark-paid`);
+  },
 };

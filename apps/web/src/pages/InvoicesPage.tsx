@@ -342,6 +342,77 @@ export function InvoicesPage() {
                 pagination={false}
               />
             </Card>
+
+            {canManage && (
+              <Card size="small" title="操作">
+                <Space>
+                  {invoice.items.some((item) => item.mode === 'METERED' && item.status === 'PENDING_READING') ? (
+                    <Button
+                      type="primary"
+                      onClick={async () => {
+                        if (!orgId || !activeInvoiceId) return;
+                        try {
+                          await api.post(`/api/orgs/${orgId}/invoices/${activeInvoiceId}/confirm`);
+                          message.success('账单已确认');
+                          await qc.invalidateQueries({ queryKey: ['invoice', orgId, activeInvoiceId] });
+                          await qc.invalidateQueries({ queryKey: ['invoices', orgId] });
+                        } catch (err) {
+                          const e = err as AxiosError<ApiErrorResponse>;
+                          message.error(e.response?.data?.error?.message ?? '确认失败');
+                        }
+                      }}
+                    >
+                      确认账单
+                    </Button>
+                  ) : null}
+                  <Button
+                    onClick={async () => {
+                      if (!orgId || !activeInvoiceId) return;
+                      try {
+                        const r = await api.get(`/api/orgs/${orgId}/invoices/${activeInvoiceId}/export`, {
+                          responseType: 'blob',
+                        });
+                        const blob = new Blob([r.data], {
+                          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        });
+                        const url = window.URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = `invoice-${activeInvoiceId}.xlsx`;
+                        link.click();
+                        window.URL.revokeObjectURL(url);
+                        message.success('导出成功');
+                      } catch (err) {
+                        const e = err as AxiosError<ApiErrorResponse>;
+                        message.error(e.response?.data?.error?.message ?? '导出失败');
+                      }
+                    }}
+                  >
+                    导出Excel
+                  </Button>
+                  {invoice.status !== 'PAID' && invoice.status !== 'VOID' ? (
+                    <Button
+                      type="primary"
+                      danger
+                      onClick={async () => {
+                        if (!orgId || !activeInvoiceId) return;
+                        try {
+                          await api.post(`/api/orgs/${orgId}/invoices/${activeInvoiceId}/mark-paid`);
+                          message.success('已标记为已支付');
+                          await qc.invalidateQueries({ queryKey: ['invoice', orgId, activeInvoiceId] });
+                          await qc.invalidateQueries({ queryKey: ['invoices', orgId] });
+                        } catch (err) {
+                          const e = err as AxiosError<ApiErrorResponse>;
+                          message.error(e.response?.data?.error?.message ?? '标记失败');
+                        }
+                      }}
+                    >
+                      标记已支付
+                    </Button>
+                  ) : null}
+                </Space>
+              </Card>
+            )}
           </Space>
         ) : (
           <Typography.Text type="secondary">未找到账单</Typography.Text>
@@ -386,9 +457,14 @@ function MeterReadingModal(props: {
     setLoading(true);
     try {
       const values = await form.validateFields();
+      // 将字符串转换为数字（InputNumber 可能返回字符串）
+      const payload = {
+        meterStart: values.meterStart != null ? Number(values.meterStart) : undefined,
+        meterEnd: Number(values.meterEnd),
+      };
       await api.post(
         `/api/orgs/${props.orgId}/invoices/${props.invoiceId}/items/${props.item.id}/confirm-reading`,
-        values,
+        payload,
       );
 
       message.success('已确认读数');

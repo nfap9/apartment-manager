@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import * as XLSX from 'xlsx';
 
 import type { Lease, LeaseCharge } from '../../../prisma/generated/prisma/client';
 import { prisma } from '../../db';
@@ -41,6 +42,46 @@ function shouldBillCharge(leaseStartDate: Date, periodStart: Date, chargeCycleMo
   if (cycle <= 1) return true;
   const m = Math.max(0, monthsDiff(leaseStartDate, periodStart));
   return m % cycle === 0;
+}
+
+/**
+ * 根据费用类型和billingTiming确定费用的账期
+ * @param charge 费用项
+ * @param invoicePeriodStart 账单的periodStart（通常是下个月的第一天）
+ * @param invoicePeriodEnd 账单的periodEnd（通常是下个月的最后一天）
+ * @returns 费用的实际账期 { start: Date, end: Date }
+ */
+function getChargePeriod(
+  charge: LeaseCharge,
+  invoicePeriodStart: Date,
+  invoicePeriodEnd: Date,
+): { start: Date; end: Date } {
+  // 房租：预付，账期是下个月（invoicePeriodStart 到 invoicePeriodEnd）
+  // 水电费：后付，账期是上个月
+  // 其他费用：根据 billingTiming 配置
+
+  // 判断是否是水电费
+  const isUtility = charge.feeType === 'WATER' || charge.feeType === 'ELECTRICITY';
+
+  // 确定 billingTiming
+  let billingTiming: 'PREPAID' | 'POSTPAID';
+  if (isUtility) {
+    // 水电费默认后付
+    billingTiming = charge.billingTiming === 'PREPAID' ? 'PREPAID' : 'POSTPAID';
+  } else {
+    // 其他费用默认预付，但可以配置
+    billingTiming = charge.billingTiming === 'POSTPAID' ? 'POSTPAID' : 'PREPAID';
+  }
+
+  if (billingTiming === 'POSTPAID') {
+    // 后付：账期是上个月
+    const periodStart = addMonths(invoicePeriodStart, -1);
+    const periodEnd = dayjs(invoicePeriodStart).subtract(1, 'day').toDate();
+    return { start: periodStart, end: periodEnd };
+  } else {
+    // 预付：账期是下个月（invoicePeriodStart 到 invoicePeriodEnd）
+    return { start: invoicePeriodStart, end: invoicePeriodEnd };
+  }
 }
 
 type GenerateDueInvoicesOptions = {
@@ -103,17 +144,31 @@ async function createInvoiceForLeasePeriod(
   periodStart: Date,
   periodEnd: Date,
 ) {
+  // periodStart 和 periodEnd 是账单的账期（通常是下个月）
+  // 房租：预付，账期是 periodStart 到 periodEnd（下个月）
   const rentCents = computeRentCents(lease, periodStart);
 
-  const fixedChargeItems = charges
-    .filter((c) => c.isActive)
-    .filter((c) => shouldBillCharge(lease.startDate, periodStart, c.billingCycleMonths))
-    .filter((c) => c.mode === 'FIXED');
+  // 筛选需要计费的费用项
+  // 注意：对于后付费用（如水电费），需要检查上个月的周期
+  const allChargeItems = charges.filter((c) => c.isActive);
 
-  const meteredChargeItems = charges
-    .filter((c) => c.isActive)
-    .filter((c) => shouldBillCharge(lease.startDate, periodStart, c.billingCycleMonths))
-    .filter((c) => c.mode === 'METERED');
+  // 分别处理固定费用和按量计费
+  const fixedChargeItems: LeaseCharge[] = [];
+  const meteredChargeItems: LeaseCharge[] = [];
+
+  for (const charge of allChargeItems) {
+    // 确定费用的账期
+    const chargePeriod = getChargePeriod(charge, periodStart, periodEnd);
+    
+    // 检查是否应该计费（根据费用的计费周期）
+    if (shouldBillCharge(lease.startDate, chargePeriod.start, charge.billingCycleMonths)) {
+      if (charge.mode === 'FIXED') {
+        fixedChargeItems.push(charge);
+      } else if (charge.mode === 'METERED') {
+        meteredChargeItems.push(charge);
+      }
+    }
+  }
 
   const fixedChargeTotal = fixedChargeItems.reduce((sum, c) => sum + (c.fixedAmountCents ?? 0), 0);
   const totalAmountCents = rentCents + fixedChargeTotal;
@@ -313,3 +368,181 @@ export async function confirmInvoiceItemReading(params: {
   return { ok: true };
 }
 
+/**
+ * 确认账单：检查所有读数是否已确认，确认后更新账单状态
+ */
+export async function confirmInvoice(params: { organizationId: string; invoiceId: string }) {
+  const invoice = await prisma.invoice.findFirst({
+    where: {
+      id: params.invoiceId,
+      organizationId: params.organizationId,
+    },
+    include: {
+      items: true,
+    },
+  });
+
+  if (!invoice) throw new HttpError(404, 'INVOICE_NOT_FOUND', '账单不存在');
+  if (invoice.status === 'PAID') throw new HttpError(400, 'INVALID_STATUS', '账单已支付，无需确认');
+  if (invoice.status === 'VOID') throw new HttpError(400, 'INVALID_STATUS', '账单已作废，无法确认');
+
+  // 检查是否所有读数都已确认
+  const pendingReadings = invoice.items.filter(
+    (item) => item.mode === 'METERED' && item.status === 'PENDING_READING',
+  );
+
+  if (pendingReadings.length > 0) {
+    throw new HttpError(400, 'PENDING_READINGS', '存在待确认的读数，请先确认所有读数');
+  }
+
+  // 更新账单状态为 ISSUED（如果还不是）
+  if (invoice.status === 'DRAFT') {
+    await prisma.invoice.update({
+      where: { id: invoice.id },
+      data: { status: 'ISSUED' },
+    });
+  }
+
+  return { ok: true };
+}
+
+/**
+ * 标记账单为已支付
+ */
+export async function markInvoiceAsPaid(params: { organizationId: string; invoiceId: string }) {
+  const invoice = await prisma.invoice.findFirst({
+    where: {
+      id: params.invoiceId,
+      organizationId: params.organizationId,
+    },
+  });
+
+  if (!invoice) throw new HttpError(404, 'INVOICE_NOT_FOUND', '账单不存在');
+  if (invoice.status === 'PAID') throw new HttpError(400, 'INVALID_STATUS', '账单已支付');
+  if (invoice.status === 'VOID') throw new HttpError(400, 'INVALID_STATUS', '账单已作废，无法标记为已支付');
+
+  await prisma.invoice.update({
+    where: { id: invoice.id },
+    data: {
+      status: 'PAID',
+      paidAt: new Date(),
+    },
+  });
+
+  return { ok: true };
+}
+
+
+
+/**
+ * 导出账单为Excel文件
+ */
+export async function exportInvoiceToExcel(params: { organizationId: string; invoiceId: string }) {
+  const invoice = await prisma.invoice.findFirst({
+    where: {
+      id: params.invoiceId,
+      organizationId: params.organizationId,
+    },
+    include: {
+      lease: {
+        include: {
+          room: {
+            include: {
+              apartment: true,
+            },
+          },
+          tenant: true,
+        },
+      },
+      items: {
+        orderBy: [
+          { kind: 'asc' },
+          { createdAt: 'asc' },
+        ],
+      },
+    },
+  });
+
+  if (!invoice) throw new HttpError(404, 'INVOICE_NOT_FOUND', '账单不存在');
+
+  // 创建工作簿
+  const workbook = XLSX.utils.book_new();
+
+  // 创建账单基本信息
+  const basicInfo = [
+    ['账单信息', ''],
+    ['账单编号', invoice.id],
+    ['公寓', invoice.lease.room.apartment.name],
+    ['房间', invoice.lease.room.name],
+    ['租客', invoice.lease.tenant.name],
+    ['租客电话', invoice.lease.tenant.phone],
+    ['账期开始', dayjs(invoice.periodStart).format('YYYY-MM-DD')],
+    ['账期结束', dayjs(invoice.periodEnd).format('YYYY-MM-DD')],
+    ['到期日期', dayjs(invoice.dueDate).format('YYYY-MM-DD')],
+    ['账单状态', invoice.status],
+    ['总金额', `¥${(invoice.totalAmountCents / 100).toFixed(2)}`],
+    ['生成时间', dayjs(invoice.issuedAt).format('YYYY-MM-DD HH:mm:ss')],
+    invoice.paidAt ? ['支付时间', dayjs(invoice.paidAt).format('YYYY-MM-DD HH:mm:ss')] : ['支付时间', '未支付'],
+  ];
+
+  const basicInfoSheet = XLSX.utils.aoa_to_sheet(basicInfo);
+  XLSX.utils.book_append_sheet(workbook, basicInfoSheet, '账单信息');
+
+  // 创建账单明细
+  const itemsData = [
+    ['项目名称', '类型', '计费模式', '起度', '止度', '用量', '单价', '单位', '金额', '状态'],
+  ];
+
+  for (const item of invoice.items) {
+    const row = [
+      item.name,
+      item.kind === 'RENT' ? '房租' : item.kind === 'DEPOSIT' ? '押金' : '费用',
+      item.mode === 'FIXED' ? '固定' : item.mode === 'METERED' ? '按量' : '-',
+      item.meterStart != null ? item.meterStart.toFixed(2) : '-',
+      item.meterEnd != null ? item.meterEnd.toFixed(2) : '-',
+      item.quantity != null ? item.quantity.toFixed(2) : '-',
+      item.unitPriceCents != null ? `¥${(item.unitPriceCents / 100).toFixed(2)}` : '-',
+      item.unitName || '-',
+      item.amountCents != null ? `¥${(item.amountCents / 100).toFixed(2)}` : '-',
+      item.status === 'PENDING_READING' ? '待确认读数' : '已确认',
+    ];
+    itemsData.push(row);
+  }
+
+  // 添加合计
+  itemsData.push([
+    '合计',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    `¥${(invoice.totalAmountCents / 100).toFixed(2)}`,
+    '',
+  ]);
+
+  const itemsSheet = XLSX.utils.aoa_to_sheet(itemsData);
+  
+  // 设置列宽
+  itemsSheet['!cols'] = [
+    { wch: 15 }, // 项目名称
+    { wch: 8 },  // 类型
+    { wch: 10 }, // 计费模式
+    { wch: 10 }, // 起度
+    { wch: 10 }, // 止度
+    { wch: 10 }, // 用量
+    { wch: 12 }, // 单价
+    { wch: 8 },  // 单位
+    { wch: 12 }, // 金额
+    { wch: 12 }, // 状态
+  ];
+
+  XLSX.utils.book_append_sheet(workbook, itemsSheet, '账单明细');
+
+  // 生成Excel文件缓冲区
+  const excelBuffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+
+  return excelBuffer;
+}

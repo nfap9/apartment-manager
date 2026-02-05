@@ -8,7 +8,13 @@ import { requireAuth } from '../../middleware/requireAuth';
 import { requireOrgMember } from '../../middleware/requireOrgMember';
 import { requirePermission } from '../../middleware/requirePermission';
 
-import { confirmInvoiceItemReading, generateDueInvoices } from './billing.service';
+import {
+  confirmInvoice,
+  confirmInvoiceItemReading,
+  exportInvoiceToExcel,
+  generateDueInvoices,
+  markInvoiceAsPaid,
+} from './billing.service';
 
 export const billingRouter = Router();
 
@@ -108,3 +114,52 @@ billingRouter.post(
   },
 );
 
+billingRouter.post(
+  '/:orgId/invoices/:invoiceId/confirm',
+  requirePermission('billing.manage'),
+  async (req, res) => {
+    const orgId = getParam(req, 'orgId');
+    const invoiceId = getParam(req, 'invoiceId');
+
+    const result = await confirmInvoice({
+      organizationId: orgId,
+      invoiceId,
+    });
+
+    return res.json(result);
+  },
+);
+
+billingRouter.get(
+  '/:orgId/invoices/:invoiceId/export',
+  requirePermission('billing.read'),
+  async (req, res) => {
+    const orgId = getParam(req, 'orgId');
+    const invoiceId = getParam(req, 'invoiceId');
+
+    const excelBuffer = await exportInvoiceToExcel({
+      organizationId: orgId,
+      invoiceId,
+    });
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename=invoice-${invoiceId}.xlsx`);
+    return res.send(excelBuffer);
+  },
+);
+
+billingRouter.post(
+  '/:orgId/invoices/:invoiceId/mark-paid',
+  requirePermission('billing.manage'),
+  async (req, res) => {
+    const orgId = getParam(req, 'orgId');
+    const invoiceId = getParam(req, 'invoiceId');
+
+    const result = await markInvoiceAsPaid({
+      organizationId: orgId,
+      invoiceId,
+    });
+
+    return res.json(result);
+  },
+);

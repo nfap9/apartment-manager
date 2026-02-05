@@ -59,6 +59,11 @@ enum InvoiceItemStatus {
   CONFIRMED
 }
 
+enum BillingTiming {
+  PREPAID
+  POSTPAID
+}
+
 enum NotificationType {
   INVOICE_CREATED
   LEASE_EXPIRING
@@ -375,6 +380,7 @@ model LeaseCharge {
   unitPriceCents   Int?
   unitName         String?
   billingCycleMonths Int @default(1)
+  billingTiming    BillingTiming?
   isActive Boolean @default(true)
 
   lease Lease @relation(fields: [leaseId], references: [id], onDelete: Cascade)
