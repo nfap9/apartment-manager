@@ -348,13 +348,14 @@ export function OrgPage() {
   }
 
   return (
-    <PageContainer>
-      <Card
-        style={{
-          borderRadius: 8,
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-        }}
-      >
+    <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
+      <PageContainer>
+        <Card
+          style={{
+            borderRadius: 8,
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+          }}
+        >
       <Tabs
         items={[
           ...(canInvite
@@ -544,8 +545,9 @@ export function OrgPage() {
             : []),
         ]}
       />
-      </Card>
-    </PageContainer>
+        </Card>
+      </PageContainer>
+    </div>
   );
 }
 

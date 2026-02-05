@@ -308,18 +308,17 @@ export function AppLayout() {
 
         <Content
           style={{
-            padding: 24,
+            padding: 0,
             overflow: 'hidden',
             minHeight: 0,
+            flex: 1,
             background: '#fff',
             boxShadow: 'inset 0 2px 8px rgba(0, 0, 0, 0.06)',
             display: 'flex',
             flexDirection: 'column',
           }}
         >
-          <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
-            <Outlet />
-          </div>
+          <Outlet />
         </Content>
       </Layout>
     </Layout>

@@ -104,7 +104,7 @@ export function TenantsPage() {
 
   return (
     <>
-      <div>
+      <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
         <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
           <Space>
             <Input.Search
@@ -121,21 +121,19 @@ export function TenantsPage() {
             </Button>
           </Space>
         </div>
-        <div>
-          <Spin spinning={query.isLoading}>
-            <Table<Tenant>
-              rowKey="id"
-              dataSource={tenants}
-              columns={columns}
-              pagination={{
-                pageSize: 10,
-                showSizeChanger: true,
-                showTotal: (total) => `共 ${total} 条`,
-              }}
-              scroll={{ x: 'max-content' }}
-            />
-          </Spin>
-        </div>
+        <Spin spinning={query.isLoading}>
+          <Table<Tenant>
+            rowKey="id"
+            dataSource={tenants}
+            columns={columns}
+            pagination={{
+              pageSize: 10,
+              showSizeChanger: true,
+              showTotal: (total) => `共 ${total} 条`,
+            }}
+            scroll={{ x: 'max-content' }}
+          />
+        </Spin>
       </div>
 
       <Modal

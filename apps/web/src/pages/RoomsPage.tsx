@@ -184,9 +184,8 @@ export function RoomsPage() {
 
   return (
     <>
-      <div>
-        <div>
-          {apartmentsQuery.isLoading ? (
+      <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
+        {apartmentsQuery.isLoading ? (
             <div style={{ padding: '20px', textAlign: 'center' }}>
               <Typography.Text type="secondary">加载中...</Typography.Text>
             </div>
@@ -197,24 +196,21 @@ export function RoomsPage() {
               items={tabItems}
             />
           )}
-        </div>
         
-        <div>
-          {activeTab && (
-            <RoomTable
-              rooms={rooms}
-              canEdit={canEdit}
-              canPricingManage={canPricingManage}
-              onEdit={handleEdit}
-              onFacility={handleFacility}
-              onPricing={handlePricing}
-              onDownloadTemplate={handleDownloadTemplate}
-              onImport={handleImport}
-              importUploading={importUploading}
-              showImportExport={false}
-            />
-          )}
-        </div>
+        {activeTab && (
+          <RoomTable
+            rooms={rooms}
+            canEdit={canEdit}
+            canPricingManage={canPricingManage}
+            onEdit={handleEdit}
+            onFacility={handleFacility}
+            onPricing={handlePricing}
+            onDownloadTemplate={handleDownloadTemplate}
+            onImport={handleImport}
+            importUploading={importUploading}
+            showImportExport={false}
+          />
+        )}
       </div>
 
       {/* 编辑房间Modal */}

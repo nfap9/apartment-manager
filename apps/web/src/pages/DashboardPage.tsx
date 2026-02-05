@@ -607,7 +607,7 @@ export function DashboardPage() {
   );
 
   return (
-    <div style={{ width: '100%', overflowX: 'hidden' }}>
+    <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
       <div style={{ marginBottom: 24 }}>
         <Segmented
           options={[

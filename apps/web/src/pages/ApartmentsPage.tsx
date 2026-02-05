@@ -60,7 +60,7 @@ export function ApartmentsPage() {
 
   return (
     <>
-      <div style={{ width: '100%', overflow: 'hidden' }}>
+      <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
         <Spin spinning={query.isLoading}>
           <Row gutter={[16, 16]} style={{ margin: 0 }}>
             {/* 新增公寓卡片 */}

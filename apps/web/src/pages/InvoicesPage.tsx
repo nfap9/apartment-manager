@@ -291,7 +291,7 @@ export function InvoicesPage() {
 
   return (
     <>
-      <div>
+      <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
         {canManage && (
           <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
             <Button
@@ -304,11 +304,10 @@ export function InvoicesPage() {
             </Button>
           </div>
         )}
-        <div>
-          <Tabs
-            activeKey={statusFilter ?? ''}
-            onChange={(key) => setStatusFilter(key === '' ? undefined : key)}
-            items={statusTabs.map((tab) => {
+        <Tabs
+          activeKey={statusFilter ?? ''}
+          onChange={(key) => setStatusFilter(key === '' ? undefined : key)}
+          items={statusTabs.map((tab) => {
             let count = 0;
             if (tab.key === '') {
               count = invoices.length;
@@ -361,7 +360,6 @@ export function InvoicesPage() {
             };
           })}
         />
-        </div>
       </div>
 
       <Drawer

@@ -93,28 +93,26 @@ export function NotificationsPage() {
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
-        <div style={{ flexShrink: 0, marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
+      <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
+        <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
           <Space>
             <span style={{ color: 'rgba(0, 0, 0, 0.65)' }}>只看未读</span>
             <Switch checked={unreadOnly} onChange={setUnreadOnly} />
           </Space>
         </div>
-        <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
-          <Spin spinning={query.isLoading}>
-            <Table<NotificationRow>
-              rowKey="id"
-              dataSource={dataSource}
-              columns={columns}
-              pagination={{
-                pageSize: 10,
-                showSizeChanger: true,
-                showTotal: (total) => `共 ${total} 条`,
-              }}
-              scroll={{ x: 'max-content' }}
-            />
-          </Spin>
-        </div>
+        <Spin spinning={query.isLoading}>
+          <Table<NotificationRow>
+            rowKey="id"
+            dataSource={dataSource}
+            columns={columns}
+            pagination={{
+              pageSize: 10,
+              showSizeChanger: true,
+              showTotal: (total) => `共 ${total} 条`,
+            }}
+            scroll={{ x: 'max-content' }}
+          />
+        </Spin>
       </div>
     </>
   );

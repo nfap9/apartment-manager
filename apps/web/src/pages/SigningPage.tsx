@@ -407,36 +407,40 @@ export function SigningPage() {
 
   if (!orgId) {
     return (
-      <Typography.Text type="secondary">请先选择组织</Typography.Text>
+      <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
+        <Typography.Text type="secondary">请先选择组织</Typography.Text>
+      </div>
     );
   }
 
   if (success) {
     return (
-      <Result
-        status="success"
-        title="签约成功！"
-        subTitle="租约已创建，房间状态已更新为已租出"
-        extra={[
-          <Button key="leases" type="primary" onClick={() => navigate('/leases')}>
-            查看租约列表
-          </Button>,
-          <Button
-            key="new"
-            onClick={() => {
-              setSuccess(false);
-              setCurrentStep(0);
-              setSelectedTenant(null);
-              setSelectedRoom(null);
-              setTenantMode('select');
-              newTenantForm.resetFields();
-              leaseForm.resetFields();
-            }}
-          >
-            继续签约
-          </Button>,
-        ]}
-      />
+      <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
+        <Result
+          status="success"
+          title="签约成功！"
+          subTitle="租约已创建，房间状态已更新为已租出"
+          extra={[
+            <Button key="leases" type="primary" onClick={() => navigate('/leases')}>
+              查看租约列表
+            </Button>,
+            <Button
+              key="new"
+              onClick={() => {
+                setSuccess(false);
+                setCurrentStep(0);
+                setSelectedTenant(null);
+                setSelectedRoom(null);
+                setTenantMode('select');
+                newTenantForm.resetFields();
+                leaseForm.resetFields();
+              }}
+            >
+              继续签约
+            </Button>,
+          ]}
+        />
+      </div>
     );
   }
 
@@ -1011,10 +1015,8 @@ export function SigningPage() {
 
   return (
     <>
-      <div>
-        <div>
-          <Steps current={currentStep} items={steps.map((s) => ({ title: s.title, icon: s.icon }))} />
-        </div>
+      <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
+        <Steps current={currentStep} items={steps.map((s) => ({ title: s.title, icon: s.icon }))} />
 
         <div style={{ marginTop: 24 }}>
           {steps[currentStep].content}

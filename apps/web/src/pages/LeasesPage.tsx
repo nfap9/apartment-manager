@@ -401,7 +401,7 @@ export function LeasesPage() {
 
   return (
     <>
-      <div>
+      <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
         {canWrite && (
           <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
             <Button type="primary" icon={<PlusOutlined />} onClick={openCreate}>
@@ -409,21 +409,19 @@ export function LeasesPage() {
             </Button>
           </div>
         )}
-        <div>
-          <Spin spinning={leasesQuery.isLoading}>
-            <Table<LeaseRow>
-              rowKey="id"
-              dataSource={leases}
-              columns={columns}
-              pagination={{
-                pageSize: 10,
-                showSizeChanger: true,
-                showTotal: (total) => `共 ${total} 条`,
-              }}
-              scroll={{ x: 'max-content' }}
-            />
-          </Spin>
-        </div>
+        <Spin spinning={leasesQuery.isLoading}>
+          <Table<LeaseRow>
+            rowKey="id"
+            dataSource={leases}
+            columns={columns}
+            pagination={{
+              pageSize: 10,
+              showSizeChanger: true,
+              showTotal: (total) => `共 ${total} 条`,
+            }}
+            scroll={{ x: 'max-content' }}
+          />
+        </Spin>
       </div>
 
       <Modal
