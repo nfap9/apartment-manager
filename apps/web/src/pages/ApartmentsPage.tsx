@@ -60,128 +60,149 @@ export function ApartmentsPage() {
 
   return (
     <>
-      <div>
-        <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
-          <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalOpen(true)}>
-            新增公寓
-          </Button>
-        </div>
-        <div>
-          <Spin spinning={query.isLoading}>
-            {apartments.length === 0 ? (
-              <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                description="暂无公寓数据"
-                style={{ padding: '60px 0' }}
+      <div style={{ width: '100%', overflow: 'hidden' }}>
+        <Spin spinning={query.isLoading}>
+          <Row gutter={[16, 16]} style={{ margin: 0 }}>
+            {/* 新增公寓卡片 */}
+            <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={4}>
+              <div
+                onClick={() => setModalOpen(true)}
+                style={{
+                  padding: 12,
+                  border: '1px dashed #d9d9d9',
+                  borderRadius: 8,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s',
+                  minHeight: 180,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#1890ff';
+                  e.currentTarget.style.backgroundColor = '#f0f7ff';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#d9d9d9';
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }}
               >
-                <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalOpen(true)}>
-                  创建第一个公寓
-                </Button>
-              </Empty>
-            ) : (
-              <Row gutter={[24, 24]}>
-                {apartments.map((apartment) => (
-                  <Col key={apartment.id} xs={24} sm={12} lg={8} xl={6}>
-                    <div
-                      style={{
-                        padding: 20,
-                        border: '1px solid #f0f0f0',
-                        borderRadius: 8,
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                      }}
-                    >
-                      <div style={{ marginBottom: 16 }}>
-                        <Space>
-                          <HomeOutlined style={{ fontSize: 20, color: '#1890ff' }} />
-                          <Typography.Title level={5} style={{ margin: 0, fontSize: 18 }}>
-                            {apartment.name}
-                          </Typography.Title>
-                        </Space>
-                      </div>
-                      
-                      <Typography.Text type="secondary" ellipsis style={{ display: 'block', marginBottom: 16 }}>
-                        {apartment.address}
-                      </Typography.Text>
-                      
-                      {/* 突出显示房间统计信息 */}
-                      <div
-                        style={{
-                          background: 'linear-gradient(135deg, #f0f7ff 0%, #e6f7ff 100%)',
-                          borderRadius: 8,
-                          padding: 16,
-                          marginBottom: 12,
-                        }}
-                      >
-                        <Row gutter={16}>
-                          <Col span={12}>
-                            <Statistic
-                              title={<span style={{ fontSize: 12, fontWeight: 500, color: 'rgba(0, 0, 0, 0.65)' }}>房间总数</span>}
-                              value={apartment.totalRooms ?? 0}
-                              valueStyle={{
-                                fontSize: 28,
-                                fontWeight: 600,
-                                color: '#1890ff',
-                              }}
-                            />
-                          </Col>
-                          <Col span={12}>
-                            <Statistic
-                              title={<span style={{ fontSize: 12, fontWeight: 500, color: 'rgba(0, 0, 0, 0.65)' }}>空房数</span>}
-                              value={apartment.vacantRooms ?? 0}
-                              valueStyle={{
-                                fontSize: 28,
-                                fontWeight: 600,
-                                color: (apartment.vacantRooms ?? 0) > 0 ? '#52c41a' : '#ff4d4f',
-                              }}
-                            />
-                          </Col>
-                        </Row>
-                      </div>
+                <PlusOutlined style={{ fontSize: 32, color: '#1890ff', marginBottom: 8 }} />
+                <Typography.Text type="secondary" style={{ fontSize: 14 }}>
+                  新增公寓
+                </Typography.Text>
+              </div>
+            </Col>
 
-                      {/* 其他信息 */}
-                      {(apartment.totalArea != null || apartment.floor != null) && (
-                        <Row gutter={16} style={{ marginTop: 12 }}>
-                          {apartment.totalArea != null && (
-                            <Col span={12}>
-                              <Statistic
-                                title={<span style={{ fontSize: 12, color: 'rgba(0, 0, 0, 0.45)' }}>面积</span>}
-                                value={apartment.totalArea}
-                                suffix="㎡"
-                                valueStyle={{ fontSize: 16, fontWeight: 500 }}
-                              />
-                            </Col>
-                          )}
-                          {apartment.floor != null && (
-                            <Col span={12}>
-                              <Statistic
-                                title={<span style={{ fontSize: 12, color: 'rgba(0, 0, 0, 0.45)' }}>楼层</span>}
-                                value={apartment.floor}
-                                suffix="层"
-                                valueStyle={{ fontSize: 16, fontWeight: 500 }}
-                              />
-                            </Col>
-                          )}
-                        </Row>
+            {/* 公寓卡片列表 */}
+            {apartments.map((apartment) => (
+              <Col key={apartment.id} xs={24} sm={12} md={8} lg={6} xl={6} xxl={4}>
+                <div
+                  onClick={() => navigate(`/apartments/${apartment.id}`)}
+                  style={{
+                    padding: 12,
+                    border: '1px solid #f0f0f0',
+                    borderRadius: 8,
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s',
+                    minHeight: 180,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#1890ff';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(24, 144, 255, 0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#f0f0f0';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
+                  <div style={{ marginBottom: 8 }}>
+                    <Space size={8}>
+                      <HomeOutlined style={{ fontSize: 16, color: '#1890ff' }} />
+                      <Typography.Title level={5} style={{ margin: 0, fontSize: 16 }}>
+                        {apartment.name}
+                      </Typography.Title>
+                    </Space>
+                  </div>
+                  
+                  <Typography.Text 
+                    type="secondary" 
+                    ellipsis 
+                    style={{ display: 'block', marginBottom: 8, fontSize: 12 }}
+                  >
+                    {apartment.address}
+                  </Typography.Text>
+                  
+                  {/* 房间统计信息 */}
+                  <div
+                    style={{
+                      background: 'linear-gradient(135deg, #f0f7ff 0%, #e6f7ff 100%)',
+                      borderRadius: 6,
+                      padding: 10,
+                      marginBottom: 8,
+                    }}
+                  >
+                    <Row gutter={8}>
+                      <Col span={12}>
+                        <Statistic
+                          title={<span style={{ fontSize: 11, fontWeight: 500, color: 'rgba(0, 0, 0, 0.65)' }}>房间总数</span>}
+                          value={apartment.totalRooms ?? 0}
+                          valueStyle={{
+                            fontSize: 22,
+                            fontWeight: 600,
+                            color: '#1890ff',
+                          }}
+                        />
+                      </Col>
+                      <Col span={12}>
+                        <Statistic
+                          title={<span style={{ fontSize: 11, fontWeight: 500, color: 'rgba(0, 0, 0, 0.65)' }}>空房数</span>}
+                          value={apartment.vacantRooms ?? 0}
+                          valueStyle={{
+                            fontSize: 22,
+                            fontWeight: 600,
+                            color: (apartment.vacantRooms ?? 0) > 0 ? '#52c41a' : '#ff4d4f',
+                          }}
+                        />
+                      </Col>
+                    </Row>
+                  </div>
+
+                  {/* 其他信息 */}
+                  {(apartment.totalArea != null || apartment.floor != null) && (
+                    <Row gutter={8} style={{ marginTop: 'auto' }}>
+                      {apartment.totalArea != null && (
+                        <Col span={12}>
+                          <Statistic
+                            title={<span style={{ fontSize: 11, color: 'rgba(0, 0, 0, 0.45)' }}>面积</span>}
+                            value={apartment.totalArea}
+                            suffix="㎡"
+                            valueStyle={{ fontSize: 14, fontWeight: 500 }}
+                          />
+                        </Col>
                       )}
-
-                      <div style={{ marginTop: 'auto', paddingTop: 16 }}>
-                        <Button
-                          type="link"
-                          onClick={() => navigate(`/apartments/${apartment.id}`)}
-                          style={{ width: '100%' }}
-                        >
-                          查看详情
-                        </Button>
-                      </div>
-                    </div>
-                  </Col>
-                ))}
-              </Row>
-            )}
-          </Spin>
-        </div>
+                      {apartment.floor != null && (
+                        <Col span={12}>
+                          <Statistic
+                            title={<span style={{ fontSize: 11, color: 'rgba(0, 0, 0, 0.45)' }}>楼层</span>}
+                            value={apartment.floor}
+                            suffix="层"
+                            valueStyle={{ fontSize: 14, fontWeight: 500 }}
+                          />
+                        </Col>
+                      )}
+                    </Row>
+                  )}
+                </div>
+              </Col>
+            ))}
+          </Row>
+        </Spin>
       </div>
 
       <Modal
