@@ -35,9 +35,28 @@ apartmentRouter.get('/:orgId/apartments', requirePermission('apartment.read'), a
   const apartments = await prisma.apartment.findMany({
     where: { organizationId: orgId },
     orderBy: { createdAt: 'desc' },
+    include: {
+      rooms: {
+        where: { isActive: true },
+        select: { id: true, isRented: true },
+      },
+    },
   });
 
-  return res.json({ apartments });
+  // 计算每个公寓的房间统计信息
+  const apartmentsWithStats = apartments.map((apartment) => {
+    const { rooms, ...apartmentData } = apartment;
+    const totalRooms = rooms.length;
+    const vacantRooms = rooms.filter((room) => !room.isRented).length;
+    
+    return {
+      ...apartmentData,
+      totalRooms,
+      vacantRooms,
+    };
+  });
+
+  return res.json({ apartments: apartmentsWithStats });
 });
 
 apartmentRouter.post('/:orgId/apartments', requirePermission('apartment.write'), async (req, res) => {

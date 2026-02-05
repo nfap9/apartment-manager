@@ -80,7 +80,7 @@ export function RoomFacilityModal({
       onCancel={onClose}
       onOk={handleSave}
       confirmLoading={updateMutation.isLoading}
-      destroyOnClose
+      destroyOnHidden
       width={600}
     >
       <Form form={form} layout="vertical" style={{ marginTop: 8 }}>

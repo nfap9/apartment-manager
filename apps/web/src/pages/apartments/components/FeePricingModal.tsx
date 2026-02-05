@@ -55,7 +55,7 @@ export function FeePricingModal({
       onCancel={onClose}
       onOk={handleSave}
       confirmLoading={updateMutation.isLoading}
-      destroyOnClose
+      destroyOnHidden
     >
       <Form form={form} layout="vertical" style={{ marginTop: 8 }}>
         <Form.List name="items">

@@ -1,7 +1,7 @@
 import type { ColumnsType } from 'antd/es/table';
 import { Button, Card, Space, Table, Upload } from 'antd';
 import { DownloadOutlined, UploadOutlined } from '@ant-design/icons';
-import { useMemo } from 'react';
+import { useMemo, useRef, useEffect, useState } from 'react';
 import type { Room } from '../../../lib/api/types';
 import { StatusTag } from '../../../components/StatusTag';
 
@@ -15,6 +15,7 @@ interface RoomTableProps {
   onDownloadTemplate: () => void;
   onImport: (file: File) => void | Promise<boolean>;
   importUploading?: boolean;
+  showImportExport?: boolean;
 }
 
 export function RoomTable({
@@ -27,10 +28,28 @@ export function RoomTable({
   onDownloadTemplate,
   onImport,
   importUploading = false,
+  showImportExport = true,
 }: RoomTableProps) {
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const [scrollHeight, setScrollHeight] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    const updateScrollHeight = () => {
+      if (tableContainerRef.current) {
+        const height = tableContainerRef.current.clientHeight;
+        // 减去表头、分页等的高度，大约120px
+        setScrollHeight(Math.max(height - 120, 200));
+      }
+    };
+
+    updateScrollHeight();
+    window.addEventListener('resize', updateScrollHeight);
+    return () => window.removeEventListener('resize', updateScrollHeight);
+  }, []);
+
   const columns: ColumnsType<Room> = useMemo(
     () => [
-      { title: '房间', dataIndex: 'name', width: 100 },
+      { title: '房间', dataIndex: 'name', width: 100, fixed: 'left' as const },
       { title: '户型', dataIndex: 'layout', width: 100 },
       { title: '面积', dataIndex: 'area', width: 80 },
       {
@@ -64,6 +83,7 @@ export function RoomTable({
         title: '操作',
         key: 'actions',
         width: 280,
+        fixed: 'right' as const,
         render: (_: unknown, row) => (
           <Space>
             {canEdit ? (
@@ -91,7 +111,7 @@ export function RoomTable({
   return (
     <Card
       extra={
-        canEdit ? (
+        canEdit && showImportExport ? (
           <Space>
             <Button icon={<DownloadOutlined />} onClick={onDownloadTemplate}>
               下载模板
@@ -109,14 +129,28 @@ export function RoomTable({
           </Space>
         ) : null
       }
+      style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+      bodyStyle={{ 
+        flex: 1, 
+        display: 'flex', 
+        flexDirection: 'column', 
+        padding: '16px', 
+        overflow: 'hidden',
+        minHeight: 0
+      }}
     >
-      <Table<Room>
-        rowKey="id"
-        dataSource={rooms}
-        columns={columns}
-        pagination={{ pageSize: 10 }}
-        scroll={{ x: 900 }}
-      />
+      <div 
+        ref={tableContainerRef}
+        style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}
+      >
+        <Table<Room>
+          rowKey="id"
+          dataSource={rooms}
+          columns={columns}
+          pagination={{ pageSize: 10, placement: ['bottomCenter'] }}
+          scroll={{ x: 900, y: scrollHeight }}
+        />
+      </div>
     </Card>
   );
 }

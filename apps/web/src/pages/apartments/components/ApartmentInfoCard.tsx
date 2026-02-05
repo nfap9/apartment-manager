@@ -91,7 +91,7 @@ export function ApartmentInfoCard({ apartment, loading, canEdit, onUpdate }: Apa
         onCancel={() => setEditOpen(false)}
         onOk={handleSave}
         confirmLoading={updateMutation.isLoading}
-        destroyOnClose
+        destroyOnHidden
       >
         <Form form={form} layout="vertical">
           <Form.Item label="名称" name="name" rules={[{ required: true, message: '请输入名称' }]}>

@@ -11,6 +11,8 @@ export type Apartment = {
   floor?: number | null;
   createdAt: string;
   rooms?: Room[];
+  totalRooms?: number;
+  vacantRooms?: number;
 };
 
 export type ApartmentsResponse = {

@@ -25,6 +25,8 @@ import { api } from '../lib/api';
 import type { ApiErrorResponse } from '../lib/apiTypes';
 import { useAuthStore } from '../stores/auth';
 import { usePermissionStore } from '../stores/permissions';
+import { PageContainer } from '../components/PageContainer';
+import { PlusOutlined } from '@ant-design/icons';
 
 type LeaseCharge = {
   id: string;
@@ -392,25 +394,45 @@ export function LeasesPage() {
     }
   };
 
-  if (!orgId) return <Typography.Text type="secondary">请先选择组织</Typography.Text>;
+  if (!orgId) {
+    return (
+      <PageContainer>
+        <Typography.Text type="secondary">请先选择组织</Typography.Text>
+      </PageContainer>
+    );
+  }
 
   return (
     <>
-      <Card
-        title={
-          <Space>
-            <span>租约</span>
-            {canWrite ? (
-              <Button size="small" type="primary" onClick={openCreate}>
-                新建租约
-              </Button>
-            ) : null}
-          </Space>
+      <PageContainer
+        extra={
+          canWrite ? (
+            <Button type="primary" icon={<PlusOutlined />} onClick={openCreate}>
+              新建租约
+            </Button>
+          ) : null
         }
-        loading={leasesQuery.isLoading}
       >
-        <Table<LeaseRow> rowKey="id" dataSource={leases} columns={columns} pagination={{ pageSize: 10 }} />
-      </Card>
+        <Card
+          loading={leasesQuery.isLoading}
+          style={{
+            borderRadius: 8,
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+          }}
+        >
+          <Table<LeaseRow>
+            rowKey="id"
+            dataSource={leases}
+            columns={columns}
+            pagination={{
+              pageSize: 10,
+              showSizeChanger: true,
+              showTotal: (total) => `共 ${total} 条`,
+            }}
+            scroll={{ x: 'max-content' }}
+          />
+        </Card>
+      </PageContainer>
 
       <Modal
         open={createOpen}
@@ -419,7 +441,7 @@ export function LeasesPage() {
         onOk={onCreate}
         confirmLoading={saving}
         width={900}
-        destroyOnClose
+        destroyOnHidden
       >
         <Form
           form={form}

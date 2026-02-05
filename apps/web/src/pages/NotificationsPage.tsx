@@ -7,6 +7,7 @@ import type { AxiosError } from 'axios';
 import { api } from '../lib/api';
 import type { ApiErrorResponse } from '../lib/apiTypes';
 import { useAuthStore } from '../stores/auth';
+import { PageContainer } from '../components/PageContainer';
 
 type NotificationRow = {
   id: string;
@@ -85,23 +86,43 @@ export function NotificationsPage() {
     [orgId, qc],
   );
 
-  if (!orgId) return <Typography.Text type="secondary">请先选择组织</Typography.Text>;
+  if (!orgId) {
+    return (
+      <PageContainer>
+        <Typography.Text type="secondary">请先选择组织</Typography.Text>
+      </PageContainer>
+    );
+  }
 
   return (
-    <Card
-      title={
+    <PageContainer
+      extra={
         <Space>
-          <span>通知</span>
-          <Space size={8}>
-            <span style={{ color: '#888' }}>只看未读</span>
-            <Switch checked={unreadOnly} onChange={setUnreadOnly} />
-          </Space>
+          <span style={{ color: 'rgba(0, 0, 0, 0.65)' }}>只看未读</span>
+          <Switch checked={unreadOnly} onChange={setUnreadOnly} />
         </Space>
       }
-      loading={query.isLoading}
     >
-      <Table<NotificationRow> rowKey="id" dataSource={dataSource} columns={columns} pagination={{ pageSize: 10 }} />
-    </Card>
+      <Card
+        loading={query.isLoading}
+        style={{
+          borderRadius: 8,
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+        }}
+      >
+        <Table<NotificationRow>
+          rowKey="id"
+          dataSource={dataSource}
+          columns={columns}
+          pagination={{
+            pageSize: 10,
+            showSizeChanger: true,
+            showTotal: (total) => `共 ${total} 条`,
+          }}
+          scroll={{ x: 'max-content' }}
+        />
+      </Card>
+    </PageContainer>
   );
 }
 

@@ -26,6 +26,7 @@ import { api } from '../lib/api';
 import type { ApiErrorResponse } from '../lib/apiTypes';
 import { useAuthStore } from '../stores/auth';
 import { usePermissionStore } from '../stores/permissions';
+import { PageContainer } from '../components/PageContainer';
 
 type Role = { id: string; name: string; description?: string | null; isSystem: boolean };
 type RolesResp = { roles: Role[] };
@@ -338,10 +339,22 @@ export function OrgPage() {
     }
   };
 
-  if (!orgId) return <Typography.Text type="secondary">请先选择组织</Typography.Text>;
+  if (!orgId) {
+    return (
+      <PageContainer>
+        <Typography.Text type="secondary">请先选择组织</Typography.Text>
+      </PageContainer>
+    );
+  }
 
   return (
-    <Card title="组织与权限">
+    <PageContainer>
+      <Card
+        style={{
+          borderRadius: 8,
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+        }}
+      >
       <Tabs
         items={[
           ...(canInvite
@@ -378,7 +391,7 @@ export function OrgPage() {
                         onCancel={() => setInviteOpen(false)}
                         onOk={onCreateInvite}
                         confirmLoading={inviteSaving}
-                        destroyOnClose
+                        destroyOnHidden
                       >
                         <Form form={inviteForm} layout="vertical" style={{ marginTop: 16 }}>
                           <Form.Item 
@@ -486,7 +499,7 @@ export function OrgPage() {
                         onCancel={() => setCreateRoleOpen(false)}
                         onOk={onCreateRole}
                         confirmLoading={createRoleSaving}
-                        destroyOnClose
+                        destroyOnHidden
                       >
                         <Form form={createRoleForm} layout="vertical" style={{ marginTop: 16 }}>
                           <Form.Item 
@@ -531,7 +544,8 @@ export function OrgPage() {
             : []),
         ]}
       />
-    </Card>
+      </Card>
+    </PageContainer>
   );
 }
 

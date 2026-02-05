@@ -77,7 +77,7 @@ export function RoomEditModal({ open, room, apartmentId, onClose, onSuccess }: R
       onCancel={onClose}
       onOk={handleSave}
       confirmLoading={updateMutation.isLoading}
-      destroyOnClose
+      destroyOnHidden
     >
       <Form form={form} layout="vertical">
         <Form.Item label="名称" name="name" rules={[{ required: true, message: '请输入名称' }]}>

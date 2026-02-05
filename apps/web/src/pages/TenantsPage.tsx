@@ -7,6 +7,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import type { ApiErrorResponse } from '../lib/apiTypes';
 import { useAuthStore } from '../stores/auth';
+import { PageContainer } from '../components/PageContainer';
+import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 
 type Tenant = {
   id: string;
@@ -95,33 +97,54 @@ export function TenantsPage() {
     }
   };
 
-  if (!orgId) return <Typography.Text type="secondary">请先选择组织</Typography.Text>;
+  if (!orgId) {
+    return (
+      <PageContainer>
+        <Typography.Text type="secondary">请先选择组织</Typography.Text>
+      </PageContainer>
+    );
+  }
 
   return (
     <>
-      <Card
-        title={
+      <PageContainer
+        extra={
           <Space>
-            <span>租客</span>
-            <Button size="small" type="primary" onClick={openCreate}>
+            <Input.Search
+              placeholder="搜索姓名/手机号"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              onSearch={(v) => setQ(v)}
+              style={{ width: 260 }}
+              allowClear
+              prefix={<SearchOutlined />}
+            />
+            <Button type="primary" icon={<PlusOutlined />} onClick={openCreate}>
               新增租客
             </Button>
           </Space>
         }
-        extra={
-          <Input.Search
-            placeholder="搜索姓名/手机号"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            onSearch={(v) => setQ(v)}
-            style={{ width: 260 }}
-            allowClear
-          />
-        }
-        loading={query.isLoading}
       >
-        <Table<Tenant> rowKey="id" dataSource={tenants} columns={columns} pagination={{ pageSize: 10 }} />
-      </Card>
+        <Card
+          loading={query.isLoading}
+          style={{
+            borderRadius: 8,
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+          }}
+        >
+          <Table<Tenant>
+            rowKey="id"
+            dataSource={tenants}
+            columns={columns}
+            pagination={{
+              pageSize: 10,
+              showSizeChanger: true,
+              showTotal: (total) => `共 ${total} 条`,
+            }}
+            scroll={{ x: 'max-content' }}
+          />
+        </Card>
+      </PageContainer>
 
       <Modal
         open={modalOpen}
@@ -129,7 +152,7 @@ export function TenantsPage() {
         onCancel={() => setModalOpen(false)}
         onOk={onSave}
         confirmLoading={saving}
-        destroyOnClose
+        destroyOnHidden
       >
         <Form form={form} layout="vertical" style={{ marginTop: 16 }}>
           <Form.Item 

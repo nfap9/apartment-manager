@@ -66,7 +66,7 @@ export function PricingPlanModal({ open, room, onClose, onSuccess }: PricingPlan
       onCancel={onClose}
       onOk={handleSave}
       confirmLoading={updateMutation.isLoading}
-      destroyOnClose
+      destroyOnHidden
     >
       <Form
         form={form}

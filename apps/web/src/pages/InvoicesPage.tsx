@@ -23,6 +23,8 @@ import type { ApiErrorResponse } from '../lib/apiTypes';
 import { StatusTag } from '../components/StatusTag';
 import { useAuthStore } from '../stores/auth';
 import { usePermissionStore } from '../stores/permissions';
+import { PageContainer } from '../components/PageContainer';
+import { PlayCircleOutlined } from '@ant-design/icons';
 
 type InvoiceItem = {
   id: string;
@@ -116,13 +118,18 @@ export function InvoicesPage() {
       {
         title: '状态',
         dataIndex: 'status',
-        width: 120,
+        width: 140,
         render: (v: InvoiceRow['status'], record: InvoiceRow) => (
-          <Space size={4}>
+          <Space size={4} wrap>
             <StatusTag status={v} type="invoice" />
             {record.hasPendingReading && (
-              <Tag color="orange" size="small">
+              <Tag color="orange">
                 待确认读数
+              </Tag>
+            )}
+            {v === 'OVERDUE' && (
+              <Tag color="red">
+                逾期
               </Tag>
             )}
           </Space>
@@ -253,7 +260,13 @@ export function InvoicesPage() {
     }
   };
 
-  if (!orgId) return <Typography.Text type="secondary">请先选择组织</Typography.Text>;
+  if (!orgId) {
+    return (
+      <PageContainer>
+        <Typography.Text type="secondary">请先选择组织</Typography.Text>
+      </PageContainer>
+    );
+  }
 
   const invoice = detailQuery.data?.invoice ?? null;
 
@@ -276,45 +289,93 @@ export function InvoicesPage() {
     return invoices.filter((inv) => inv.status === statusFilter);
   }, [invoices, statusFilter]);
 
+  // 计算逾期账单数量
+  const overdueCount = invoices.filter((inv) => inv.status === 'OVERDUE').length;
+
   return (
     <>
-      <Card
-        title={
-          <Space>
-            <span>账单</span>
-            {canManage ? (
-              <Button size="small" onClick={onRunBilling} loading={listQuery.isFetching}>
-                运行出账
-              </Button>
-            ) : null}
-          </Space>
+      <PageContainer
+        extra={
+          canManage ? (
+            <Button
+              type="primary"
+              icon={<PlayCircleOutlined />}
+              onClick={onRunBilling}
+              loading={listQuery.isFetching}
+            >
+              运行出账
+            </Button>
+          ) : null
         }
-        loading={listQuery.isLoading}
       >
-        <Tabs
-          activeKey={statusFilter ?? ''}
-          onChange={(key) => setStatusFilter(key === '' ? undefined : key)}
-          items={statusTabs.map((tab) => ({
-            key: tab.key,
-            label: tab.label,
-            children: (
-              <Table<InvoiceRow>
-                rowKey="id"
-                dataSource={filteredInvoices}
-                columns={invoiceColumns}
-                pagination={{ pageSize: 10 }}
-              />
-            ),
-          }))}
-        />
-      </Card>
+        <Card
+          loading={listQuery.isLoading}
+          style={{
+            borderRadius: 8,
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+          }}
+        >
+          <Tabs
+            activeKey={statusFilter ?? ''}
+            onChange={(key) => setStatusFilter(key === '' ? undefined : key)}
+            items={statusTabs.map((tab) => {
+              let count = 0;
+              if (tab.key === '') {
+                count = invoices.length;
+              } else if (tab.key === 'PENDING_READING') {
+                count = invoices.filter((inv) => inv.hasPendingReading).length;
+              } else if (tab.key === 'OVERDUE') {
+                count = overdueCount;
+              } else {
+                count = invoices.filter((inv) => inv.status === tab.key).length;
+              }
+
+              return {
+                key: tab.key,
+                label: (
+                  <span>
+                    {tab.label}
+                    {count > 0 && (
+                      <Tag
+                        color={tab.key === 'OVERDUE' ? 'red' : tab.key === 'PENDING_READING' ? 'orange' : 'default'}
+                        style={{ marginLeft: 8 }}
+                      >
+                        {count}
+                      </Tag>
+                    )}
+                  </span>
+                ),
+                children: (
+                  <Table<InvoiceRow>
+                    rowKey="id"
+                    dataSource={filteredInvoices}
+                    columns={invoiceColumns}
+                    pagination={{
+                      pageSize: 10,
+                      showSizeChanger: true,
+                      showTotal: (total) => `共 ${total} 条`,
+                    }}
+                    scroll={{ x: 'max-content' }}
+                    rowClassName={(record) => {
+                      if (record.status === 'OVERDUE') {
+                        return 'invoice-row-overdue';
+                      }
+                      return '';
+                    }}
+                  />
+                ),
+              };
+            })}
+          />
+        </Card>
+      </PageContainer>
 
       <Drawer
         title="账单详情"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         size="large"
-        destroyOnClose
+        destroyOnHidden
       >
         {detailQuery.isLoading ? <Typography.Text>加载中...</Typography.Text> : null}
         {invoice ? (

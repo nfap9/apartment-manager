@@ -10,6 +10,7 @@ import { LeasesPage } from './pages/LeasesPage';
 import { LoginPage } from './pages/LoginPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { OrgPage } from './pages/OrgPage';
+import { RoomsPage } from './pages/RoomsPage';
 import { SigningPage } from './pages/SigningPage';
 import { TenantsPage } from './pages/TenantsPage';
 
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/apartments" element={<ApartmentsPage />} />
           <Route path="/apartments/:apartmentId" element={<ApartmentDetailPage />} />
+          <Route path="/rooms" element={<RoomsPage />} />
           <Route path="/tenants" element={<TenantsPage />} />
           <Route path="/leases" element={<LeasesPage />} />
           <Route path="/signing" element={<SigningPage />} />

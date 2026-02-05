@@ -34,6 +34,7 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../lib/api';
 import type { ApiErrorResponse } from '../lib/apiTypes';
 import { useAuthStore } from '../stores/auth';
+import { PageContainer } from '../components/PageContainer';
 
 type PricingPlan = {
   id: string;
@@ -406,37 +407,48 @@ export function SigningPage() {
   );
 
   if (!orgId) {
-    return <Typography.Text type="secondary">请先选择组织</Typography.Text>;
+    return (
+      <PageContainer>
+        <Typography.Text type="secondary">请先选择组织</Typography.Text>
+      </PageContainer>
+    );
   }
 
   if (success) {
     return (
-      <Card>
-        <Result
-          status="success"
-          title="签约成功！"
-          subTitle="租约已创建，房间状态已更新为已租出"
-          extra={[
-            <Button key="leases" type="primary" onClick={() => navigate('/leases')}>
-              查看租约列表
-            </Button>,
-            <Button
-              key="new"
-              onClick={() => {
-                setSuccess(false);
-                setCurrentStep(0);
-                setSelectedTenant(null);
-                setSelectedRoom(null);
-                setTenantMode('select');
-                newTenantForm.resetFields();
-                leaseForm.resetFields();
-              }}
-            >
-              继续签约
-            </Button>,
-          ]}
-        />
-      </Card>
+      <PageContainer>
+        <Card
+          style={{
+            borderRadius: 8,
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+          }}
+        >
+          <Result
+            status="success"
+            title="签约成功！"
+            subTitle="租约已创建，房间状态已更新为已租出"
+            extra={[
+              <Button key="leases" type="primary" onClick={() => navigate('/leases')}>
+                查看租约列表
+              </Button>,
+              <Button
+                key="new"
+                onClick={() => {
+                  setSuccess(false);
+                  setCurrentStep(0);
+                  setSelectedTenant(null);
+                  setSelectedRoom(null);
+                  setTenantMode('select');
+                  newTenantForm.resetFields();
+                  leaseForm.resetFields();
+                }}
+              >
+                继续签约
+              </Button>,
+            ]}
+          />
+        </Card>
+      </PageContainer>
     );
   }
 
@@ -1010,14 +1022,13 @@ export function SigningPage() {
   ];
 
   return (
-    <Card
-      title={
-        <Space>
-          <SolutionOutlined />
-          <span>一站式签约</span>
-        </Space>
-      }
-    >
+    <PageContainer>
+      <Card
+        style={{
+          borderRadius: 8,
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+        }}
+      >
       <Steps current={currentStep} items={steps.map((s) => ({ title: s.title, icon: s.icon }))} />
 
       <div style={{ marginTop: 24, minHeight: 400 }}>{steps[currentStep].content}</div>
@@ -1041,6 +1052,7 @@ export function SigningPage() {
           )}
         </Space>
       </div>
-    </Card>
+      </Card>
+    </PageContainer>
   );
 }
