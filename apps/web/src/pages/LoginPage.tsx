@@ -34,30 +34,22 @@ export function LoginPage() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 16,
-      }}
-    >
-      <Card style={{ width: 420 }}>
-        <Space direction="vertical" style={{ width: '100%' }} size={16}>
+    <div className="min-h-full flex items-center justify-center p-4">
+      <Card className="w-[420px]">
+        <Space direction="vertical" className="w-full" size={16}>
           <div>
-            <Typography.Title level={3} style={{ marginBottom: 0 }}>
+            <Typography.Title level={3} className="mb-0">
               登录
             </Typography.Title>
             <Typography.Text type="secondary">手机号 + 密码</Typography.Text>
           </div>
 
-          <Form layout="vertical" onFinish={onFinish} requiredMark={false} style={{ marginTop: 8 }}>
+          <Form layout="vertical" onFinish={onFinish} requiredMark={false} className="mt-2">
             <Form.Item
               label="手机号"
               name="phone"
               rules={[{ required: true, message: '请输入手机号' }]}
-              style={{ marginBottom: 16 }}
+              className="mb-4"
             >
               <Input placeholder="例如：13800000000" autoComplete="username" size="large" />
             </Form.Item>
@@ -66,7 +58,7 @@ export function LoginPage() {
               label="密码"
               name="password"
               rules={[{ required: true, message: '请输入密码' }]}
-              style={{ marginBottom: 20 }}
+              className="mb-5"
             >
               <Input.Password placeholder="请输入密码" autoComplete="current-password" size="large" />
             </Form.Item>
@@ -76,7 +68,7 @@ export function LoginPage() {
             </Button>
           </Form>
 
-          <Typography.Paragraph type="secondary" style={{ marginBottom: 0 }}>
+          <Typography.Paragraph type="secondary" className="mb-0">
             示例管理员账号（seed）：13800000000 / admin123456
           </Typography.Paragraph>
         </Space>

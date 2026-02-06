@@ -24,11 +24,11 @@ export function PageContainer({
     <div className={`page-container ${className}`}>
       {(breadcrumb || extra) && (
         <div className="page-header">
-          <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="flex-1 min-w-0">
             {breadcrumb && breadcrumb.length > 0 && (
               <Breadcrumb
                 items={breadcrumb}
-                style={{ marginBottom: 12 }}
+                className="mb-3"
               />
             )}
           </div>
@@ -39,7 +39,7 @@ export function PageContainer({
           )}
         </div>
       )}
-      <div style={{ minHeight: 0 }}>
+      <div className="min-h-0">
         {children}
       </div>
     </div>

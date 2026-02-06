@@ -8,8 +8,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
-import './styles/variables.css';
-import './index.css';
+import './styles/index.scss';
 import { themeConfig } from './styles/theme';
 import App from './App.tsx';
 

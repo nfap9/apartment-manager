@@ -146,18 +146,13 @@ export function DashboardPage() {
 
   // 公寓状态内容
   const renderApartmentStatus = () => (
-    <Row gutter={[24, 24]} style={{ margin: 0 }}>
+    <Row gutter={[24, 24]} className="m-0">
       {/* 房间统计 */}
       <Col xs={24} sm={12} lg={6}>
-        <Card
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-          }}
-        >
+        <Card className="rounded-xl shadow-md">
           <Spin spinning={kpisQuery.isLoading}>
             <Statistic
-              title={<span style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)' }}>总房间数</span>}
+              title={<span className="text-sm text-text-secondary">总房间数</span>}
               value={k?.totalRoomCount ?? 0}
               valueStyle={{
                 fontSize: 32,
@@ -169,15 +164,10 @@ export function DashboardPage() {
         </Card>
       </Col>
       <Col xs={24} sm={12} lg={6}>
-        <Card
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-          }}
-        >
+        <Card className="rounded-xl shadow-md">
           <Spin spinning={kpisQuery.isLoading}>
             <Statistic
-              title={<span style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)' }}>已出租</span>}
+              title={<span className="text-sm text-text-secondary">已出租</span>}
               value={k?.occupiedRoomCount ?? 0}
               valueStyle={{
                 fontSize: 32,
@@ -189,15 +179,10 @@ export function DashboardPage() {
         </Card>
       </Col>
       <Col xs={24} sm={12} lg={6}>
-        <Card
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-          }}
-        >
+        <Card className="rounded-xl shadow-md">
           <Spin spinning={kpisQuery.isLoading}>
             <Statistic
-              title={<span style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)' }}>空房</span>}
+              title={<span className="text-sm text-text-secondary">空房</span>}
               value={vacantCount}
               valueStyle={{
                 fontSize: 32,
@@ -209,15 +194,10 @@ export function DashboardPage() {
         </Card>
       </Col>
       <Col xs={24} sm={12} lg={6}>
-        <Card
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-          }}
-        >
+        <Card className="rounded-xl shadow-md">
           <Spin spinning={kpisQuery.isLoading}>
             <Statistic
-              title={<span style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)' }}>入住率</span>}
+              title={<span className="text-sm text-text-secondary">入住率</span>}
               value={occupancyRate}
               suffix="%"
               valueStyle={{
@@ -234,52 +214,48 @@ export function DashboardPage() {
       {/* 房租状态 */}
       <Col xs={24} lg={12}>
         <Card
-          title={<span style={{ fontWeight: 500 }}>房租状态</span>}
+          title={<span className="font-medium">房租状态</span>}
           loading={rentStatusQuery.isLoading}
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-            height: '100%',
-          }}
+          className="rounded-xl shadow-md h-full"
         >
           <Row gutter={[24, 24]}>
             <Col xs={12} sm={12}>
               <Statistic
-                title={<span style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.65)' }}>待交房租</span>}
+                title={<span className="text-[13px] text-text-secondary">待交房租</span>}
                 value={rentStatusQuery.data?.pendingCount ?? 0}
                 valueStyle={{ fontSize: 24, fontWeight: 600, color: '#1890ff' }}
               />
-              <div style={{ marginTop: 8, fontSize: 14, color: 'rgba(0, 0, 0, 0.45)' }}>
+              <div className="mt-2 text-sm text-text-tertiary">
                 金额: ¥{((rentStatusQuery.data?.pendingAmount ?? 0) / 100).toFixed(2)}
               </div>
             </Col>
             <Col xs={12} sm={12}>
               <Statistic
-                title={<span style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.65)' }}>已交房租</span>}
+                title={<span className="text-[13px] text-text-secondary">已交房租</span>}
                 value={rentStatusQuery.data?.paidCount ?? 0}
                 valueStyle={{ fontSize: 24, fontWeight: 600, color: '#52c41a' }}
               />
-              <div style={{ marginTop: 8, fontSize: 14, color: 'rgba(0, 0, 0, 0.45)' }}>
+              <div className="mt-2 text-sm text-text-tertiary">
                 金额: ¥{((rentStatusQuery.data?.paidAmount ?? 0) / 100).toFixed(2)}
               </div>
             </Col>
             <Col xs={12} sm={12}>
               <Statistic
-                title={<span style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.65)' }}>即将到期</span>}
+                title={<span className="text-[13px] text-text-secondary">即将到期</span>}
                 value={rentStatusQuery.data?.soonDueCount ?? 0}
                 valueStyle={{ fontSize: 24, fontWeight: 600, color: '#faad14' }}
               />
-              <div style={{ marginTop: 8, fontSize: 14, color: 'rgba(0, 0, 0, 0.45)' }}>
+              <div className="mt-2 text-sm text-text-tertiary">
                 金额: ¥{((rentStatusQuery.data?.soonDueAmount ?? 0) / 100).toFixed(2)}
               </div>
             </Col>
             <Col xs={12} sm={12}>
               <Statistic
-                title={<span style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.65)' }}>逾期账单</span>}
+                title={<span className="text-[13px] text-text-secondary">逾期账单</span>}
                 value={k?.invoiceOverdueCount ?? 0}
                 valueStyle={{ fontSize: 24, fontWeight: 600, color: '#ff4d4f' }}
               />
-              <div style={{ marginTop: 8, fontSize: 14, color: 'rgba(0, 0, 0, 0.45)' }}>
+              <div className="mt-2 text-sm text-text-tertiary">
                 金额: ¥{((k?.invoiceOverdueTotalCents ?? 0) / 100).toFixed(2)}
               </div>
             </Col>
@@ -291,21 +267,17 @@ export function DashboardPage() {
       <Col xs={24} lg={12}>
         <Card
           title={
-            <span style={{ fontWeight: 500 }}>
+            <span className="font-medium">
               空房列表
               {vacantQuery.data?.rooms && vacantQuery.data.rooms.length > 0 && (
-                <Tag color="blue" style={{ marginLeft: 8 }}>
+                <Tag color="blue" className="ml-2">
                   {vacantQuery.data.rooms.length}
                 </Tag>
               )}
             </span>
           }
           loading={vacantQuery.isLoading}
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-            height: '100%',
-          }}
+          className="rounded-xl shadow-md h-full"
         >
           <Table
             size="small"
@@ -326,21 +298,17 @@ export function DashboardPage() {
       <Col xs={24} lg={12}>
         <Card
           title={
-            <span style={{ fontWeight: 500 }}>
+            <span className="font-medium">
               30天到期提醒
               {expiringQuery.data?.leases && expiringQuery.data.leases.length > 0 && (
-                <Tag color="orange" style={{ marginLeft: 8 }}>
+                <Tag color="orange" className="ml-2">
                   {expiringQuery.data.leases.length}
                 </Tag>
               )}
             </span>
           }
           loading={expiringQuery.isLoading}
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-            height: '100%',
-          }}
+          className="rounded-xl shadow-md h-full"
         >
           <Table
             size="small"
@@ -364,7 +332,7 @@ export function DashboardPage() {
                     <span>
                       {date.toLocaleDateString()}
                       {daysLeft >= 0 && daysLeft <= 30 && (
-                        <Tag color={daysLeft <= 7 ? 'red' : 'orange'} style={{ marginLeft: 4 }}>
+                        <Tag color={daysLeft <= 7 ? 'red' : 'orange'} className="ml-1">
                           {daysLeft}天
                         </Tag>
                       )}
@@ -382,21 +350,17 @@ export function DashboardPage() {
       <Col xs={24} lg={12}>
         <Card
           title={
-            <span style={{ fontWeight: 500 }}>
+            <span className="font-medium">
               7天内到期房租
               {rentStatusQuery.data?.soonDueList && rentStatusQuery.data.soonDueList.length > 0 && (
-                <Tag color="orange" style={{ marginLeft: 8 }}>
+                <Tag color="orange" className="ml-2">
                   {rentStatusQuery.data.soonDueList.length}
                 </Tag>
               )}
             </span>
           }
           loading={rentStatusQuery.isLoading}
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-            height: '100%',
-          }}
+          className="rounded-xl shadow-md h-full"
         >
           <Table
             size="small"
@@ -428,7 +392,7 @@ export function DashboardPage() {
                   return (
                     <span>
                       {date.toLocaleDateString()}
-                      <Tag color={daysLeft <= 3 ? 'red' : 'orange'} style={{ marginLeft: 4 }}>
+                      <Tag color={daysLeft <= 3 ? 'red' : 'orange'} className="ml-1">
                         {daysLeft}天
                       </Tag>
                     </span>
@@ -451,18 +415,13 @@ export function DashboardPage() {
 
   // 数据分析内容
   const renderDataAnalysis = () => (
-    <Row gutter={[24, 24]} style={{ margin: 0 }}>
+    <Row gutter={[24, 24]} className="m-0">
       {/* KPI 统计 */}
       <Col xs={24} sm={12} lg={6}>
-        <Card
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-          }}
-        >
+        <Card className="rounded-xl shadow-md">
           <Spin spinning={kpisQuery.isLoading}>
             <Statistic
-              title={<span style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)' }}>公寓数</span>}
+              title={<span className="text-sm text-text-secondary">公寓数</span>}
               value={k?.apartmentCount ?? 0}
               valueStyle={{
                 fontSize: 32,
@@ -474,15 +433,10 @@ export function DashboardPage() {
         </Card>
       </Col>
       <Col xs={24} sm={12} lg={6}>
-        <Card
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-          }}
-        >
+        <Card className="rounded-xl shadow-md">
           <Spin spinning={kpisQuery.isLoading}>
             <Statistic
-              title={<span style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)' }}>房间数</span>}
+              title={<span className="text-sm text-text-secondary">房间数</span>}
               value={k?.totalRoomCount ?? 0}
               valueStyle={{
                 fontSize: 32,
@@ -494,15 +448,10 @@ export function DashboardPage() {
         </Card>
       </Col>
       <Col xs={24} sm={12} lg={6}>
-        <Card
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-          }}
-        >
+        <Card className="rounded-xl shadow-md">
           <Spin spinning={kpisQuery.isLoading}>
             <Statistic
-              title={<span style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)' }}>已出租</span>}
+              title={<span className="text-sm text-text-secondary">已出租</span>}
               value={k?.occupiedRoomCount ?? 0}
               valueStyle={{
                 fontSize: 32,
@@ -514,15 +463,10 @@ export function DashboardPage() {
         </Card>
       </Col>
       <Col xs={24} sm={12} lg={6}>
-        <Card
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-          }}
-        >
+        <Card className="rounded-xl shadow-md">
           <Spin spinning={kpisQuery.isLoading}>
             <Statistic
-              title={<span style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)' }}>入住率</span>}
+              title={<span className="text-sm text-text-secondary">入住率</span>}
               value={occupancyRate}
               suffix="%"
               valueStyle={{
@@ -539,13 +483,9 @@ export function DashboardPage() {
       {/* 图表和账单概览 */}
       <Col xs={24} lg={12}>
         <Card
-          title={<span style={{ fontWeight: 500 }}>入住情况</span>}
+          title={<span className="font-medium">入住情况</span>}
           loading={kpisQuery.isLoading}
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-            height: '100%',
-          }}
+          className="rounded-xl shadow-md h-full"
         >
           {chartOption ? (
             <ReactECharts
@@ -559,25 +499,21 @@ export function DashboardPage() {
 
       <Col xs={24} lg={12}>
         <Card
-          title={<span style={{ fontWeight: 500 }}>账单概览</span>}
+          title={<span className="font-medium">账单概览</span>}
           loading={kpisQuery.isLoading}
-          style={{
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-            height: '100%',
-          }}
+          className="rounded-xl shadow-md h-full"
         >
           <Row gutter={[24, 24]}>
             <Col xs={12} sm={12}>
               <Statistic
-                title={<span style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.65)' }}>未结账单数</span>}
+                title={<span className="text-[13px] text-text-secondary">未结账单数</span>}
                 value={k?.invoiceIssuedCount ?? 0}
                 valueStyle={{ fontSize: 24, fontWeight: 600 }}
               />
             </Col>
             <Col xs={12} sm={12}>
               <Statistic
-                title={<span style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.65)' }}>未结金额</span>}
+                title={<span className="text-[13px] text-text-secondary">未结金额</span>}
                 value={(k?.invoiceIssuedTotalCents ?? 0) / 100}
                 prefix="¥"
                 precision={2}
@@ -586,14 +522,14 @@ export function DashboardPage() {
             </Col>
             <Col xs={12} sm={12}>
               <Statistic
-                title={<span style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.65)' }}>逾期账单数</span>}
+                title={<span className="text-[13px] text-text-secondary">逾期账单数</span>}
                 value={k?.invoiceOverdueCount ?? 0}
                 valueStyle={{ fontSize: 24, fontWeight: 600, color: '#ff4d4f' }}
               />
             </Col>
             <Col xs={12} sm={12}>
               <Statistic
-                title={<span style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.65)' }}>逾期金额</span>}
+                title={<span className="text-[13px] text-text-secondary">逾期金额</span>}
                 value={(k?.invoiceOverdueTotalCents ?? 0) / 100}
                 prefix="¥"
                 precision={2}
@@ -607,8 +543,8 @@ export function DashboardPage() {
   );
 
   return (
-    <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
-      <div style={{ marginBottom: 24 }}>
+    <div className="w-full h-full p-6 overflow-y-auto overflow-x-hidden">
+      <div className="mb-6">
         <Segmented
           options={[
             { label: '公寓状态', value: 'apartment-status' },

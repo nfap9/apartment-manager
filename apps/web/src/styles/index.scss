@@ -1,0 +1,10 @@
+// Tailwind CSS 基础样式
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// 全局样式
+@import './global.scss';
+
+// Ant Design 样式覆盖
+@import './antd-overrides.scss';

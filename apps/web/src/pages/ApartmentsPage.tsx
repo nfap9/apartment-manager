@@ -60,37 +60,17 @@ export function ApartmentsPage() {
 
   return (
     <>
-      <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
+      <div className="w-full h-full p-6 overflow-y-auto overflow-x-hidden">
         <Spin spinning={query.isLoading}>
-          <Row gutter={[16, 16]} style={{ margin: 0 }}>
+          <Row gutter={[16, 16]} className="m-0">
             {/* 新增公寓卡片 */}
             <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={4}>
               <div
                 onClick={() => setModalOpen(true)}
-                style={{
-                  padding: 12,
-                  border: '1px dashed #d9d9d9',
-                  borderRadius: 8,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s',
-                  minHeight: 180,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#1890ff';
-                  e.currentTarget.style.backgroundColor = '#f0f7ff';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#d9d9d9';
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                }}
+                className="p-3 border border-dashed border-border rounded-xl h-full flex flex-col items-center justify-center cursor-pointer transition-all duration-300 min-h-[180px] hover:border-primary hover:bg-blue-50"
               >
-                <PlusOutlined style={{ fontSize: 32, color: '#1890ff', marginBottom: 8 }} />
-                <Typography.Text type="secondary" style={{ fontSize: 14 }}>
+                <PlusOutlined className="text-[32px] text-primary mb-2" />
+                <Typography.Text type="secondary" className="text-sm">
                   新增公寓
                 </Typography.Text>
               </div>
@@ -101,30 +81,12 @@ export function ApartmentsPage() {
               <Col key={apartment.id} xs={24} sm={12} md={8} lg={6} xl={6} xxl={4}>
                 <div
                   onClick={() => navigate(`/apartments/${apartment.id}`)}
-                  style={{
-                    padding: 12,
-                    border: '1px solid #f0f0f0',
-                    borderRadius: 8,
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s',
-                    minHeight: 180,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#1890ff';
-                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(24, 144, 255, 0.15)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#f0f0f0';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
+                  className="p-3 border border-border-light rounded-xl h-full flex flex-col cursor-pointer transition-all duration-300 min-h-[180px] hover:border-primary hover:shadow-[0_2px_8px_rgba(24,144,255,0.15)]"
                 >
-                  <div style={{ marginBottom: 8 }}>
+                  <div className="mb-2">
                     <Space size={8}>
-                      <HomeOutlined style={{ fontSize: 16, color: '#1890ff' }} />
-                      <Typography.Title level={5} style={{ margin: 0, fontSize: 16 }}>
+                      <HomeOutlined className="text-base text-primary" />
+                      <Typography.Title level={5} className="m-0 text-base">
                         {apartment.name}
                       </Typography.Title>
                     </Space>
@@ -133,24 +95,17 @@ export function ApartmentsPage() {
                   <Typography.Text 
                     type="secondary" 
                     ellipsis 
-                    style={{ display: 'block', marginBottom: 8, fontSize: 12 }}
+                    className="block mb-2 text-xs"
                   >
                     {apartment.address}
                   </Typography.Text>
                   
                   {/* 房间统计信息 */}
-                  <div
-                    style={{
-                      background: 'linear-gradient(135deg, #f0f7ff 0%, #e6f7ff 100%)',
-                      borderRadius: 6,
-                      padding: 10,
-                      marginBottom: 8,
-                    }}
-                  >
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-2.5 mb-2">
                     <Row gutter={8}>
                       <Col span={12}>
                         <Statistic
-                          title={<span style={{ fontSize: 11, fontWeight: 500, color: 'rgba(0, 0, 0, 0.65)' }}>房间总数</span>}
+                          title={<span className="text-[11px] font-medium text-text-secondary">房间总数</span>}
                           value={apartment.totalRooms ?? 0}
                           valueStyle={{
                             fontSize: 22,
@@ -161,7 +116,7 @@ export function ApartmentsPage() {
                       </Col>
                       <Col span={12}>
                         <Statistic
-                          title={<span style={{ fontSize: 11, fontWeight: 500, color: 'rgba(0, 0, 0, 0.65)' }}>空房数</span>}
+                          title={<span className="text-[11px] font-medium text-text-secondary">空房数</span>}
                           value={apartment.vacantRooms ?? 0}
                           valueStyle={{
                             fontSize: 22,
@@ -175,11 +130,11 @@ export function ApartmentsPage() {
 
                   {/* 其他信息 */}
                   {(apartment.totalArea != null || apartment.floor != null) && (
-                    <Row gutter={8} style={{ marginTop: 'auto' }}>
+                    <Row gutter={8} className="mt-auto">
                       {apartment.totalArea != null && (
                         <Col span={12}>
                           <Statistic
-                            title={<span style={{ fontSize: 11, color: 'rgba(0, 0, 0, 0.45)' }}>面积</span>}
+                            title={<span className="text-[11px] text-text-tertiary">面积</span>}
                             value={apartment.totalArea}
                             suffix="㎡"
                             valueStyle={{ fontSize: 14, fontWeight: 500 }}
@@ -189,7 +144,7 @@ export function ApartmentsPage() {
                       {apartment.floor != null && (
                         <Col span={12}>
                           <Statistic
-                            title={<span style={{ fontSize: 11, color: 'rgba(0, 0, 0, 0.45)' }}>楼层</span>}
+                            title={<span className="text-[11px] text-text-tertiary">楼层</span>}
                             value={apartment.floor}
                             suffix="层"
                             valueStyle={{ fontSize: 14, fontWeight: 500 }}
@@ -213,12 +168,12 @@ export function ApartmentsPage() {
         confirmLoading={saving}
         destroyOnHidden
       >
-        <Form form={form} layout="vertical" style={{ marginTop: 16 }}>
+        <Form form={form} layout="vertical" className="mt-4">
           <Form.Item 
             label="名称" 
             name="name" 
             rules={[{ required: true, message: '请输入名称' }]}
-            style={{ marginBottom: 16 }}
+            className="mb-4"
           >
             <Input placeholder="请输入公寓名称" />
           </Form.Item>
@@ -226,23 +181,23 @@ export function ApartmentsPage() {
             label="地址" 
             name="address" 
             rules={[{ required: true, message: '请输入地址' }]}
-            style={{ marginBottom: 16 }}
+            className="mb-4"
           >
             <Input placeholder="请输入公寓地址" />
           </Form.Item>
           <Form.Item 
             label="总面积(㎡)" 
             name="totalArea"
-            style={{ marginBottom: 16 }}
+            className="mb-4"
           >
-            <InputNumber min={0} style={{ width: '100%' }} placeholder="选填" />
+            <InputNumber min={0} className="w-full" placeholder="选填" />
           </Form.Item>
           <Form.Item 
             label="楼层" 
             name="floor"
-            style={{ marginBottom: 0 }}
+            className="mb-0"
           >
-            <InputNumber style={{ width: '100%' }} placeholder="选填" />
+            <InputNumber className="w-full" placeholder="选填" />
           </Form.Item>
         </Form>
       </Modal>

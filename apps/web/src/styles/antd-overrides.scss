@@ -1,0 +1,72 @@
+@import './variables.scss';
+
+// Ant Design 组件样式覆盖
+// 使用 SCSS 嵌套和变量来覆盖 Ant Design 默认样式
+
+// 过渡动画
+.ant-card {
+  transition: all $transition-normal;
+  
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+.ant-btn {
+  transition: all $transition-fast;
+}
+
+// 空状态优化
+.ant-empty {
+  padding: 40px 0;
+}
+
+// 加载状态优化
+.ant-spin-nested-loading > div > .ant-spin {
+  max-height: none;
+}
+
+// 表格优化
+.ant-table {
+  border-radius: $radius-xl;
+  overflow: hidden;
+  
+  .ant-table-thead > tr > th {
+    background: $color-bg-secondary;
+    font-weight: $font-weight-medium;
+  }
+}
+
+// 卡片操作按钮优化
+.ant-card-actions {
+  background: $color-bg-secondary;
+  
+  > li > span {
+    padding: 12px 0;
+  }
+}
+
+// 按钮图标对齐优化
+.ant-btn-icon-only {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  
+  .ant-btn-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+  }
+}
+
+// 确保侧边栏子元素使用 flex 布局，使按钮固定在底部
+.ant-layout-sider-children {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+}

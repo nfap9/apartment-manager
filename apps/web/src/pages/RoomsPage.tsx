@@ -184,9 +184,9 @@ export function RoomsPage() {
 
   return (
     <>
-      <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
+      <div className="w-full h-full p-6 overflow-y-auto overflow-x-hidden">
         {apartmentsQuery.isLoading ? (
-            <div style={{ padding: '20px', textAlign: 'center' }}>
+            <div className="p-5 text-center">
               <Typography.Text type="secondary">加载中...</Typography.Text>
             </div>
           ) : (
@@ -226,7 +226,7 @@ export function RoomsPage() {
         confirmLoading={saving}
         destroyOnHidden
       >
-        <Form form={form} layout="vertical" style={{ marginTop: 16 }}>
+        <Form form={form} layout="vertical" className="mt-4">
           <Form.Item
             label="房间名称"
             name="name"

@@ -177,103 +177,63 @@ export function AppLayout() {
   }, [location.pathname]);
 
   return (
-    <Layout style={{ height: '100vh', overflow: 'hidden' }}>
+    <Layout className="h-screen overflow-hidden">
       <Sider
         width={220}
         collapsedWidth={80}
         collapsed={collapsed}
         theme="light"
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          boxShadow: '2px 0 8px rgba(0, 0, 0, 0.06)',
-        }}
+        className="flex flex-col shadow-md"
       >
         <div
-          style={{
-            height: 64,
-            padding: collapsed ? '0 8px' : '0 16px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: collapsed ? 'center' : 'flex-start',
-            marginBottom: 8,
-          }}
+          className={`h-16 flex items-center mb-2 ${
+            collapsed ? 'px-2 justify-center' : 'px-4 justify-start'
+          }`}
         >
           {!collapsed && (
-            <Typography.Title level={5} style={{ margin: 0, fontSize: 16, fontWeight: 600 }}>
+            <Typography.Title level={5} className="m-0 text-base font-semibold">
               公寓管理系统
             </Typography.Title>
           )}
           {collapsed && (
-            <div
-              style={{
-                width: 32,
-                height: 32,
-                borderRadius: 6,
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontWeight: 'bold',
-                fontSize: 14,
-              }}
-            >
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
               公
             </div>
           )}
         </div>
-        <div style={{ flex: 1, overflow: 'auto' }}>
+        <div className="flex-1 overflow-auto">
           <Menu
             mode="inline"
             items={menuItems}
             selectedKeys={selectedKeys}
             onClick={menuClickHandler}
-            style={{ borderRight: 0 }}
+            className="border-r-0"
           />
         </div>
         <div
-          style={{
-            padding: '8px',
-            borderTop: '1px solid #f0f0f0',
-            display: 'flex',
-            justifyContent: collapsed ? 'center' : 'flex-end',
-            flexShrink: 0,
-          }}
+          className={`p-2 border-t border-border-light flex flex-shrink-0 ${
+            collapsed ? 'justify-center' : 'justify-end'
+          }`}
         >
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
-            style={{ width: collapsed ? '100%' : 'auto' }}
+            className={collapsed ? 'w-full' : ''}
           />
         </div>
       </Sider>
 
-      <Layout style={{ minHeight: 0, overflow: 'hidden' }}>
-        <Header
-          style={{
-            background: '#fff',
-            padding: '0 24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-            position: 'relative',
-            zIndex: 10,
-          }}
-        >
-          <Space style={{ flex: 1, minWidth: 0 }} align="center">
-            <Breadcrumb
-              items={breadcrumbItems}
-              style={{ margin: 0 }}
-            />
+      <Layout className="min-h-0 overflow-hidden">
+        <Header className="bg-white px-6 flex items-center justify-between shadow-md relative z-10">
+          <Space className="flex-1 min-w-0" align="center">
+            <Breadcrumb items={breadcrumbItems} className="m-0" />
           </Space>
 
           <Space align="center">
             <Select
               placeholder="选择组织"
-              style={{ width: 150 }}
+              className="w-[150px]"
               options={orgOptions}
               value={activeOrgId ?? undefined}
               onChange={(v) => setActiveOrgId(v)}
@@ -294,10 +254,10 @@ export function AppLayout() {
               }}
               placement="bottomRight"
             >
-              <Button type="text" style={{ padding: '0 8px', height: 'auto' }}>
+              <Button type="text" className="px-2 h-auto">
                 <Space>
                   <UserOutlined />
-                  <Typography.Text strong style={{ color: 'rgba(0, 0, 0, 0.85)' }}>
+                  <Typography.Text strong className="text-text-primary">
                     {user?.displayName ?? user?.phone ?? '未登录'}
                   </Typography.Text>
                 </Space>
@@ -306,18 +266,7 @@ export function AppLayout() {
           </Space>
         </Header>
 
-        <Content
-          style={{
-            padding: 0,
-            overflow: 'hidden',
-            minHeight: 0,
-            flex: 1,
-            background: '#fff',
-            boxShadow: 'inset 0 2px 8px rgba(0, 0, 0, 0.06)',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
+        <Content className="p-0 overflow-hidden min-h-0 flex-1 bg-white shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] flex flex-col">
           <Outlet />
         </Content>
       </Layout>
