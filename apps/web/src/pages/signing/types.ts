@@ -9,9 +9,12 @@ export type PricingPlan = {
 
 export type RoomFacility = {
   id: string;
+  type: string;
   name: string;
   quantity: number;
-  valueCents: number;
+  originalPriceCents: number;
+  yearsInUse: number;
+  notes?: string | null;
 };
 
 export type AvailableRoom = {

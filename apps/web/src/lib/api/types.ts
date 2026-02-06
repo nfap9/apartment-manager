@@ -39,9 +39,12 @@ export type Room = {
 export type RoomFacility = {
   id: string;
   roomId: string;
-  name: string;
+  type: string; // 设施类型：空调、洗衣机、冰箱等
+  name: string; // 设施名称（默认与type相同，可自定义）
   quantity: number;
-  valueCents: number;
+  originalPriceCents: number; // 原价（分）
+  yearsInUse: number; // 已使用年限（支持小数）
+  notes?: string | null; // 备注
 };
 
 export type RoomsResponse = {

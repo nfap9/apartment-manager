@@ -85,6 +85,14 @@ export const InvoiceItemStatus = {
 export type InvoiceItemStatus = (typeof InvoiceItemStatus)[keyof typeof InvoiceItemStatus]
 
 
+export const BillingTiming = {
+  PREPAID: 'PREPAID',
+  POSTPAID: 'POSTPAID'
+} as const
+
+export type BillingTiming = (typeof BillingTiming)[keyof typeof BillingTiming]
+
+
 export const NotificationType = {
   INVOICE_CREATED: 'INVOICE_CREATED',
   LEASE_EXPIRING: 'LEASE_EXPIRING',

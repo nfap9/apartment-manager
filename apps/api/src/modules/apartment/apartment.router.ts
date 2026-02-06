@@ -23,10 +23,34 @@ const apartmentBaseSchema = z.object({
   floor: z.number().int().optional(),
 });
 
+const facilityTypes = [
+  '空调',
+  '洗衣机',
+  '冰箱',
+  '电视',
+  '热水器',
+  '微波炉',
+  '电磁炉',
+  '油烟机',
+  '床',
+  '沙发',
+  '桌子',
+  '椅子',
+  '衣柜',
+  '书桌',
+  '茶几',
+  '其他',
+] as const;
+
 const roomFacilitySchema = z.object({
+  type: z.enum(facilityTypes as [string, ...string[]], {
+    errorMap: () => ({ message: '请选择有效的设施类型' }),
+  }),
   name: z.string().trim().min(1).max(50),
   quantity: z.number().int().positive().default(1),
-  valueCents: z.number().int().nonnegative().default(0),
+  originalPriceCents: z.number().int().nonnegative().default(0),
+  yearsInUse: z.number().min(0).max(50).default(0),
+  notes: z.string().trim().max(500).optional(),
 });
 
 apartmentRouter.get('/:orgId/apartments', requirePermission('apartment.read'), async (req, res) => {
@@ -748,9 +772,12 @@ apartmentRouter.put('/:orgId/rooms/:roomId/facilities', requirePermission('room.
       await tx.roomFacility.createMany({
         data: facilities.map((f) => ({
           roomId,
+          type: f.type,
           name: f.name,
           quantity: f.quantity,
-          valueCents: f.valueCents,
+          originalPriceCents: f.originalPriceCents,
+          yearsInUse: f.yearsInUse,
+          notes: f.notes ?? null,
         })),
       });
     }

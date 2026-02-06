@@ -48,6 +48,7 @@ export type LeaseChargeMinAggregateOutputType = {
   unitPriceCents: number | null
   unitName: string | null
   billingCycleMonths: number | null
+  billingTiming: $Enums.BillingTiming | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -63,6 +64,7 @@ export type LeaseChargeMaxAggregateOutputType = {
   unitPriceCents: number | null
   unitName: string | null
   billingCycleMonths: number | null
+  billingTiming: $Enums.BillingTiming | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -78,6 +80,7 @@ export type LeaseChargeCountAggregateOutputType = {
   unitPriceCents: number
   unitName: number
   billingCycleMonths: number
+  billingTiming: number
   isActive: number
   createdAt: number
   updatedAt: number
@@ -107,6 +110,7 @@ export type LeaseChargeMinAggregateInputType = {
   unitPriceCents?: true
   unitName?: true
   billingCycleMonths?: true
+  billingTiming?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -122,6 +126,7 @@ export type LeaseChargeMaxAggregateInputType = {
   unitPriceCents?: true
   unitName?: true
   billingCycleMonths?: true
+  billingTiming?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -137,6 +142,7 @@ export type LeaseChargeCountAggregateInputType = {
   unitPriceCents?: true
   unitName?: true
   billingCycleMonths?: true
+  billingTiming?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -239,6 +245,7 @@ export type LeaseChargeGroupByOutputType = {
   unitPriceCents: number | null
   unitName: string | null
   billingCycleMonths: number
+  billingTiming: $Enums.BillingTiming | null
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -277,6 +284,7 @@ export type LeaseChargeWhereInput = {
   unitPriceCents?: Prisma.IntNullableFilter<"LeaseCharge"> | number | null
   unitName?: Prisma.StringNullableFilter<"LeaseCharge"> | string | null
   billingCycleMonths?: Prisma.IntFilter<"LeaseCharge"> | number
+  billingTiming?: Prisma.EnumBillingTimingNullableFilter<"LeaseCharge"> | $Enums.BillingTiming | null
   isActive?: Prisma.BoolFilter<"LeaseCharge"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LeaseCharge"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LeaseCharge"> | Date | string
@@ -294,6 +302,7 @@ export type LeaseChargeOrderByWithRelationInput = {
   unitPriceCents?: Prisma.SortOrderInput | Prisma.SortOrder
   unitName?: Prisma.SortOrderInput | Prisma.SortOrder
   billingCycleMonths?: Prisma.SortOrder
+  billingTiming?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -314,6 +323,7 @@ export type LeaseChargeWhereUniqueInput = Prisma.AtLeast<{
   unitPriceCents?: Prisma.IntNullableFilter<"LeaseCharge"> | number | null
   unitName?: Prisma.StringNullableFilter<"LeaseCharge"> | string | null
   billingCycleMonths?: Prisma.IntFilter<"LeaseCharge"> | number
+  billingTiming?: Prisma.EnumBillingTimingNullableFilter<"LeaseCharge"> | $Enums.BillingTiming | null
   isActive?: Prisma.BoolFilter<"LeaseCharge"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LeaseCharge"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LeaseCharge"> | Date | string
@@ -331,6 +341,7 @@ export type LeaseChargeOrderByWithAggregationInput = {
   unitPriceCents?: Prisma.SortOrderInput | Prisma.SortOrder
   unitName?: Prisma.SortOrderInput | Prisma.SortOrder
   billingCycleMonths?: Prisma.SortOrder
+  billingTiming?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -354,6 +365,7 @@ export type LeaseChargeScalarWhereWithAggregatesInput = {
   unitPriceCents?: Prisma.IntNullableWithAggregatesFilter<"LeaseCharge"> | number | null
   unitName?: Prisma.StringNullableWithAggregatesFilter<"LeaseCharge"> | string | null
   billingCycleMonths?: Prisma.IntWithAggregatesFilter<"LeaseCharge"> | number
+  billingTiming?: Prisma.EnumBillingTimingNullableWithAggregatesFilter<"LeaseCharge"> | $Enums.BillingTiming | null
   isActive?: Prisma.BoolWithAggregatesFilter<"LeaseCharge"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"LeaseCharge"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"LeaseCharge"> | Date | string
@@ -368,6 +380,7 @@ export type LeaseChargeCreateInput = {
   unitPriceCents?: number | null
   unitName?: string | null
   billingCycleMonths?: number
+  billingTiming?: $Enums.BillingTiming | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -385,6 +398,7 @@ export type LeaseChargeUncheckedCreateInput = {
   unitPriceCents?: number | null
   unitName?: string | null
   billingCycleMonths?: number
+  billingTiming?: $Enums.BillingTiming | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -400,6 +414,7 @@ export type LeaseChargeUpdateInput = {
   unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingCycleMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -417,6 +432,7 @@ export type LeaseChargeUncheckedUpdateInput = {
   unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingCycleMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -433,6 +449,7 @@ export type LeaseChargeCreateManyInput = {
   unitPriceCents?: number | null
   unitName?: string | null
   billingCycleMonths?: number
+  billingTiming?: $Enums.BillingTiming | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -447,6 +464,7 @@ export type LeaseChargeUpdateManyMutationInput = {
   unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingCycleMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -462,6 +480,7 @@ export type LeaseChargeUncheckedUpdateManyInput = {
   unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingCycleMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -487,6 +506,7 @@ export type LeaseChargeCountOrderByAggregateInput = {
   unitPriceCents?: Prisma.SortOrder
   unitName?: Prisma.SortOrder
   billingCycleMonths?: Prisma.SortOrder
+  billingTiming?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -508,6 +528,7 @@ export type LeaseChargeMaxOrderByAggregateInput = {
   unitPriceCents?: Prisma.SortOrder
   unitName?: Prisma.SortOrder
   billingCycleMonths?: Prisma.SortOrder
+  billingTiming?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -523,6 +544,7 @@ export type LeaseChargeMinOrderByAggregateInput = {
   unitPriceCents?: Prisma.SortOrder
   unitName?: Prisma.SortOrder
   billingCycleMonths?: Prisma.SortOrder
+  billingTiming?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -585,6 +607,10 @@ export type NullableEnumFeeTypeFieldUpdateOperationsInput = {
   set?: $Enums.FeeType | null
 }
 
+export type NullableEnumBillingTimingFieldUpdateOperationsInput = {
+  set?: $Enums.BillingTiming | null
+}
+
 export type LeaseChargeCreateNestedOneWithoutInvoiceItemsInput = {
   create?: Prisma.XOR<Prisma.LeaseChargeCreateWithoutInvoiceItemsInput, Prisma.LeaseChargeUncheckedCreateWithoutInvoiceItemsInput>
   connectOrCreate?: Prisma.LeaseChargeCreateOrConnectWithoutInvoiceItemsInput
@@ -610,6 +636,7 @@ export type LeaseChargeCreateWithoutLeaseInput = {
   unitPriceCents?: number | null
   unitName?: string | null
   billingCycleMonths?: number
+  billingTiming?: $Enums.BillingTiming | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -625,6 +652,7 @@ export type LeaseChargeUncheckedCreateWithoutLeaseInput = {
   unitPriceCents?: number | null
   unitName?: string | null
   billingCycleMonths?: number
+  billingTiming?: $Enums.BillingTiming | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -670,6 +698,7 @@ export type LeaseChargeScalarWhereInput = {
   unitPriceCents?: Prisma.IntNullableFilter<"LeaseCharge"> | number | null
   unitName?: Prisma.StringNullableFilter<"LeaseCharge"> | string | null
   billingCycleMonths?: Prisma.IntFilter<"LeaseCharge"> | number
+  billingTiming?: Prisma.EnumBillingTimingNullableFilter<"LeaseCharge"> | $Enums.BillingTiming | null
   isActive?: Prisma.BoolFilter<"LeaseCharge"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LeaseCharge"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LeaseCharge"> | Date | string
@@ -684,6 +713,7 @@ export type LeaseChargeCreateWithoutInvoiceItemsInput = {
   unitPriceCents?: number | null
   unitName?: string | null
   billingCycleMonths?: number
+  billingTiming?: $Enums.BillingTiming | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -700,6 +730,7 @@ export type LeaseChargeUncheckedCreateWithoutInvoiceItemsInput = {
   unitPriceCents?: number | null
   unitName?: string | null
   billingCycleMonths?: number
+  billingTiming?: $Enums.BillingTiming | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -730,6 +761,7 @@ export type LeaseChargeUpdateWithoutInvoiceItemsInput = {
   unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingCycleMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -746,6 +778,7 @@ export type LeaseChargeUncheckedUpdateWithoutInvoiceItemsInput = {
   unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingCycleMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -760,6 +793,7 @@ export type LeaseChargeCreateManyLeaseInput = {
   unitPriceCents?: number | null
   unitName?: string | null
   billingCycleMonths?: number
+  billingTiming?: $Enums.BillingTiming | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -774,6 +808,7 @@ export type LeaseChargeUpdateWithoutLeaseInput = {
   unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingCycleMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -789,6 +824,7 @@ export type LeaseChargeUncheckedUpdateWithoutLeaseInput = {
   unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingCycleMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -804,6 +840,7 @@ export type LeaseChargeUncheckedUpdateManyWithoutLeaseInput = {
   unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingCycleMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -850,6 +887,7 @@ export type LeaseChargeSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   unitPriceCents?: boolean
   unitName?: boolean
   billingCycleMonths?: boolean
+  billingTiming?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -868,6 +906,7 @@ export type LeaseChargeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   unitPriceCents?: boolean
   unitName?: boolean
   billingCycleMonths?: boolean
+  billingTiming?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -884,6 +923,7 @@ export type LeaseChargeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   unitPriceCents?: boolean
   unitName?: boolean
   billingCycleMonths?: boolean
+  billingTiming?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -900,12 +940,13 @@ export type LeaseChargeSelectScalar = {
   unitPriceCents?: boolean
   unitName?: boolean
   billingCycleMonths?: boolean
+  billingTiming?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type LeaseChargeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "leaseId" | "name" | "feeType" | "mode" | "fixedAmountCents" | "unitPriceCents" | "unitName" | "billingCycleMonths" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["leaseCharge"]>
+export type LeaseChargeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "leaseId" | "name" | "feeType" | "mode" | "fixedAmountCents" | "unitPriceCents" | "unitName" | "billingCycleMonths" | "billingTiming" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["leaseCharge"]>
 export type LeaseChargeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lease?: boolean | Prisma.LeaseDefaultArgs<ExtArgs>
   invoiceItems?: boolean | Prisma.LeaseCharge$invoiceItemsArgs<ExtArgs>
@@ -934,6 +975,7 @@ export type $LeaseChargePayload<ExtArgs extends runtime.Types.Extensions.Interna
     unitPriceCents: number | null
     unitName: string | null
     billingCycleMonths: number
+    billingTiming: $Enums.BillingTiming | null
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -1371,6 +1413,7 @@ export interface LeaseChargeFieldRefs {
   readonly unitPriceCents: Prisma.FieldRef<"LeaseCharge", 'Int'>
   readonly unitName: Prisma.FieldRef<"LeaseCharge", 'String'>
   readonly billingCycleMonths: Prisma.FieldRef<"LeaseCharge", 'Int'>
+  readonly billingTiming: Prisma.FieldRef<"LeaseCharge", 'BillingTiming'>
   readonly isActive: Prisma.FieldRef<"LeaseCharge", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"LeaseCharge", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"LeaseCharge", 'DateTime'>

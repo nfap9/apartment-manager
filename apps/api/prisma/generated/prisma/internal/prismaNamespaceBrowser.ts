@@ -257,9 +257,12 @@ export type RoomScalarFieldEnum = (typeof RoomScalarFieldEnum)[keyof typeof Room
 export const RoomFacilityScalarFieldEnum = {
   id: 'id',
   roomId: 'roomId',
+  type: 'type',
   name: 'name',
   quantity: 'quantity',
-  valueCents: 'valueCents',
+  originalPriceCents: 'originalPriceCents',
+  yearsInUse: 'yearsInUse',
+  notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -326,6 +329,7 @@ export const LeaseChargeScalarFieldEnum = {
   unitPriceCents: 'unitPriceCents',
   unitName: 'unitName',
   billingCycleMonths: 'billingCycleMonths',
+  billingTiming: 'billingTiming',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

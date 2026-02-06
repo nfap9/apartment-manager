@@ -28,20 +28,25 @@ export type AggregateRoomFacility = {
 
 export type RoomFacilityAvgAggregateOutputType = {
   quantity: number | null
-  valueCents: number | null
+  originalPriceCents: number | null
+  yearsInUse: number | null
 }
 
 export type RoomFacilitySumAggregateOutputType = {
   quantity: number | null
-  valueCents: number | null
+  originalPriceCents: number | null
+  yearsInUse: number | null
 }
 
 export type RoomFacilityMinAggregateOutputType = {
   id: string | null
   roomId: string | null
+  type: string | null
   name: string | null
   quantity: number | null
-  valueCents: number | null
+  originalPriceCents: number | null
+  yearsInUse: number | null
+  notes: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -49,9 +54,12 @@ export type RoomFacilityMinAggregateOutputType = {
 export type RoomFacilityMaxAggregateOutputType = {
   id: string | null
   roomId: string | null
+  type: string | null
   name: string | null
   quantity: number | null
-  valueCents: number | null
+  originalPriceCents: number | null
+  yearsInUse: number | null
+  notes: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -59,9 +67,12 @@ export type RoomFacilityMaxAggregateOutputType = {
 export type RoomFacilityCountAggregateOutputType = {
   id: number
   roomId: number
+  type: number
   name: number
   quantity: number
-  valueCents: number
+  originalPriceCents: number
+  yearsInUse: number
+  notes: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -70,20 +81,25 @@ export type RoomFacilityCountAggregateOutputType = {
 
 export type RoomFacilityAvgAggregateInputType = {
   quantity?: true
-  valueCents?: true
+  originalPriceCents?: true
+  yearsInUse?: true
 }
 
 export type RoomFacilitySumAggregateInputType = {
   quantity?: true
-  valueCents?: true
+  originalPriceCents?: true
+  yearsInUse?: true
 }
 
 export type RoomFacilityMinAggregateInputType = {
   id?: true
   roomId?: true
+  type?: true
   name?: true
   quantity?: true
-  valueCents?: true
+  originalPriceCents?: true
+  yearsInUse?: true
+  notes?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -91,9 +107,12 @@ export type RoomFacilityMinAggregateInputType = {
 export type RoomFacilityMaxAggregateInputType = {
   id?: true
   roomId?: true
+  type?: true
   name?: true
   quantity?: true
-  valueCents?: true
+  originalPriceCents?: true
+  yearsInUse?: true
+  notes?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -101,9 +120,12 @@ export type RoomFacilityMaxAggregateInputType = {
 export type RoomFacilityCountAggregateInputType = {
   id?: true
   roomId?: true
+  type?: true
   name?: true
   quantity?: true
-  valueCents?: true
+  originalPriceCents?: true
+  yearsInUse?: true
+  notes?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -198,9 +220,12 @@ export type RoomFacilityGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 export type RoomFacilityGroupByOutputType = {
   id: string
   roomId: string
+  type: string
   name: string
   quantity: number
-  valueCents: number
+  originalPriceCents: number
+  yearsInUse: number
+  notes: string | null
   createdAt: Date
   updatedAt: Date
   _count: RoomFacilityCountAggregateOutputType | null
@@ -231,9 +256,12 @@ export type RoomFacilityWhereInput = {
   NOT?: Prisma.RoomFacilityWhereInput | Prisma.RoomFacilityWhereInput[]
   id?: Prisma.StringFilter<"RoomFacility"> | string
   roomId?: Prisma.StringFilter<"RoomFacility"> | string
+  type?: Prisma.StringFilter<"RoomFacility"> | string
   name?: Prisma.StringFilter<"RoomFacility"> | string
   quantity?: Prisma.IntFilter<"RoomFacility"> | number
-  valueCents?: Prisma.IntFilter<"RoomFacility"> | number
+  originalPriceCents?: Prisma.IntFilter<"RoomFacility"> | number
+  yearsInUse?: Prisma.FloatFilter<"RoomFacility"> | number
+  notes?: Prisma.StringNullableFilter<"RoomFacility"> | string | null
   createdAt?: Prisma.DateTimeFilter<"RoomFacility"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"RoomFacility"> | Date | string
   room?: Prisma.XOR<Prisma.RoomScalarRelationFilter, Prisma.RoomWhereInput>
@@ -242,9 +270,12 @@ export type RoomFacilityWhereInput = {
 export type RoomFacilityOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   roomId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   name?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
-  valueCents?: Prisma.SortOrder
+  originalPriceCents?: Prisma.SortOrder
+  yearsInUse?: Prisma.SortOrder
+  notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   room?: Prisma.RoomOrderByWithRelationInput
@@ -257,9 +288,12 @@ export type RoomFacilityWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.RoomFacilityWhereInput[]
   NOT?: Prisma.RoomFacilityWhereInput | Prisma.RoomFacilityWhereInput[]
   roomId?: Prisma.StringFilter<"RoomFacility"> | string
+  type?: Prisma.StringFilter<"RoomFacility"> | string
   name?: Prisma.StringFilter<"RoomFacility"> | string
   quantity?: Prisma.IntFilter<"RoomFacility"> | number
-  valueCents?: Prisma.IntFilter<"RoomFacility"> | number
+  originalPriceCents?: Prisma.IntFilter<"RoomFacility"> | number
+  yearsInUse?: Prisma.FloatFilter<"RoomFacility"> | number
+  notes?: Prisma.StringNullableFilter<"RoomFacility"> | string | null
   createdAt?: Prisma.DateTimeFilter<"RoomFacility"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"RoomFacility"> | Date | string
   room?: Prisma.XOR<Prisma.RoomScalarRelationFilter, Prisma.RoomWhereInput>
@@ -268,9 +302,12 @@ export type RoomFacilityWhereUniqueInput = Prisma.AtLeast<{
 export type RoomFacilityOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   roomId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   name?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
-  valueCents?: Prisma.SortOrder
+  originalPriceCents?: Prisma.SortOrder
+  yearsInUse?: Prisma.SortOrder
+  notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.RoomFacilityCountOrderByAggregateInput
@@ -286,18 +323,24 @@ export type RoomFacilityScalarWhereWithAggregatesInput = {
   NOT?: Prisma.RoomFacilityScalarWhereWithAggregatesInput | Prisma.RoomFacilityScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"RoomFacility"> | string
   roomId?: Prisma.StringWithAggregatesFilter<"RoomFacility"> | string
+  type?: Prisma.StringWithAggregatesFilter<"RoomFacility"> | string
   name?: Prisma.StringWithAggregatesFilter<"RoomFacility"> | string
   quantity?: Prisma.IntWithAggregatesFilter<"RoomFacility"> | number
-  valueCents?: Prisma.IntWithAggregatesFilter<"RoomFacility"> | number
+  originalPriceCents?: Prisma.IntWithAggregatesFilter<"RoomFacility"> | number
+  yearsInUse?: Prisma.FloatWithAggregatesFilter<"RoomFacility"> | number
+  notes?: Prisma.StringNullableWithAggregatesFilter<"RoomFacility"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"RoomFacility"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"RoomFacility"> | Date | string
 }
 
 export type RoomFacilityCreateInput = {
   id?: string
+  type: string
   name: string
   quantity?: number
-  valueCents?: number
+  originalPriceCents?: number
+  yearsInUse?: number
+  notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   room: Prisma.RoomCreateNestedOneWithoutFacilitiesInput
@@ -306,18 +349,24 @@ export type RoomFacilityCreateInput = {
 export type RoomFacilityUncheckedCreateInput = {
   id?: string
   roomId: string
+  type: string
   name: string
   quantity?: number
-  valueCents?: number
+  originalPriceCents?: number
+  yearsInUse?: number
+  notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type RoomFacilityUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  valueCents?: Prisma.IntFieldUpdateOperationsInput | number
+  originalPriceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  yearsInUse?: Prisma.FloatFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   room?: Prisma.RoomUpdateOneRequiredWithoutFacilitiesNestedInput
@@ -326,9 +375,12 @@ export type RoomFacilityUpdateInput = {
 export type RoomFacilityUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  valueCents?: Prisma.IntFieldUpdateOperationsInput | number
+  originalPriceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  yearsInUse?: Prisma.FloatFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -336,18 +388,24 @@ export type RoomFacilityUncheckedUpdateInput = {
 export type RoomFacilityCreateManyInput = {
   id?: string
   roomId: string
+  type: string
   name: string
   quantity?: number
-  valueCents?: number
+  originalPriceCents?: number
+  yearsInUse?: number
+  notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type RoomFacilityUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  valueCents?: Prisma.IntFieldUpdateOperationsInput | number
+  originalPriceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  yearsInUse?: Prisma.FloatFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -355,9 +413,12 @@ export type RoomFacilityUpdateManyMutationInput = {
 export type RoomFacilityUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  valueCents?: Prisma.IntFieldUpdateOperationsInput | number
+  originalPriceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  yearsInUse?: Prisma.FloatFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -380,24 +441,31 @@ export type RoomFacilityRoomIdNameCompoundUniqueInput = {
 export type RoomFacilityCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   roomId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   name?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
-  valueCents?: Prisma.SortOrder
+  originalPriceCents?: Prisma.SortOrder
+  yearsInUse?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type RoomFacilityAvgOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
-  valueCents?: Prisma.SortOrder
+  originalPriceCents?: Prisma.SortOrder
+  yearsInUse?: Prisma.SortOrder
 }
 
 export type RoomFacilityMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   roomId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   name?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
-  valueCents?: Prisma.SortOrder
+  originalPriceCents?: Prisma.SortOrder
+  yearsInUse?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -405,16 +473,20 @@ export type RoomFacilityMaxOrderByAggregateInput = {
 export type RoomFacilityMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   roomId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   name?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
-  valueCents?: Prisma.SortOrder
+  originalPriceCents?: Prisma.SortOrder
+  yearsInUse?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type RoomFacilitySumOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
-  valueCents?: Prisma.SortOrder
+  originalPriceCents?: Prisma.SortOrder
+  yearsInUse?: Prisma.SortOrder
 }
 
 export type RoomFacilityCreateNestedManyWithoutRoomInput = {
@@ -459,20 +531,34 @@ export type RoomFacilityUncheckedUpdateManyWithoutRoomNestedInput = {
   deleteMany?: Prisma.RoomFacilityScalarWhereInput | Prisma.RoomFacilityScalarWhereInput[]
 }
 
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type RoomFacilityCreateWithoutRoomInput = {
   id?: string
+  type: string
   name: string
   quantity?: number
-  valueCents?: number
+  originalPriceCents?: number
+  yearsInUse?: number
+  notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type RoomFacilityUncheckedCreateWithoutRoomInput = {
   id?: string
+  type: string
   name: string
   quantity?: number
-  valueCents?: number
+  originalPriceCents?: number
+  yearsInUse?: number
+  notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -509,45 +595,60 @@ export type RoomFacilityScalarWhereInput = {
   NOT?: Prisma.RoomFacilityScalarWhereInput | Prisma.RoomFacilityScalarWhereInput[]
   id?: Prisma.StringFilter<"RoomFacility"> | string
   roomId?: Prisma.StringFilter<"RoomFacility"> | string
+  type?: Prisma.StringFilter<"RoomFacility"> | string
   name?: Prisma.StringFilter<"RoomFacility"> | string
   quantity?: Prisma.IntFilter<"RoomFacility"> | number
-  valueCents?: Prisma.IntFilter<"RoomFacility"> | number
+  originalPriceCents?: Prisma.IntFilter<"RoomFacility"> | number
+  yearsInUse?: Prisma.FloatFilter<"RoomFacility"> | number
+  notes?: Prisma.StringNullableFilter<"RoomFacility"> | string | null
   createdAt?: Prisma.DateTimeFilter<"RoomFacility"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"RoomFacility"> | Date | string
 }
 
 export type RoomFacilityCreateManyRoomInput = {
   id?: string
+  type: string
   name: string
   quantity?: number
-  valueCents?: number
+  originalPriceCents?: number
+  yearsInUse?: number
+  notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type RoomFacilityUpdateWithoutRoomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  valueCents?: Prisma.IntFieldUpdateOperationsInput | number
+  originalPriceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  yearsInUse?: Prisma.FloatFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type RoomFacilityUncheckedUpdateWithoutRoomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  valueCents?: Prisma.IntFieldUpdateOperationsInput | number
+  originalPriceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  yearsInUse?: Prisma.FloatFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type RoomFacilityUncheckedUpdateManyWithoutRoomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  valueCents?: Prisma.IntFieldUpdateOperationsInput | number
+  originalPriceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  yearsInUse?: Prisma.FloatFieldUpdateOperationsInput | number
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -557,9 +658,12 @@ export type RoomFacilityUncheckedUpdateManyWithoutRoomInput = {
 export type RoomFacilitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   roomId?: boolean
+  type?: boolean
   name?: boolean
   quantity?: boolean
-  valueCents?: boolean
+  originalPriceCents?: boolean
+  yearsInUse?: boolean
+  notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   room?: boolean | Prisma.RoomDefaultArgs<ExtArgs>
@@ -568,9 +672,12 @@ export type RoomFacilitySelect<ExtArgs extends runtime.Types.Extensions.Internal
 export type RoomFacilitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   roomId?: boolean
+  type?: boolean
   name?: boolean
   quantity?: boolean
-  valueCents?: boolean
+  originalPriceCents?: boolean
+  yearsInUse?: boolean
+  notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   room?: boolean | Prisma.RoomDefaultArgs<ExtArgs>
@@ -579,9 +686,12 @@ export type RoomFacilitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.
 export type RoomFacilitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   roomId?: boolean
+  type?: boolean
   name?: boolean
   quantity?: boolean
-  valueCents?: boolean
+  originalPriceCents?: boolean
+  yearsInUse?: boolean
+  notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   room?: boolean | Prisma.RoomDefaultArgs<ExtArgs>
@@ -590,14 +700,17 @@ export type RoomFacilitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
 export type RoomFacilitySelectScalar = {
   id?: boolean
   roomId?: boolean
+  type?: boolean
   name?: boolean
   quantity?: boolean
-  valueCents?: boolean
+  originalPriceCents?: boolean
+  yearsInUse?: boolean
+  notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type RoomFacilityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "roomId" | "name" | "quantity" | "valueCents" | "createdAt" | "updatedAt", ExtArgs["result"]["roomFacility"]>
+export type RoomFacilityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "roomId" | "type" | "name" | "quantity" | "originalPriceCents" | "yearsInUse" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["roomFacility"]>
 export type RoomFacilityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   room?: boolean | Prisma.RoomDefaultArgs<ExtArgs>
 }
@@ -616,9 +729,12 @@ export type $RoomFacilityPayload<ExtArgs extends runtime.Types.Extensions.Intern
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     roomId: string
+    type: string
     name: string
     quantity: number
-    valueCents: number
+    originalPriceCents: number
+    yearsInUse: number
+    notes: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["roomFacility"]>
@@ -1047,9 +1163,12 @@ export interface Prisma__RoomFacilityClient<T, Null = never, ExtArgs extends run
 export interface RoomFacilityFieldRefs {
   readonly id: Prisma.FieldRef<"RoomFacility", 'String'>
   readonly roomId: Prisma.FieldRef<"RoomFacility", 'String'>
+  readonly type: Prisma.FieldRef<"RoomFacility", 'String'>
   readonly name: Prisma.FieldRef<"RoomFacility", 'String'>
   readonly quantity: Prisma.FieldRef<"RoomFacility", 'Int'>
-  readonly valueCents: Prisma.FieldRef<"RoomFacility", 'Int'>
+  readonly originalPriceCents: Prisma.FieldRef<"RoomFacility", 'Int'>
+  readonly yearsInUse: Prisma.FieldRef<"RoomFacility", 'Float'>
+  readonly notes: Prisma.FieldRef<"RoomFacility", 'String'>
   readonly createdAt: Prisma.FieldRef<"RoomFacility", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"RoomFacility", 'DateTime'>
 }

@@ -1,3 +1,12 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
 node_modules
 dist
 build
@@ -9,11 +18,6 @@ coverage
 !.env.example
 
 .DS_Store
-
-pnpm-debug.log*
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
 .vscode
 .idea

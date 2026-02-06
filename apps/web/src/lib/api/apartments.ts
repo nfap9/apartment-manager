@@ -211,7 +211,14 @@ export const roomsApi = {
   updateFacilities: async (
     orgId: string,
     roomId: string,
-    data: Array<{ name: string; quantity: number; valueCents: number }>,
+    data: Array<{
+      type: string;
+      name: string;
+      quantity: number;
+      originalPriceCents: number;
+      yearsInUse: number;
+      notes?: string | null;
+    }>,
   ): Promise<void> => {
     await api.put(`/api/orgs/${orgId}/rooms/${roomId}/facilities`, data);
   },

@@ -285,11 +285,14 @@ model Room {
 }
 
 model RoomFacility {
-  id      String @id @default(uuid())
-  roomId  String
-  name    String
-  quantity Int @default(1)
-  valueCents Int @default(0)
+  id                String  @id @default(uuid())
+  roomId            String
+  type              String  // 设施类型：空调、洗衣机、冰箱等
+  name              String  // 设施名称（默认与type相同，可自定义）
+  quantity          Int     @default(1)
+  originalPriceCents Int    @default(0) // 原价（分）
+  yearsInUse       Float   @default(0) // 已使用年限（支持小数）
+  notes            String? // 备注
 
   room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
 

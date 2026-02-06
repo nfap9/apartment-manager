@@ -2258,9 +2258,12 @@ export type RoomScalarFieldEnum = (typeof RoomScalarFieldEnum)[keyof typeof Room
 export const RoomFacilityScalarFieldEnum = {
   id: 'id',
   roomId: 'roomId',
+  type: 'type',
   name: 'name',
   quantity: 'quantity',
-  valueCents: 'valueCents',
+  originalPriceCents: 'originalPriceCents',
+  yearsInUse: 'yearsInUse',
+  notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2327,6 +2330,7 @@ export const LeaseChargeScalarFieldEnum = {
   unitPriceCents: 'unitPriceCents',
   unitName: 'unitName',
   billingCycleMonths: 'billingCycleMonths',
+  billingTiming: 'billingTiming',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -2581,6 +2585,20 @@ export type EnumLeaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
  * Reference to a field of type 'LeaseStatus[]'
  */
 export type ListEnumLeaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeaseStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'BillingTiming'
+ */
+export type EnumBillingTimingFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BillingTiming'>
+    
+
+
+/**
+ * Reference to a field of type 'BillingTiming[]'
+ */
+export type ListEnumBillingTimingFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BillingTiming[]'>
     
 
 
