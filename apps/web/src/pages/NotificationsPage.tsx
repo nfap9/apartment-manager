@@ -93,7 +93,7 @@ export function NotificationsPage() {
 
   return (
     <>
-      <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
+      <div className="page-wrapper">
         <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
           <Space>
             <span style={{ color: 'rgba(0, 0, 0, 0.65)' }}>只看未读</span>

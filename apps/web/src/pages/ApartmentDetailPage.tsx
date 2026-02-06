@@ -117,7 +117,7 @@ export function ApartmentDetailPage() {
   };
 
   return (
-    <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
+    <div className="page-wrapper">
       <Space direction="vertical" style={{ width: '100%' }} size={16}>
       <ApartmentInfoCard
         apartment={apartment}

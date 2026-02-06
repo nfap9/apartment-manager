@@ -184,7 +184,7 @@ export function RoomsPage() {
 
   return (
     <>
-      <div className="w-full h-full p-6 overflow-y-auto overflow-x-hidden">
+      <div className="page-wrapper">
         {apartmentsQuery.isLoading ? (
             <div className="p-5 text-center">
               <Typography.Text type="secondary">加载中...</Typography.Text>

@@ -407,7 +407,7 @@ export function SigningPage() {
 
   if (!orgId) {
     return (
-      <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
+      <div className="page-wrapper">
         <Typography.Text type="secondary">请先选择组织</Typography.Text>
       </div>
     );
@@ -415,7 +415,7 @@ export function SigningPage() {
 
   if (success) {
     return (
-      <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
+      <div className="page-wrapper">
         <Result
           status="success"
           title="签约成功！"
@@ -1015,7 +1015,7 @@ export function SigningPage() {
 
   return (
     <>
-      <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
+      <div className="page-wrapper">
         <Steps current={currentStep} items={steps.map((s) => ({ title: s.title, icon: s.icon }))} />
 
         <div style={{ marginTop: 24 }}>

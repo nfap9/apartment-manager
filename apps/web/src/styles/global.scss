@@ -26,6 +26,16 @@ body {
   color: $color-text-primary;
 }
 
+// 页面外层容器 - 统一各Page页面的最外层div样式
+.page-wrapper {
+  width: 100%;
+  height: 100%;
+  padding: $spacing-xl; // 24px
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #fff;
+}
+
 // 全局工具类
 .page-container {
   max-width: $layout-content-max-width;

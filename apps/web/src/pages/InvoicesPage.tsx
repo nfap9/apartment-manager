@@ -291,7 +291,7 @@ export function InvoicesPage() {
 
   return (
     <>
-      <div style={{ width: '100%', height: '100%', padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
+      <div className="page-wrapper">
         {canManage && (
           <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
             <Button

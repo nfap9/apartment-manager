@@ -76,7 +76,7 @@ export function ApartmentsPage() {
 
   return (
     <>
-      <div className="w-full h-full p-6 overflow-y-auto overflow-x-hidden">
+      <div className="page-wrapper">
         <Spin spinning={query.isLoading}>
           <Row gutter={[16, 16]} className="m-0">
             {/* 新增公寓卡片 */}
