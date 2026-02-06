@@ -36,6 +36,7 @@ export function OrgPage() {
       'lease.write': '编辑租约',
       'billing.read': '查看账单',
       'billing.manage': '账单管理',
+      'fee.manage': '费用管理',
       'notification.read': '查看通知',
       'dashboard.read': '查看看板',
     }),

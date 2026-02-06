@@ -26,6 +26,9 @@ export const PERMISSIONS = [
   'billing.read',
   'billing.manage',
 
+  // fee
+  'fee.manage',
+
   // notification & dashboard
   'notification.read',
   'dashboard.read',

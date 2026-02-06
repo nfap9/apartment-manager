@@ -102,6 +102,7 @@ model Organization {
   invoices      Invoice[]
   notifications Notification[]
   auditLogs     AuditLog[]
+  feeItems      FeeItem[]
 }
 
 model Membership {
@@ -252,14 +253,83 @@ model ApartmentFeePricing {
   fixedAmountCents Int?
   unitPriceCents   Int?
   unitName    String?
+  notes       String?
+  billingTiming BillingTiming?
+  hasSpecs    Boolean @default(false)
 
   apartment Apartment @relation(fields: [apartmentId], references: [id], onDelete: Cascade)
+  specs     FeePricingSpec[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([apartmentId, feeType])
   @@index([apartmentId])
+}
+
+model FeePricingSpec {
+  id          String  @id @default(uuid())
+  feePricingId String
+  name        String  // 规格名称，如 "100M"、"200M"、"500M"
+  description String? // 规格描述（可选）
+  fixedAmountCents Int?  // 固定金额（如果该规格是固定计费）
+  unitPriceCents   Int?  // 单价（如果该规格是按量计费）
+  unitName    String? // 单位名称
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0) // 排序顺序
+  
+  feePricing ApartmentFeePricing @relation(fields: [feePricingId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([feePricingId, name])
+  @@index([feePricingId])
+}
+
+model FeeItem {
+  id          String  @id @default(uuid())
+  organizationId String
+  feeType     FeeType
+  name        String  // 费用项目名称，如"网费"、"管理费"等
+  mode        FeeMode
+  defaultFixedAmountCents Int?  // 默认固定金额
+  defaultUnitPriceCents   Int?  // 默认单价
+  defaultUnitName    String? // 默认单位名称
+  defaultBillingTiming BillingTiming? // 默认结算时机
+  hasSpecs    Boolean @default(false) // 是否支持多规格
+  notes       String? // 备注
+  isActive    Boolean @default(true) // 是否启用
+  sortOrder   Int     @default(0) // 排序顺序
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  specs        FeeItemSpec[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([organizationId, feeType, name])
+  @@index([organizationId])
+}
+
+model FeeItemSpec {
+  id          String  @id @default(uuid())
+  feeItemId   String
+  name        String  // 规格名称，如 "100M"、"200M"、"500M"
+  description String? // 规格描述（可选）
+  fixedAmountCents Int?  // 固定金额（如果该规格是固定计费）
+  unitPriceCents   Int?  // 单价（如果该规格是按量计费）
+  unitName    String? // 单位名称
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0) // 排序顺序
+  
+  feeItem FeeItem @relation(fields: [feeItemId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([feeItemId, name])
+  @@index([feeItemId])
 }
 
 model Room {

@@ -5,6 +5,7 @@ import { AppLayout } from './layouts/AppLayout';
 import { ApartmentDetailPage } from './pages/apartments/ApartmentDetailPage';
 import { ApartmentsPage } from './pages/apartments/ApartmentsPage';
 import { DashboardPage } from './pages/dashboard/DashboardPage';
+import { FeesPage } from './pages/fees/FeesPage';
 import { InvoicesPage } from './pages/invoices/InvoicesPage';
 import { LeasesPage } from './pages/leases/LeasesPage';
 import { LoginPage } from './pages/login/LoginPage';
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/leases" element={<LeasesPage />} />
           <Route path="/signing" element={<SigningPage />} />
           <Route path="/invoices" element={<InvoicesPage />} />
+          <Route path="/fees" element={<FeesPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/org" element={<OrgPage />} />
         </Route>

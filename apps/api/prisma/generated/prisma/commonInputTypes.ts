@@ -277,6 +277,13 @@ export type EnumFeeModeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumFeeModeFilter<$PrismaModel> | $Enums.FeeMode
 }
 
+export type EnumBillingTimingNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.BillingTiming | Prisma.EnumBillingTimingFieldRefInput<$PrismaModel> | null
+  in?: $Enums.BillingTiming[] | Prisma.ListEnumBillingTimingFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.BillingTiming[] | Prisma.ListEnumBillingTimingFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumBillingTimingNullableFilter<$PrismaModel> | $Enums.BillingTiming | null
+}
+
 export type EnumFeeTypeWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.FeeType | Prisma.EnumFeeTypeFieldRefInput<$PrismaModel>
   in?: $Enums.FeeType[] | Prisma.ListEnumFeeTypeFieldRefInput<$PrismaModel>
@@ -295,6 +302,16 @@ export type EnumFeeModeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumFeeModeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumFeeModeFilter<$PrismaModel>
+}
+
+export type EnumBillingTimingNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BillingTiming | Prisma.EnumBillingTimingFieldRefInput<$PrismaModel> | null
+  in?: $Enums.BillingTiming[] | Prisma.ListEnumBillingTimingFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.BillingTiming[] | Prisma.ListEnumBillingTimingFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumBillingTimingNullableWithAggregatesFilter<$PrismaModel> | $Enums.BillingTiming | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBillingTimingNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBillingTimingNullableFilter<$PrismaModel>
 }
 
 export type FloatFilter<$PrismaModel = never> = {
@@ -348,13 +365,6 @@ export type EnumFeeTypeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumFeeTypeNullableFilter<$PrismaModel> | $Enums.FeeType | null
 }
 
-export type EnumBillingTimingNullableFilter<$PrismaModel = never> = {
-  equals?: $Enums.BillingTiming | Prisma.EnumBillingTimingFieldRefInput<$PrismaModel> | null
-  in?: $Enums.BillingTiming[] | Prisma.ListEnumBillingTimingFieldRefInput<$PrismaModel> | null
-  notIn?: $Enums.BillingTiming[] | Prisma.ListEnumBillingTimingFieldRefInput<$PrismaModel> | null
-  not?: Prisma.NestedEnumBillingTimingNullableFilter<$PrismaModel> | $Enums.BillingTiming | null
-}
-
 export type EnumFeeTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.FeeType | Prisma.EnumFeeTypeFieldRefInput<$PrismaModel> | null
   in?: $Enums.FeeType[] | Prisma.ListEnumFeeTypeFieldRefInput<$PrismaModel> | null
@@ -363,16 +373,6 @@ export type EnumFeeTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumFeeTypeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumFeeTypeNullableFilter<$PrismaModel>
-}
-
-export type EnumBillingTimingNullableWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.BillingTiming | Prisma.EnumBillingTimingFieldRefInput<$PrismaModel> | null
-  in?: $Enums.BillingTiming[] | Prisma.ListEnumBillingTimingFieldRefInput<$PrismaModel> | null
-  notIn?: $Enums.BillingTiming[] | Prisma.ListEnumBillingTimingFieldRefInput<$PrismaModel> | null
-  not?: Prisma.NestedEnumBillingTimingNullableWithAggregatesFilter<$PrismaModel> | $Enums.BillingTiming | null
-  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumBillingTimingNullableFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumBillingTimingNullableFilter<$PrismaModel>
 }
 
 export type EnumInvoiceStatusFilter<$PrismaModel = never> = {
@@ -776,6 +776,13 @@ export type NestedEnumFeeModeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumFeeModeFilter<$PrismaModel> | $Enums.FeeMode
 }
 
+export type NestedEnumBillingTimingNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.BillingTiming | Prisma.EnumBillingTimingFieldRefInput<$PrismaModel> | null
+  in?: $Enums.BillingTiming[] | Prisma.ListEnumBillingTimingFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.BillingTiming[] | Prisma.ListEnumBillingTimingFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumBillingTimingNullableFilter<$PrismaModel> | $Enums.BillingTiming | null
+}
+
 export type NestedEnumFeeTypeWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.FeeType | Prisma.EnumFeeTypeFieldRefInput<$PrismaModel>
   in?: $Enums.FeeType[] | Prisma.ListEnumFeeTypeFieldRefInput<$PrismaModel>
@@ -794,6 +801,16 @@ export type NestedEnumFeeModeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumFeeModeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumFeeModeFilter<$PrismaModel>
+}
+
+export type NestedEnumBillingTimingNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BillingTiming | Prisma.EnumBillingTimingFieldRefInput<$PrismaModel> | null
+  in?: $Enums.BillingTiming[] | Prisma.ListEnumBillingTimingFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.BillingTiming[] | Prisma.ListEnumBillingTimingFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumBillingTimingNullableWithAggregatesFilter<$PrismaModel> | $Enums.BillingTiming | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBillingTimingNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBillingTimingNullableFilter<$PrismaModel>
 }
 
 export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -836,13 +853,6 @@ export type NestedEnumFeeTypeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumFeeTypeNullableFilter<$PrismaModel> | $Enums.FeeType | null
 }
 
-export type NestedEnumBillingTimingNullableFilter<$PrismaModel = never> = {
-  equals?: $Enums.BillingTiming | Prisma.EnumBillingTimingFieldRefInput<$PrismaModel> | null
-  in?: $Enums.BillingTiming[] | Prisma.ListEnumBillingTimingFieldRefInput<$PrismaModel> | null
-  notIn?: $Enums.BillingTiming[] | Prisma.ListEnumBillingTimingFieldRefInput<$PrismaModel> | null
-  not?: Prisma.NestedEnumBillingTimingNullableFilter<$PrismaModel> | $Enums.BillingTiming | null
-}
-
 export type NestedEnumFeeTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.FeeType | Prisma.EnumFeeTypeFieldRefInput<$PrismaModel> | null
   in?: $Enums.FeeType[] | Prisma.ListEnumFeeTypeFieldRefInput<$PrismaModel> | null
@@ -851,16 +861,6 @@ export type NestedEnumFeeTypeNullableWithAggregatesFilter<$PrismaModel = never> 
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumFeeTypeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumFeeTypeNullableFilter<$PrismaModel>
-}
-
-export type NestedEnumBillingTimingNullableWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.BillingTiming | Prisma.EnumBillingTimingFieldRefInput<$PrismaModel> | null
-  in?: $Enums.BillingTiming[] | Prisma.ListEnumBillingTimingFieldRefInput<$PrismaModel> | null
-  notIn?: $Enums.BillingTiming[] | Prisma.ListEnumBillingTimingFieldRefInput<$PrismaModel> | null
-  not?: Prisma.NestedEnumBillingTimingNullableWithAggregatesFilter<$PrismaModel> | $Enums.BillingTiming | null
-  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumBillingTimingNullableFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumBillingTimingNullableFilter<$PrismaModel>
 }
 
 export type NestedEnumInvoiceStatusFilter<$PrismaModel = never> = {

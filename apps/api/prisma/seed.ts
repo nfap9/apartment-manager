@@ -61,6 +61,10 @@ async function main() {
     where: { key: { in: [...PERMISSION_KEYS] } },
   });
 
+  // 确保 Admin 角色拥有所有权限（先删除再添加，确保包含新权限）
+  await prisma.rolePermission.deleteMany({
+    where: { roleId: adminRole.id },
+  });
   await prisma.rolePermission.createMany({
     data: permissions.map((p) => ({ roleId: adminRole.id, permissionId: p.id })),
     skipDuplicates: true,
@@ -72,6 +76,46 @@ async function main() {
   });
 
   console.log('[seed] 基础数据创建完成');
+
+  // 创建预置的水费和电费
+  console.log('[seed] 创建预置费用项目...');
+  const existingWaterFee = await prisma.feeItem.findFirst({
+    where: { organizationId: org.id, feeType: 'WATER', name: '水费' },
+  });
+  if (!existingWaterFee) {
+    await prisma.feeItem.create({
+      data: {
+        organizationId: org.id,
+        feeType: 'WATER',
+        name: '水费',
+        mode: 'METERED',
+        defaultUnitPriceCents: 500, // 5元/吨
+        defaultUnitName: '吨',
+        defaultBillingTiming: 'POSTPAID',
+        isActive: true,
+        sortOrder: 1,
+      },
+    });
+  }
+  const existingElectricityFee = await prisma.feeItem.findFirst({
+    where: { organizationId: org.id, feeType: 'ELECTRICITY', name: '电费' },
+  });
+  if (!existingElectricityFee) {
+    await prisma.feeItem.create({
+      data: {
+        organizationId: org.id,
+        feeType: 'ELECTRICITY',
+        name: '电费',
+        mode: 'METERED',
+        defaultUnitPriceCents: 80, // 0.8元/度
+        defaultUnitName: '度',
+        defaultBillingTiming: 'POSTPAID',
+        isActive: true,
+        sortOrder: 2,
+      },
+    });
+  }
+  console.log('[seed] 预置费用项目创建完成');
 
   // 创建测试数据
   console.log('[seed] 开始创建测试数据...');
@@ -177,9 +221,9 @@ async function main() {
         isRented: i < 3, // 前3个房间已出租
         facilities: {
           create: [
-            { name: '空调', quantity: 1, valueCents: 200000 }, // 2000元
-            { name: '热水器', quantity: 1, valueCents: 150000 }, // 1500元
-            { name: '床', quantity: 1, valueCents: 80000 }, // 800元
+            { type: '空调', name: '空调', quantity: 1, originalPriceCents: 200000 }, // 2000元
+            { type: '热水器', name: '热水器', quantity: 1, originalPriceCents: 150000 }, // 1500元
+            { type: '床', name: '床', quantity: 1, originalPriceCents: 80000 }, // 800元
           ],
         },
         pricingPlans: {
@@ -215,10 +259,10 @@ async function main() {
         isRented: i < 2, // 前2个房间已出租
         facilities: {
           create: [
-            { name: '空调', quantity: 2, valueCents: 400000 },
-            { name: '热水器', quantity: 1, valueCents: 150000 },
-            { name: '冰箱', quantity: 1, valueCents: 300000 },
-            { name: '床', quantity: 2, valueCents: 160000 },
+            { type: '空调', name: '空调', quantity: 2, originalPriceCents: 400000 },
+            { type: '热水器', name: '热水器', quantity: 1, originalPriceCents: 150000 },
+            { type: '冰箱', name: '冰箱', quantity: 1, originalPriceCents: 300000 },
+            { type: '床', name: '床', quantity: 2, originalPriceCents: 160000 },
           ],
         },
         pricingPlans: {

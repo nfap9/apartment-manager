@@ -100,6 +100,21 @@ export type ApartmentUpstream = Prisma.ApartmentUpstreamModel
  */
 export type ApartmentFeePricing = Prisma.ApartmentFeePricingModel
 /**
+ * Model FeePricingSpec
+ * 
+ */
+export type FeePricingSpec = Prisma.FeePricingSpecModel
+/**
+ * Model FeeItem
+ * 
+ */
+export type FeeItem = Prisma.FeeItemModel
+/**
+ * Model FeeItemSpec
+ * 
+ */
+export type FeeItemSpec = Prisma.FeeItemSpecModel
+/**
  * Model Room
  * 
  */

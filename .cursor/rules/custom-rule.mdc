@@ -1,0 +1,10 @@
+---
+description: 修改代码后验证和同步
+alwaysApply: false
+---
+# Overview
+
+当修改代码时需要遵守这个规则
+
+1. 修改完代码后需要执行lint和build指令，并解决错误
+2. 修改数据库设计后需要执行数据库迁移。

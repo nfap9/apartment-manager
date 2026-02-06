@@ -83,6 +83,35 @@ orgRouter.post('/', requireAuth, async (req, res) => {
       skipDuplicates: true,
     });
 
+    // 创建预置的水费和电费
+    await tx.feeItem.createMany({
+      data: [
+        {
+          organizationId: org.id,
+          feeType: 'WATER',
+          name: '水费',
+          mode: 'METERED',
+          defaultUnitPriceCents: 500, // 5元/吨
+          defaultUnitName: '吨',
+          defaultBillingTiming: 'POSTPAID',
+          isActive: true,
+          sortOrder: 1,
+        },
+        {
+          organizationId: org.id,
+          feeType: 'ELECTRICITY',
+          name: '电费',
+          mode: 'METERED',
+          defaultUnitPriceCents: 80, // 0.8元/度
+          defaultUnitName: '度',
+          defaultBillingTiming: 'POSTPAID',
+          isActive: true,
+          sortOrder: 2,
+        },
+      ],
+      skipDuplicates: true,
+    });
+
     return { org, membershipId: membership.id };
   });
 

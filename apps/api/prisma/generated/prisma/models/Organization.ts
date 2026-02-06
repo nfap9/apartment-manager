@@ -183,6 +183,7 @@ export type OrganizationWhereInput = {
   invoices?: Prisma.InvoiceListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
+  feeItems?: Prisma.FeeItemListRelationFilter
 }
 
 export type OrganizationOrderByWithRelationInput = {
@@ -199,6 +200,7 @@ export type OrganizationOrderByWithRelationInput = {
   invoices?: Prisma.InvoiceOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
+  feeItems?: Prisma.FeeItemOrderByRelationAggregateInput
 }
 
 export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -218,6 +220,7 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   invoices?: Prisma.InvoiceListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
+  feeItems?: Prisma.FeeItemListRelationFilter
 }, "id">
 
 export type OrganizationOrderByWithAggregationInput = {
@@ -254,6 +257,7 @@ export type OrganizationCreateInput = {
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateInput = {
@@ -270,6 +274,7 @@ export type OrganizationUncheckedCreateInput = {
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUpdateInput = {
@@ -286,6 +291,7 @@ export type OrganizationUpdateInput = {
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateInput = {
@@ -302,6 +308,7 @@ export type OrganizationUncheckedUpdateInput = {
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyInput = {
@@ -407,6 +414,20 @@ export type OrganizationUpdateOneRequiredWithoutApartmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutApartmentsInput, Prisma.OrganizationUpdateWithoutApartmentsInput>, Prisma.OrganizationUncheckedUpdateWithoutApartmentsInput>
 }
 
+export type OrganizationCreateNestedOneWithoutFeeItemsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutFeeItemsInput, Prisma.OrganizationUncheckedCreateWithoutFeeItemsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutFeeItemsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutFeeItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutFeeItemsInput, Prisma.OrganizationUncheckedCreateWithoutFeeItemsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutFeeItemsInput
+  upsert?: Prisma.OrganizationUpsertWithoutFeeItemsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutFeeItemsInput, Prisma.OrganizationUpdateWithoutFeeItemsInput>, Prisma.OrganizationUncheckedUpdateWithoutFeeItemsInput>
+}
+
 export type OrganizationCreateNestedOneWithoutTenantsInput = {
   create?: Prisma.XOR<Prisma.OrganizationCreateWithoutTenantsInput, Prisma.OrganizationUncheckedCreateWithoutTenantsInput>
   connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutTenantsInput
@@ -490,6 +511,7 @@ export type OrganizationCreateWithoutMembershipsInput = {
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutMembershipsInput = {
@@ -505,6 +527,7 @@ export type OrganizationUncheckedCreateWithoutMembershipsInput = {
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutMembershipsInput = {
@@ -536,6 +559,7 @@ export type OrganizationUpdateWithoutMembershipsInput = {
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutMembershipsInput = {
@@ -551,6 +575,7 @@ export type OrganizationUncheckedUpdateWithoutMembershipsInput = {
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutRolesInput = {
@@ -566,6 +591,7 @@ export type OrganizationCreateWithoutRolesInput = {
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutRolesInput = {
@@ -581,6 +607,7 @@ export type OrganizationUncheckedCreateWithoutRolesInput = {
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutRolesInput = {
@@ -612,6 +639,7 @@ export type OrganizationUpdateWithoutRolesInput = {
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutRolesInput = {
@@ -627,6 +655,7 @@ export type OrganizationUncheckedUpdateWithoutRolesInput = {
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutInvitesInput = {
@@ -642,6 +671,7 @@ export type OrganizationCreateWithoutInvitesInput = {
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutInvitesInput = {
@@ -657,6 +687,7 @@ export type OrganizationUncheckedCreateWithoutInvitesInput = {
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutInvitesInput = {
@@ -688,6 +719,7 @@ export type OrganizationUpdateWithoutInvitesInput = {
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutInvitesInput = {
@@ -703,6 +735,7 @@ export type OrganizationUncheckedUpdateWithoutInvitesInput = {
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutApartmentsInput = {
@@ -718,6 +751,7 @@ export type OrganizationCreateWithoutApartmentsInput = {
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutApartmentsInput = {
@@ -733,6 +767,7 @@ export type OrganizationUncheckedCreateWithoutApartmentsInput = {
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutApartmentsInput = {
@@ -764,6 +799,7 @@ export type OrganizationUpdateWithoutApartmentsInput = {
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutApartmentsInput = {
@@ -774,6 +810,87 @@ export type OrganizationUncheckedUpdateWithoutApartmentsInput = {
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutOrganizationNestedInput
   invites?: Prisma.OrgInviteUncheckedUpdateManyWithoutOrganizationNestedInput
+  tenants?: Prisma.TenantUncheckedUpdateManyWithoutOrganizationNestedInput
+  leases?: Prisma.LeaseUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutFeeItemsInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
+  roles?: Prisma.RoleCreateNestedManyWithoutOrganizationInput
+  invites?: Prisma.OrgInviteCreateNestedManyWithoutOrganizationInput
+  apartments?: Prisma.ApartmentCreateNestedManyWithoutOrganizationInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutOrganizationInput
+  leases?: Prisma.LeaseCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutFeeItemsInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutOrganizationInput
+  invites?: Prisma.OrgInviteUncheckedCreateNestedManyWithoutOrganizationInput
+  apartments?: Prisma.ApartmentUncheckedCreateNestedManyWithoutOrganizationInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutOrganizationInput
+  leases?: Prisma.LeaseUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutFeeItemsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutFeeItemsInput, Prisma.OrganizationUncheckedCreateWithoutFeeItemsInput>
+}
+
+export type OrganizationUpsertWithoutFeeItemsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutFeeItemsInput, Prisma.OrganizationUncheckedUpdateWithoutFeeItemsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutFeeItemsInput, Prisma.OrganizationUncheckedCreateWithoutFeeItemsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutFeeItemsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutFeeItemsInput, Prisma.OrganizationUncheckedUpdateWithoutFeeItemsInput>
+}
+
+export type OrganizationUpdateWithoutFeeItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutOrganizationNestedInput
+  invites?: Prisma.OrgInviteUpdateManyWithoutOrganizationNestedInput
+  apartments?: Prisma.ApartmentUpdateManyWithoutOrganizationNestedInput
+  tenants?: Prisma.TenantUpdateManyWithoutOrganizationNestedInput
+  leases?: Prisma.LeaseUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutFeeItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutOrganizationNestedInput
+  invites?: Prisma.OrgInviteUncheckedUpdateManyWithoutOrganizationNestedInput
+  apartments?: Prisma.ApartmentUncheckedUpdateManyWithoutOrganizationNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutOrganizationNestedInput
   leases?: Prisma.LeaseUncheckedUpdateManyWithoutOrganizationNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -794,6 +911,7 @@ export type OrganizationCreateWithoutTenantsInput = {
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutTenantsInput = {
@@ -809,6 +927,7 @@ export type OrganizationUncheckedCreateWithoutTenantsInput = {
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutTenantsInput = {
@@ -840,6 +959,7 @@ export type OrganizationUpdateWithoutTenantsInput = {
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutTenantsInput = {
@@ -855,6 +975,7 @@ export type OrganizationUncheckedUpdateWithoutTenantsInput = {
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutLeasesInput = {
@@ -870,6 +991,7 @@ export type OrganizationCreateWithoutLeasesInput = {
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutLeasesInput = {
@@ -885,6 +1007,7 @@ export type OrganizationUncheckedCreateWithoutLeasesInput = {
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutLeasesInput = {
@@ -916,6 +1039,7 @@ export type OrganizationUpdateWithoutLeasesInput = {
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutLeasesInput = {
@@ -931,6 +1055,7 @@ export type OrganizationUncheckedUpdateWithoutLeasesInput = {
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutInvoicesInput = {
@@ -946,6 +1071,7 @@ export type OrganizationCreateWithoutInvoicesInput = {
   leases?: Prisma.LeaseCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutInvoicesInput = {
@@ -961,6 +1087,7 @@ export type OrganizationUncheckedCreateWithoutInvoicesInput = {
   leases?: Prisma.LeaseUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutInvoicesInput = {
@@ -992,6 +1119,7 @@ export type OrganizationUpdateWithoutInvoicesInput = {
   leases?: Prisma.LeaseUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutInvoicesInput = {
@@ -1007,6 +1135,7 @@ export type OrganizationUncheckedUpdateWithoutInvoicesInput = {
   leases?: Prisma.LeaseUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutNotificationsInput = {
@@ -1022,6 +1151,7 @@ export type OrganizationCreateWithoutNotificationsInput = {
   leases?: Prisma.LeaseCreateNestedManyWithoutOrganizationInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutNotificationsInput = {
@@ -1037,6 +1167,7 @@ export type OrganizationUncheckedCreateWithoutNotificationsInput = {
   leases?: Prisma.LeaseUncheckedCreateNestedManyWithoutOrganizationInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutNotificationsInput = {
@@ -1068,6 +1199,7 @@ export type OrganizationUpdateWithoutNotificationsInput = {
   leases?: Prisma.LeaseUpdateManyWithoutOrganizationNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutNotificationsInput = {
@@ -1083,6 +1215,7 @@ export type OrganizationUncheckedUpdateWithoutNotificationsInput = {
   leases?: Prisma.LeaseUncheckedUpdateManyWithoutOrganizationNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutAuditLogsInput = {
@@ -1098,6 +1231,7 @@ export type OrganizationCreateWithoutAuditLogsInput = {
   leases?: Prisma.LeaseCreateNestedManyWithoutOrganizationInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutAuditLogsInput = {
@@ -1113,6 +1247,7 @@ export type OrganizationUncheckedCreateWithoutAuditLogsInput = {
   leases?: Prisma.LeaseUncheckedCreateNestedManyWithoutOrganizationInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  feeItems?: Prisma.FeeItemUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutAuditLogsInput = {
@@ -1144,6 +1279,7 @@ export type OrganizationUpdateWithoutAuditLogsInput = {
   leases?: Prisma.LeaseUpdateManyWithoutOrganizationNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutAuditLogsInput = {
@@ -1159,6 +1295,7 @@ export type OrganizationUncheckedUpdateWithoutAuditLogsInput = {
   leases?: Prisma.LeaseUncheckedUpdateManyWithoutOrganizationNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  feeItems?: Prisma.FeeItemUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 
@@ -1176,6 +1313,7 @@ export type OrganizationCountOutputType = {
   invoices: number
   notifications: number
   auditLogs: number
+  feeItems: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1188,6 +1326,7 @@ export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   invoices?: boolean | OrganizationCountOutputTypeCountInvoicesArgs
   notifications?: boolean | OrganizationCountOutputTypeCountNotificationsArgs
   auditLogs?: boolean | OrganizationCountOutputTypeCountAuditLogsArgs
+  feeItems?: boolean | OrganizationCountOutputTypeCountFeeItemsArgs
 }
 
 /**
@@ -1263,6 +1402,13 @@ export type OrganizationCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtim
   where?: Prisma.AuditLogWhereInput
 }
 
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountFeeItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FeeItemWhereInput
+}
+
 
 export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1278,6 +1424,7 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   invoices?: boolean | Prisma.Organization$invoicesArgs<ExtArgs>
   notifications?: boolean | Prisma.Organization$notificationsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.Organization$auditLogsArgs<ExtArgs>
+  feeItems?: boolean | Prisma.Organization$feeItemsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
@@ -1313,6 +1460,7 @@ export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.Interna
   invoices?: boolean | Prisma.Organization$invoicesArgs<ExtArgs>
   notifications?: boolean | Prisma.Organization$notificationsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.Organization$auditLogsArgs<ExtArgs>
+  feeItems?: boolean | Prisma.Organization$feeItemsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1330,6 +1478,7 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     invoices: Prisma.$InvoicePayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
+    feeItems: Prisma.$FeeItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1739,6 +1888,7 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
   invoices<T extends Prisma.Organization$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.Organization$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.Organization$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  feeItems<T extends Prisma.Organization$feeItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$feeItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeeItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2373,6 +2523,30 @@ export type Organization$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
+}
+
+/**
+ * Organization.feeItems
+ */
+export type Organization$feeItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FeeItem
+   */
+  select?: Prisma.FeeItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FeeItem
+   */
+  omit?: Prisma.FeeItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FeeItemInclude<ExtArgs> | null
+  where?: Prisma.FeeItemWhereInput
+  orderBy?: Prisma.FeeItemOrderByWithRelationInput | Prisma.FeeItemOrderByWithRelationInput[]
+  cursor?: Prisma.FeeItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FeeItemScalarFieldEnum | Prisma.FeeItemScalarFieldEnum[]
 }
 
 /**

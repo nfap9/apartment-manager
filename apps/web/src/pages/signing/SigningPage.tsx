@@ -72,12 +72,20 @@ export function SigningPage() {
           electricityUnitName: electricityCharge.unitName ?? '度',
         });
       }
-      // 将其他费用加载到 Form.List 中
+      // 将其他费用加载到 Form.List 中，包含规格信息
       leaseForm.setFieldsValue({
         charges: other.map((c) => ({
           name: c.name,
           feeType: c.feeType ?? null,
+          mode: c.mode,
           fixedAmountCents: c.fixedAmountCents ?? null,
+          unitPriceCents: c.unitPriceCents ?? null,
+          unitName: c.unitName ?? null,
+          notes: c.notes ?? null,
+          billingTiming: c.billingTiming ?? null,
+          hasSpecs: c.hasSpecs ?? false,
+          specs: c.specs ?? [],
+          selectedSpecId: null, // 用户选择的规格ID
         })),
       });
     } catch {
@@ -203,16 +211,16 @@ export function SigningPage() {
         });
       }
 
-      // 添加其他费用（只支持固定计费）
+      // 添加其他费用（支持所有计费方式）
       if (leaseValues.charges) {
         charges.push(
-          ...leaseValues.charges.map((c) => ({
+          ...leaseValues.charges.map((c: any) => ({
             name: c.name,
             feeType: c.feeType ?? 'OTHER',
-            mode: 'FIXED' as const,
-            fixedAmountCents: c.fixedAmountCents ?? null,
-            unitPriceCents: null,
-            unitName: null,
+            mode: c.mode || 'FIXED',
+            fixedAmountCents: c.mode === 'FIXED' ? (c.fixedAmountCents ?? null) : null,
+            unitPriceCents: c.mode === 'METERED' ? (c.unitPriceCents ?? null) : null,
+            unitName: c.mode === 'METERED' ? (c.unitName ?? null) : null,
             billingCycleMonths: leaseValues.billingCycleMonths ?? 1,
             isActive: true,
           }))

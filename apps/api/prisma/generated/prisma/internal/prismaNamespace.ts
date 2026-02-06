@@ -396,6 +396,9 @@ export const ModelName = {
   Apartment: 'Apartment',
   ApartmentUpstream: 'ApartmentUpstream',
   ApartmentFeePricing: 'ApartmentFeePricing',
+  FeePricingSpec: 'FeePricingSpec',
+  FeeItem: 'FeeItem',
+  FeeItemSpec: 'FeeItemSpec',
   Room: 'Room',
   RoomFacility: 'RoomFacility',
   RoomPricingPlan: 'RoomPricingPlan',
@@ -421,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "organization" | "membership" | "role" | "permission" | "rolePermission" | "membershipRole" | "orgInvite" | "orgInviteUse" | "apartment" | "apartmentUpstream" | "apartmentFeePricing" | "room" | "roomFacility" | "roomPricingPlan" | "tenant" | "lease" | "leaseCharge" | "invoice" | "invoiceItem" | "notification" | "auditLog"
+    modelProps: "user" | "organization" | "membership" | "role" | "permission" | "rolePermission" | "membershipRole" | "orgInvite" | "orgInviteUse" | "apartment" | "apartmentUpstream" | "apartmentFeePricing" | "feePricingSpec" | "feeItem" | "feeItemSpec" | "room" | "roomFacility" | "roomPricingPlan" | "tenant" | "lease" | "leaseCharge" | "invoice" | "invoiceItem" | "notification" | "auditLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1310,6 +1313,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ApartmentFeePricingCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ApartmentFeePricingCountAggregateOutputType> | number
+        }
+      }
+    }
+    FeePricingSpec: {
+      payload: Prisma.$FeePricingSpecPayload<ExtArgs>
+      fields: Prisma.FeePricingSpecFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FeePricingSpecFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeePricingSpecPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FeePricingSpecFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeePricingSpecPayload>
+        }
+        findFirst: {
+          args: Prisma.FeePricingSpecFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeePricingSpecPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FeePricingSpecFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeePricingSpecPayload>
+        }
+        findMany: {
+          args: Prisma.FeePricingSpecFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeePricingSpecPayload>[]
+        }
+        create: {
+          args: Prisma.FeePricingSpecCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeePricingSpecPayload>
+        }
+        createMany: {
+          args: Prisma.FeePricingSpecCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FeePricingSpecCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeePricingSpecPayload>[]
+        }
+        delete: {
+          args: Prisma.FeePricingSpecDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeePricingSpecPayload>
+        }
+        update: {
+          args: Prisma.FeePricingSpecUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeePricingSpecPayload>
+        }
+        deleteMany: {
+          args: Prisma.FeePricingSpecDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FeePricingSpecUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FeePricingSpecUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeePricingSpecPayload>[]
+        }
+        upsert: {
+          args: Prisma.FeePricingSpecUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeePricingSpecPayload>
+        }
+        aggregate: {
+          args: Prisma.FeePricingSpecAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFeePricingSpec>
+        }
+        groupBy: {
+          args: Prisma.FeePricingSpecGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FeePricingSpecGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FeePricingSpecCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FeePricingSpecCountAggregateOutputType> | number
+        }
+      }
+    }
+    FeeItem: {
+      payload: Prisma.$FeeItemPayload<ExtArgs>
+      fields: Prisma.FeeItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FeeItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FeeItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemPayload>
+        }
+        findFirst: {
+          args: Prisma.FeeItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FeeItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemPayload>
+        }
+        findMany: {
+          args: Prisma.FeeItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemPayload>[]
+        }
+        create: {
+          args: Prisma.FeeItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemPayload>
+        }
+        createMany: {
+          args: Prisma.FeeItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FeeItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemPayload>[]
+        }
+        delete: {
+          args: Prisma.FeeItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemPayload>
+        }
+        update: {
+          args: Prisma.FeeItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.FeeItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FeeItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FeeItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.FeeItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemPayload>
+        }
+        aggregate: {
+          args: Prisma.FeeItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFeeItem>
+        }
+        groupBy: {
+          args: Prisma.FeeItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FeeItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FeeItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FeeItemCountAggregateOutputType> | number
+        }
+      }
+    }
+    FeeItemSpec: {
+      payload: Prisma.$FeeItemSpecPayload<ExtArgs>
+      fields: Prisma.FeeItemSpecFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FeeItemSpecFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemSpecPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FeeItemSpecFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemSpecPayload>
+        }
+        findFirst: {
+          args: Prisma.FeeItemSpecFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemSpecPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FeeItemSpecFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemSpecPayload>
+        }
+        findMany: {
+          args: Prisma.FeeItemSpecFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemSpecPayload>[]
+        }
+        create: {
+          args: Prisma.FeeItemSpecCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemSpecPayload>
+        }
+        createMany: {
+          args: Prisma.FeeItemSpecCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FeeItemSpecCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemSpecPayload>[]
+        }
+        delete: {
+          args: Prisma.FeeItemSpecDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemSpecPayload>
+        }
+        update: {
+          args: Prisma.FeeItemSpecUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemSpecPayload>
+        }
+        deleteMany: {
+          args: Prisma.FeeItemSpecDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FeeItemSpecUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FeeItemSpecUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemSpecPayload>[]
+        }
+        upsert: {
+          args: Prisma.FeeItemSpecUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeItemSpecPayload>
+        }
+        aggregate: {
+          args: Prisma.FeeItemSpecAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFeeItemSpec>
+        }
+        groupBy: {
+          args: Prisma.FeeItemSpecGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FeeItemSpecGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FeeItemSpecCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FeeItemSpecCountAggregateOutputType> | number
         }
       }
     }
@@ -2232,11 +2457,69 @@ export const ApartmentFeePricingScalarFieldEnum = {
   fixedAmountCents: 'fixedAmountCents',
   unitPriceCents: 'unitPriceCents',
   unitName: 'unitName',
+  notes: 'notes',
+  billingTiming: 'billingTiming',
+  hasSpecs: 'hasSpecs',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type ApartmentFeePricingScalarFieldEnum = (typeof ApartmentFeePricingScalarFieldEnum)[keyof typeof ApartmentFeePricingScalarFieldEnum]
+
+
+export const FeePricingSpecScalarFieldEnum = {
+  id: 'id',
+  feePricingId: 'feePricingId',
+  name: 'name',
+  description: 'description',
+  fixedAmountCents: 'fixedAmountCents',
+  unitPriceCents: 'unitPriceCents',
+  unitName: 'unitName',
+  isActive: 'isActive',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeePricingSpecScalarFieldEnum = (typeof FeePricingSpecScalarFieldEnum)[keyof typeof FeePricingSpecScalarFieldEnum]
+
+
+export const FeeItemScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  feeType: 'feeType',
+  name: 'name',
+  mode: 'mode',
+  defaultFixedAmountCents: 'defaultFixedAmountCents',
+  defaultUnitPriceCents: 'defaultUnitPriceCents',
+  defaultUnitName: 'defaultUnitName',
+  defaultBillingTiming: 'defaultBillingTiming',
+  hasSpecs: 'hasSpecs',
+  notes: 'notes',
+  isActive: 'isActive',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeeItemScalarFieldEnum = (typeof FeeItemScalarFieldEnum)[keyof typeof FeeItemScalarFieldEnum]
+
+
+export const FeeItemSpecScalarFieldEnum = {
+  id: 'id',
+  feeItemId: 'feeItemId',
+  name: 'name',
+  description: 'description',
+  fixedAmountCents: 'fixedAmountCents',
+  unitPriceCents: 'unitPriceCents',
+  unitName: 'unitName',
+  isActive: 'isActive',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeeItemSpecScalarFieldEnum = (typeof FeeItemSpecScalarFieldEnum)[keyof typeof FeeItemSpecScalarFieldEnum]
 
 
 export const RoomScalarFieldEnum = {
@@ -2575,20 +2858,6 @@ export type ListEnumFeeModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
 
 
 /**
- * Reference to a field of type 'LeaseStatus'
- */
-export type EnumLeaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeaseStatus'>
-    
-
-
-/**
- * Reference to a field of type 'LeaseStatus[]'
- */
-export type ListEnumLeaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeaseStatus[]'>
-    
-
-
-/**
  * Reference to a field of type 'BillingTiming'
  */
 export type EnumBillingTimingFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BillingTiming'>
@@ -2599,6 +2868,20 @@ export type EnumBillingTimingFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'BillingTiming[]'
  */
 export type ListEnumBillingTimingFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BillingTiming[]'>
+    
+
+
+/**
+ * Reference to a field of type 'LeaseStatus'
+ */
+export type EnumLeaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeaseStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'LeaseStatus[]'
+ */
+export type ListEnumLeaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeaseStatus[]'>
     
 
 
@@ -2778,6 +3061,9 @@ export type GlobalOmitConfig = {
   apartment?: Prisma.ApartmentOmit
   apartmentUpstream?: Prisma.ApartmentUpstreamOmit
   apartmentFeePricing?: Prisma.ApartmentFeePricingOmit
+  feePricingSpec?: Prisma.FeePricingSpecOmit
+  feeItem?: Prisma.FeeItemOmit
+  feeItemSpec?: Prisma.FeeItemSpecOmit
   room?: Prisma.RoomOmit
   roomFacility?: Prisma.RoomFacilityOmit
   roomPricingPlan?: Prisma.RoomPricingPlanOmit

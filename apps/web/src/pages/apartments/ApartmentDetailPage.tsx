@@ -1,6 +1,6 @@
-import { Space, Tabs, Typography } from 'antd';
+import { Space, Tabs, Typography, Button } from 'antd';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useOrgIdWithError } from '../../hooks/useOrgId';
 import { useApartmentDetail } from './hooks/useApartmentDetail';
 import {
@@ -23,6 +23,7 @@ export function ApartmentDetailPage() {
   const { apartmentId } = useParams<{ apartmentId: string }>();
   const [orgId, errorComponent] = useOrgIdWithError();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const {
     apartment,
@@ -132,17 +133,27 @@ export function ApartmentDetailPage() {
             key: 'rooms',
             label: '房间',
             children: (
-              <RoomTable
-                rooms={apartment?.rooms ?? []}
-                canEdit={canRoomWrite}
-                canPricingManage={canPricingManage}
-                onEdit={handleEditRoom}
-                onFacility={handleFacility}
-                onPricing={handlePricing}
-                onDownloadTemplate={handleDownloadTemplate}
-                onImport={handleImport}
-                importUploading={importUploading}
-              />
+              <div>
+                <div style={{ marginBottom: 16, textAlign: 'right' }}>
+                  <Button
+                    type="primary"
+                    onClick={() => navigate(`/rooms?apartmentId=${apartmentId}`)}
+                  >
+                    查看房间管理
+                  </Button>
+                </div>
+                <RoomTable
+                  rooms={apartment?.rooms ?? []}
+                  canEdit={canRoomWrite}
+                  canPricingManage={canPricingManage}
+                  onEdit={handleEditRoom}
+                  onFacility={handleFacility}
+                  onPricing={handlePricing}
+                  onDownloadTemplate={handleDownloadTemplate}
+                  onImport={handleImport}
+                  importUploading={importUploading}
+                />
+              </div>
             ),
           },
           ...(canUpstreamRead

@@ -106,6 +106,12 @@ signingRouter.get('/:orgId/signing/fee-templates/:apartmentId', requirePermissio
   const feePricings = await prisma.apartmentFeePricing.findMany({
     where: { apartmentId },
     orderBy: { feeType: 'asc' },
+    include: {
+      specs: {
+        where: { isActive: true },
+        orderBy: { sortOrder: 'asc' },
+      },
+    },
   });
 
   // 转换为签约费用格式
@@ -116,6 +122,19 @@ signingRouter.get('/:orgId/signing/fee-templates/:apartmentId', requirePermissio
     fixedAmountCents: fp.fixedAmountCents,
     unitPriceCents: fp.unitPriceCents,
     unitName: fp.unitName,
+    notes: fp.notes,
+    billingTiming: fp.billingTiming,
+    hasSpecs: fp.hasSpecs,
+    specs: fp.hasSpecs
+      ? fp.specs.map((spec) => ({
+          id: spec.id,
+          name: spec.name,
+          description: spec.description,
+          fixedAmountCents: spec.fixedAmountCents,
+          unitPriceCents: spec.unitPriceCents,
+          unitName: spec.unitName,
+        }))
+      : undefined,
     billingCycleMonths: 1,
     isActive: true,
   }));

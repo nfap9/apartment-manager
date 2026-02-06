@@ -50,7 +50,7 @@ const roomFacilitySchema = z.object({
   quantity: z.number().int().positive().default(1),
   originalPriceCents: z.number().int().nonnegative().default(0),
   yearsInUse: z.number().min(0).max(50).default(0),
-  notes: z.string().trim().max(500).optional(),
+  notes: z.string().trim().max(500).optional().nullable(),
 });
 
 apartmentRouter.get('/:orgId/apartments', requirePermission('apartment.read'), async (req, res) => {
@@ -204,6 +204,11 @@ apartmentRouter.get(
     const feePricings = await prisma.apartmentFeePricing.findMany({
       where: { apartmentId },
       orderBy: { feeType: 'asc' },
+      include: {
+        specs: {
+          orderBy: { sortOrder: 'asc' },
+        },
+      },
     });
     return res.json({ feePricings });
   },
@@ -221,6 +226,17 @@ apartmentRouter.put(
       throw new HttpError(404, 'APARTMENT_NOT_FOUND', '公寓不存在');
     }
 
+    const specSchema = z.object({
+      id: z.string().optional(), // 如果有 id，表示更新；否则表示新建
+      name: z.string().trim().min(1).max(50),
+      description: z.string().trim().max(200).optional().nullable(),
+      fixedAmountCents: z.number().int().nonnegative().optional().nullable(),
+      unitPriceCents: z.number().int().nonnegative().optional().nullable(),
+      unitName: z.string().trim().max(20).optional().nullable(),
+      isActive: z.boolean().optional(),
+      sortOrder: z.number().int().nonnegative().optional(),
+    });
+
     const items = z
       .array(
         z.object({
@@ -229,39 +245,99 @@ apartmentRouter.put(
           fixedAmountCents: z.number().int().nonnegative().optional().nullable(),
           unitPriceCents: z.number().int().nonnegative().optional().nullable(),
           unitName: z.string().trim().max(20).optional().nullable(),
+          notes: z.string().trim().max(500).optional().nullable(),
+          billingTiming: z.enum(['PREPAID', 'POSTPAID']).optional().nullable(),
+          hasSpecs: z.boolean().optional(),
+          specs: z.array(specSchema).optional(),
         }),
       )
       .max(50)
       .parse(req.body);
 
     for (const it of items) {
-      if (it.mode === 'FIXED' && (it.fixedAmountCents == null || it.fixedAmountCents < 0)) {
-        throw new HttpError(400, 'INVALID_FEE_PRICING', '固定收费必须提供 fixedAmountCents');
-      }
-      if (it.mode === 'METERED' && (it.unitPriceCents == null || it.unitPriceCents < 0)) {
-        throw new HttpError(400, 'INVALID_FEE_PRICING', '按用量计费必须提供 unitPriceCents');
+      if (it.hasSpecs) {
+        // 如果启用规格，必须提供至少一个规格
+        if (!it.specs || it.specs.length === 0) {
+          throw new HttpError(400, 'INVALID_FEE_PRICING', '启用多规格时必须提供至少一个规格');
+        }
+        // 验证每个规格
+        for (const spec of it.specs) {
+          if (it.mode === 'FIXED' && (spec.fixedAmountCents == null || spec.fixedAmountCents < 0)) {
+            throw new HttpError(400, 'INVALID_FEE_PRICING', `规格 "${spec.name}" 的固定金额无效`);
+          }
+          if (it.mode === 'METERED' && (spec.unitPriceCents == null || spec.unitPriceCents < 0)) {
+            throw new HttpError(400, 'INVALID_FEE_PRICING', `规格 "${spec.name}" 的单价无效`);
+          }
+        }
+      } else {
+        // 如果不启用规格，使用原有的验证逻辑
+        if (it.mode === 'FIXED' && (it.fixedAmountCents == null || it.fixedAmountCents < 0)) {
+          throw new HttpError(400, 'INVALID_FEE_PRICING', '固定收费必须提供 fixedAmountCents');
+        }
+        if (it.mode === 'METERED' && (it.unitPriceCents == null || it.unitPriceCents < 0)) {
+          throw new HttpError(400, 'INVALID_FEE_PRICING', '按用量计费必须提供 unitPriceCents');
+        }
       }
     }
 
     await prisma.$transaction(async (tx) => {
-      await tx.apartmentFeePricing.deleteMany({ where: { apartmentId } });
-      if (items.length) {
-        await tx.apartmentFeePricing.createMany({
-          data: items.map((it) => ({
-            apartmentId,
-            feeType: it.feeType,
-            mode: it.mode,
-            fixedAmountCents: it.fixedAmountCents ?? null,
-            unitPriceCents: it.unitPriceCents ?? null,
-            unitName: it.unitName ?? null,
-          })),
+      // 先删除所有现有的费用定价和规格
+      const existingPricings = await tx.apartmentFeePricing.findMany({
+        where: { apartmentId },
+        select: { id: true },
+      });
+      const existingPricingIds = existingPricings.map((p) => p.id);
+      if (existingPricingIds.length > 0) {
+        await tx.feePricingSpec.deleteMany({
+          where: { feePricingId: { in: existingPricingIds } },
         });
+      }
+      await tx.apartmentFeePricing.deleteMany({ where: { apartmentId } });
+
+      // 创建新的费用定价
+      if (items.length) {
+        for (const it of items) {
+          const feePricing = await tx.apartmentFeePricing.create({
+            data: {
+              apartmentId,
+              feeType: it.feeType,
+              mode: it.mode,
+              fixedAmountCents: it.fixedAmountCents ?? null,
+              unitPriceCents: it.unitPriceCents ?? null,
+              unitName: it.unitName ?? null,
+              notes: it.notes ?? null,
+              billingTiming: it.billingTiming ?? null,
+              hasSpecs: it.hasSpecs ?? false,
+            },
+          });
+
+          // 如果有规格，创建规格记录
+          if (it.hasSpecs && it.specs && it.specs.length > 0) {
+            await tx.feePricingSpec.createMany({
+              data: it.specs.map((spec, index) => ({
+                feePricingId: feePricing.id,
+                name: spec.name,
+                description: spec.description ?? null,
+                fixedAmountCents: spec.fixedAmountCents ?? null,
+                unitPriceCents: spec.unitPriceCents ?? null,
+                unitName: spec.unitName ?? null,
+                isActive: spec.isActive ?? true,
+                sortOrder: spec.sortOrder ?? index,
+              })),
+            });
+          }
+        }
       }
     });
 
     const feePricings = await prisma.apartmentFeePricing.findMany({
       where: { apartmentId },
       orderBy: { feeType: 'asc' },
+      include: {
+        specs: {
+          orderBy: { sortOrder: 'asc' },
+        },
+      },
     });
 
     return res.json({ feePricings });
@@ -777,7 +853,7 @@ apartmentRouter.put('/:orgId/rooms/:roomId/facilities', requirePermission('room.
           quantity: f.quantity,
           originalPriceCents: f.originalPriceCents,
           yearsInUse: f.yearsInUse,
-          notes: f.notes ?? null,
+          notes: f.notes && f.notes.trim() ? f.notes.trim() : null,
         })),
       });
     }

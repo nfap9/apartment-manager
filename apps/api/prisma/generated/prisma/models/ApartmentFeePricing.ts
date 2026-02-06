@@ -44,6 +44,9 @@ export type ApartmentFeePricingMinAggregateOutputType = {
   fixedAmountCents: number | null
   unitPriceCents: number | null
   unitName: string | null
+  notes: string | null
+  billingTiming: $Enums.BillingTiming | null
+  hasSpecs: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,6 +59,9 @@ export type ApartmentFeePricingMaxAggregateOutputType = {
   fixedAmountCents: number | null
   unitPriceCents: number | null
   unitName: string | null
+  notes: string | null
+  billingTiming: $Enums.BillingTiming | null
+  hasSpecs: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -68,6 +74,9 @@ export type ApartmentFeePricingCountAggregateOutputType = {
   fixedAmountCents: number
   unitPriceCents: number
   unitName: number
+  notes: number
+  billingTiming: number
+  hasSpecs: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -92,6 +101,9 @@ export type ApartmentFeePricingMinAggregateInputType = {
   fixedAmountCents?: true
   unitPriceCents?: true
   unitName?: true
+  notes?: true
+  billingTiming?: true
+  hasSpecs?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -104,6 +116,9 @@ export type ApartmentFeePricingMaxAggregateInputType = {
   fixedAmountCents?: true
   unitPriceCents?: true
   unitName?: true
+  notes?: true
+  billingTiming?: true
+  hasSpecs?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -116,6 +131,9 @@ export type ApartmentFeePricingCountAggregateInputType = {
   fixedAmountCents?: true
   unitPriceCents?: true
   unitName?: true
+  notes?: true
+  billingTiming?: true
+  hasSpecs?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -215,6 +233,9 @@ export type ApartmentFeePricingGroupByOutputType = {
   fixedAmountCents: number | null
   unitPriceCents: number | null
   unitName: string | null
+  notes: string | null
+  billingTiming: $Enums.BillingTiming | null
+  hasSpecs: boolean
   createdAt: Date
   updatedAt: Date
   _count: ApartmentFeePricingCountAggregateOutputType | null
@@ -250,9 +271,13 @@ export type ApartmentFeePricingWhereInput = {
   fixedAmountCents?: Prisma.IntNullableFilter<"ApartmentFeePricing"> | number | null
   unitPriceCents?: Prisma.IntNullableFilter<"ApartmentFeePricing"> | number | null
   unitName?: Prisma.StringNullableFilter<"ApartmentFeePricing"> | string | null
+  notes?: Prisma.StringNullableFilter<"ApartmentFeePricing"> | string | null
+  billingTiming?: Prisma.EnumBillingTimingNullableFilter<"ApartmentFeePricing"> | $Enums.BillingTiming | null
+  hasSpecs?: Prisma.BoolFilter<"ApartmentFeePricing"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ApartmentFeePricing"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ApartmentFeePricing"> | Date | string
   apartment?: Prisma.XOR<Prisma.ApartmentScalarRelationFilter, Prisma.ApartmentWhereInput>
+  specs?: Prisma.FeePricingSpecListRelationFilter
 }
 
 export type ApartmentFeePricingOrderByWithRelationInput = {
@@ -263,9 +288,13 @@ export type ApartmentFeePricingOrderByWithRelationInput = {
   fixedAmountCents?: Prisma.SortOrderInput | Prisma.SortOrder
   unitPriceCents?: Prisma.SortOrderInput | Prisma.SortOrder
   unitName?: Prisma.SortOrderInput | Prisma.SortOrder
+  notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  billingTiming?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasSpecs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   apartment?: Prisma.ApartmentOrderByWithRelationInput
+  specs?: Prisma.FeePricingSpecOrderByRelationAggregateInput
 }
 
 export type ApartmentFeePricingWhereUniqueInput = Prisma.AtLeast<{
@@ -280,9 +309,13 @@ export type ApartmentFeePricingWhereUniqueInput = Prisma.AtLeast<{
   fixedAmountCents?: Prisma.IntNullableFilter<"ApartmentFeePricing"> | number | null
   unitPriceCents?: Prisma.IntNullableFilter<"ApartmentFeePricing"> | number | null
   unitName?: Prisma.StringNullableFilter<"ApartmentFeePricing"> | string | null
+  notes?: Prisma.StringNullableFilter<"ApartmentFeePricing"> | string | null
+  billingTiming?: Prisma.EnumBillingTimingNullableFilter<"ApartmentFeePricing"> | $Enums.BillingTiming | null
+  hasSpecs?: Prisma.BoolFilter<"ApartmentFeePricing"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ApartmentFeePricing"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ApartmentFeePricing"> | Date | string
   apartment?: Prisma.XOR<Prisma.ApartmentScalarRelationFilter, Prisma.ApartmentWhereInput>
+  specs?: Prisma.FeePricingSpecListRelationFilter
 }, "id" | "apartmentId_feeType">
 
 export type ApartmentFeePricingOrderByWithAggregationInput = {
@@ -293,6 +326,9 @@ export type ApartmentFeePricingOrderByWithAggregationInput = {
   fixedAmountCents?: Prisma.SortOrderInput | Prisma.SortOrder
   unitPriceCents?: Prisma.SortOrderInput | Prisma.SortOrder
   unitName?: Prisma.SortOrderInput | Prisma.SortOrder
+  notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  billingTiming?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasSpecs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ApartmentFeePricingCountOrderByAggregateInput
@@ -313,6 +349,9 @@ export type ApartmentFeePricingScalarWhereWithAggregatesInput = {
   fixedAmountCents?: Prisma.IntNullableWithAggregatesFilter<"ApartmentFeePricing"> | number | null
   unitPriceCents?: Prisma.IntNullableWithAggregatesFilter<"ApartmentFeePricing"> | number | null
   unitName?: Prisma.StringNullableWithAggregatesFilter<"ApartmentFeePricing"> | string | null
+  notes?: Prisma.StringNullableWithAggregatesFilter<"ApartmentFeePricing"> | string | null
+  billingTiming?: Prisma.EnumBillingTimingNullableWithAggregatesFilter<"ApartmentFeePricing"> | $Enums.BillingTiming | null
+  hasSpecs?: Prisma.BoolWithAggregatesFilter<"ApartmentFeePricing"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ApartmentFeePricing"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ApartmentFeePricing"> | Date | string
 }
@@ -324,9 +363,13 @@ export type ApartmentFeePricingCreateInput = {
   fixedAmountCents?: number | null
   unitPriceCents?: number | null
   unitName?: string | null
+  notes?: string | null
+  billingTiming?: $Enums.BillingTiming | null
+  hasSpecs?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   apartment: Prisma.ApartmentCreateNestedOneWithoutFeePricingsInput
+  specs?: Prisma.FeePricingSpecCreateNestedManyWithoutFeePricingInput
 }
 
 export type ApartmentFeePricingUncheckedCreateInput = {
@@ -337,8 +380,12 @@ export type ApartmentFeePricingUncheckedCreateInput = {
   fixedAmountCents?: number | null
   unitPriceCents?: number | null
   unitName?: string | null
+  notes?: string | null
+  billingTiming?: $Enums.BillingTiming | null
+  hasSpecs?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  specs?: Prisma.FeePricingSpecUncheckedCreateNestedManyWithoutFeePricingInput
 }
 
 export type ApartmentFeePricingUpdateInput = {
@@ -348,9 +395,13 @@ export type ApartmentFeePricingUpdateInput = {
   fixedAmountCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
+  hasSpecs?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   apartment?: Prisma.ApartmentUpdateOneRequiredWithoutFeePricingsNestedInput
+  specs?: Prisma.FeePricingSpecUpdateManyWithoutFeePricingNestedInput
 }
 
 export type ApartmentFeePricingUncheckedUpdateInput = {
@@ -361,8 +412,12 @@ export type ApartmentFeePricingUncheckedUpdateInput = {
   fixedAmountCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
+  hasSpecs?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  specs?: Prisma.FeePricingSpecUncheckedUpdateManyWithoutFeePricingNestedInput
 }
 
 export type ApartmentFeePricingCreateManyInput = {
@@ -373,6 +428,9 @@ export type ApartmentFeePricingCreateManyInput = {
   fixedAmountCents?: number | null
   unitPriceCents?: number | null
   unitName?: string | null
+  notes?: string | null
+  billingTiming?: $Enums.BillingTiming | null
+  hasSpecs?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -384,6 +442,9 @@ export type ApartmentFeePricingUpdateManyMutationInput = {
   fixedAmountCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
+  hasSpecs?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -396,6 +457,9 @@ export type ApartmentFeePricingUncheckedUpdateManyInput = {
   fixedAmountCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
+  hasSpecs?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -423,6 +487,9 @@ export type ApartmentFeePricingCountOrderByAggregateInput = {
   fixedAmountCents?: Prisma.SortOrder
   unitPriceCents?: Prisma.SortOrder
   unitName?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
+  billingTiming?: Prisma.SortOrder
+  hasSpecs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -440,6 +507,9 @@ export type ApartmentFeePricingMaxOrderByAggregateInput = {
   fixedAmountCents?: Prisma.SortOrder
   unitPriceCents?: Prisma.SortOrder
   unitName?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
+  billingTiming?: Prisma.SortOrder
+  hasSpecs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -452,6 +522,9 @@ export type ApartmentFeePricingMinOrderByAggregateInput = {
   fixedAmountCents?: Prisma.SortOrder
   unitPriceCents?: Prisma.SortOrder
   unitName?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
+  billingTiming?: Prisma.SortOrder
+  hasSpecs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -459,6 +532,11 @@ export type ApartmentFeePricingMinOrderByAggregateInput = {
 export type ApartmentFeePricingSumOrderByAggregateInput = {
   fixedAmountCents?: Prisma.SortOrder
   unitPriceCents?: Prisma.SortOrder
+}
+
+export type ApartmentFeePricingScalarRelationFilter = {
+  is?: Prisma.ApartmentFeePricingWhereInput
+  isNot?: Prisma.ApartmentFeePricingWhereInput
 }
 
 export type ApartmentFeePricingCreateNestedManyWithoutApartmentInput = {
@@ -511,6 +589,24 @@ export type EnumFeeModeFieldUpdateOperationsInput = {
   set?: $Enums.FeeMode
 }
 
+export type NullableEnumBillingTimingFieldUpdateOperationsInput = {
+  set?: $Enums.BillingTiming | null
+}
+
+export type ApartmentFeePricingCreateNestedOneWithoutSpecsInput = {
+  create?: Prisma.XOR<Prisma.ApartmentFeePricingCreateWithoutSpecsInput, Prisma.ApartmentFeePricingUncheckedCreateWithoutSpecsInput>
+  connectOrCreate?: Prisma.ApartmentFeePricingCreateOrConnectWithoutSpecsInput
+  connect?: Prisma.ApartmentFeePricingWhereUniqueInput
+}
+
+export type ApartmentFeePricingUpdateOneRequiredWithoutSpecsNestedInput = {
+  create?: Prisma.XOR<Prisma.ApartmentFeePricingCreateWithoutSpecsInput, Prisma.ApartmentFeePricingUncheckedCreateWithoutSpecsInput>
+  connectOrCreate?: Prisma.ApartmentFeePricingCreateOrConnectWithoutSpecsInput
+  upsert?: Prisma.ApartmentFeePricingUpsertWithoutSpecsInput
+  connect?: Prisma.ApartmentFeePricingWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ApartmentFeePricingUpdateToOneWithWhereWithoutSpecsInput, Prisma.ApartmentFeePricingUpdateWithoutSpecsInput>, Prisma.ApartmentFeePricingUncheckedUpdateWithoutSpecsInput>
+}
+
 export type ApartmentFeePricingCreateWithoutApartmentInput = {
   id?: string
   feeType: $Enums.FeeType
@@ -518,8 +614,12 @@ export type ApartmentFeePricingCreateWithoutApartmentInput = {
   fixedAmountCents?: number | null
   unitPriceCents?: number | null
   unitName?: string | null
+  notes?: string | null
+  billingTiming?: $Enums.BillingTiming | null
+  hasSpecs?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  specs?: Prisma.FeePricingSpecCreateNestedManyWithoutFeePricingInput
 }
 
 export type ApartmentFeePricingUncheckedCreateWithoutApartmentInput = {
@@ -529,8 +629,12 @@ export type ApartmentFeePricingUncheckedCreateWithoutApartmentInput = {
   fixedAmountCents?: number | null
   unitPriceCents?: number | null
   unitName?: string | null
+  notes?: string | null
+  billingTiming?: $Enums.BillingTiming | null
+  hasSpecs?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  specs?: Prisma.FeePricingSpecUncheckedCreateNestedManyWithoutFeePricingInput
 }
 
 export type ApartmentFeePricingCreateOrConnectWithoutApartmentInput = {
@@ -570,8 +674,87 @@ export type ApartmentFeePricingScalarWhereInput = {
   fixedAmountCents?: Prisma.IntNullableFilter<"ApartmentFeePricing"> | number | null
   unitPriceCents?: Prisma.IntNullableFilter<"ApartmentFeePricing"> | number | null
   unitName?: Prisma.StringNullableFilter<"ApartmentFeePricing"> | string | null
+  notes?: Prisma.StringNullableFilter<"ApartmentFeePricing"> | string | null
+  billingTiming?: Prisma.EnumBillingTimingNullableFilter<"ApartmentFeePricing"> | $Enums.BillingTiming | null
+  hasSpecs?: Prisma.BoolFilter<"ApartmentFeePricing"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ApartmentFeePricing"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ApartmentFeePricing"> | Date | string
+}
+
+export type ApartmentFeePricingCreateWithoutSpecsInput = {
+  id?: string
+  feeType: $Enums.FeeType
+  mode: $Enums.FeeMode
+  fixedAmountCents?: number | null
+  unitPriceCents?: number | null
+  unitName?: string | null
+  notes?: string | null
+  billingTiming?: $Enums.BillingTiming | null
+  hasSpecs?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  apartment: Prisma.ApartmentCreateNestedOneWithoutFeePricingsInput
+}
+
+export type ApartmentFeePricingUncheckedCreateWithoutSpecsInput = {
+  id?: string
+  apartmentId: string
+  feeType: $Enums.FeeType
+  mode: $Enums.FeeMode
+  fixedAmountCents?: number | null
+  unitPriceCents?: number | null
+  unitName?: string | null
+  notes?: string | null
+  billingTiming?: $Enums.BillingTiming | null
+  hasSpecs?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ApartmentFeePricingCreateOrConnectWithoutSpecsInput = {
+  where: Prisma.ApartmentFeePricingWhereUniqueInput
+  create: Prisma.XOR<Prisma.ApartmentFeePricingCreateWithoutSpecsInput, Prisma.ApartmentFeePricingUncheckedCreateWithoutSpecsInput>
+}
+
+export type ApartmentFeePricingUpsertWithoutSpecsInput = {
+  update: Prisma.XOR<Prisma.ApartmentFeePricingUpdateWithoutSpecsInput, Prisma.ApartmentFeePricingUncheckedUpdateWithoutSpecsInput>
+  create: Prisma.XOR<Prisma.ApartmentFeePricingCreateWithoutSpecsInput, Prisma.ApartmentFeePricingUncheckedCreateWithoutSpecsInput>
+  where?: Prisma.ApartmentFeePricingWhereInput
+}
+
+export type ApartmentFeePricingUpdateToOneWithWhereWithoutSpecsInput = {
+  where?: Prisma.ApartmentFeePricingWhereInput
+  data: Prisma.XOR<Prisma.ApartmentFeePricingUpdateWithoutSpecsInput, Prisma.ApartmentFeePricingUncheckedUpdateWithoutSpecsInput>
+}
+
+export type ApartmentFeePricingUpdateWithoutSpecsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  feeType?: Prisma.EnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType
+  mode?: Prisma.EnumFeeModeFieldUpdateOperationsInput | $Enums.FeeMode
+  fixedAmountCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
+  hasSpecs?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  apartment?: Prisma.ApartmentUpdateOneRequiredWithoutFeePricingsNestedInput
+}
+
+export type ApartmentFeePricingUncheckedUpdateWithoutSpecsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  apartmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  feeType?: Prisma.EnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType
+  mode?: Prisma.EnumFeeModeFieldUpdateOperationsInput | $Enums.FeeMode
+  fixedAmountCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
+  hasSpecs?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ApartmentFeePricingCreateManyApartmentInput = {
@@ -581,6 +764,9 @@ export type ApartmentFeePricingCreateManyApartmentInput = {
   fixedAmountCents?: number | null
   unitPriceCents?: number | null
   unitName?: string | null
+  notes?: string | null
+  billingTiming?: $Enums.BillingTiming | null
+  hasSpecs?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -592,8 +778,12 @@ export type ApartmentFeePricingUpdateWithoutApartmentInput = {
   fixedAmountCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
+  hasSpecs?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  specs?: Prisma.FeePricingSpecUpdateManyWithoutFeePricingNestedInput
 }
 
 export type ApartmentFeePricingUncheckedUpdateWithoutApartmentInput = {
@@ -603,8 +793,12 @@ export type ApartmentFeePricingUncheckedUpdateWithoutApartmentInput = {
   fixedAmountCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
+  hasSpecs?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  specs?: Prisma.FeePricingSpecUncheckedUpdateManyWithoutFeePricingNestedInput
 }
 
 export type ApartmentFeePricingUncheckedUpdateManyWithoutApartmentInput = {
@@ -614,10 +808,42 @@ export type ApartmentFeePricingUncheckedUpdateManyWithoutApartmentInput = {
   fixedAmountCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   unitName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingTiming?: Prisma.NullableEnumBillingTimingFieldUpdateOperationsInput | $Enums.BillingTiming | null
+  hasSpecs?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type ApartmentFeePricingCountOutputType
+ */
+
+export type ApartmentFeePricingCountOutputType = {
+  specs: number
+}
+
+export type ApartmentFeePricingCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  specs?: boolean | ApartmentFeePricingCountOutputTypeCountSpecsArgs
+}
+
+/**
+ * ApartmentFeePricingCountOutputType without action
+ */
+export type ApartmentFeePricingCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ApartmentFeePricingCountOutputType
+   */
+  select?: Prisma.ApartmentFeePricingCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ApartmentFeePricingCountOutputType without action
+ */
+export type ApartmentFeePricingCountOutputTypeCountSpecsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FeePricingSpecWhereInput
+}
 
 
 export type ApartmentFeePricingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -628,9 +854,14 @@ export type ApartmentFeePricingSelect<ExtArgs extends runtime.Types.Extensions.I
   fixedAmountCents?: boolean
   unitPriceCents?: boolean
   unitName?: boolean
+  notes?: boolean
+  billingTiming?: boolean
+  hasSpecs?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   apartment?: boolean | Prisma.ApartmentDefaultArgs<ExtArgs>
+  specs?: boolean | Prisma.ApartmentFeePricing$specsArgs<ExtArgs>
+  _count?: boolean | Prisma.ApartmentFeePricingCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["apartmentFeePricing"]>
 
 export type ApartmentFeePricingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -641,6 +872,9 @@ export type ApartmentFeePricingSelectCreateManyAndReturn<ExtArgs extends runtime
   fixedAmountCents?: boolean
   unitPriceCents?: boolean
   unitName?: boolean
+  notes?: boolean
+  billingTiming?: boolean
+  hasSpecs?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   apartment?: boolean | Prisma.ApartmentDefaultArgs<ExtArgs>
@@ -654,6 +888,9 @@ export type ApartmentFeePricingSelectUpdateManyAndReturn<ExtArgs extends runtime
   fixedAmountCents?: boolean
   unitPriceCents?: boolean
   unitName?: boolean
+  notes?: boolean
+  billingTiming?: boolean
+  hasSpecs?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   apartment?: boolean | Prisma.ApartmentDefaultArgs<ExtArgs>
@@ -667,13 +904,18 @@ export type ApartmentFeePricingSelectScalar = {
   fixedAmountCents?: boolean
   unitPriceCents?: boolean
   unitName?: boolean
+  notes?: boolean
+  billingTiming?: boolean
+  hasSpecs?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ApartmentFeePricingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "apartmentId" | "feeType" | "mode" | "fixedAmountCents" | "unitPriceCents" | "unitName" | "createdAt" | "updatedAt", ExtArgs["result"]["apartmentFeePricing"]>
+export type ApartmentFeePricingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "apartmentId" | "feeType" | "mode" | "fixedAmountCents" | "unitPriceCents" | "unitName" | "notes" | "billingTiming" | "hasSpecs" | "createdAt" | "updatedAt", ExtArgs["result"]["apartmentFeePricing"]>
 export type ApartmentFeePricingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   apartment?: boolean | Prisma.ApartmentDefaultArgs<ExtArgs>
+  specs?: boolean | Prisma.ApartmentFeePricing$specsArgs<ExtArgs>
+  _count?: boolean | Prisma.ApartmentFeePricingCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ApartmentFeePricingIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   apartment?: boolean | Prisma.ApartmentDefaultArgs<ExtArgs>
@@ -686,6 +928,7 @@ export type $ApartmentFeePricingPayload<ExtArgs extends runtime.Types.Extensions
   name: "ApartmentFeePricing"
   objects: {
     apartment: Prisma.$ApartmentPayload<ExtArgs>
+    specs: Prisma.$FeePricingSpecPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -695,6 +938,9 @@ export type $ApartmentFeePricingPayload<ExtArgs extends runtime.Types.Extensions
     fixedAmountCents: number | null
     unitPriceCents: number | null
     unitName: string | null
+    notes: string | null
+    billingTiming: $Enums.BillingTiming | null
+    hasSpecs: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["apartmentFeePricing"]>
@@ -1092,6 +1338,7 @@ readonly fields: ApartmentFeePricingFieldRefs;
 export interface Prisma__ApartmentFeePricingClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   apartment<T extends Prisma.ApartmentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ApartmentDefaultArgs<ExtArgs>>): Prisma.Prisma__ApartmentClient<runtime.Types.Result.GetResult<Prisma.$ApartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  specs<T extends Prisma.ApartmentFeePricing$specsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ApartmentFeePricing$specsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeePricingSpecPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1128,6 +1375,9 @@ export interface ApartmentFeePricingFieldRefs {
   readonly fixedAmountCents: Prisma.FieldRef<"ApartmentFeePricing", 'Int'>
   readonly unitPriceCents: Prisma.FieldRef<"ApartmentFeePricing", 'Int'>
   readonly unitName: Prisma.FieldRef<"ApartmentFeePricing", 'String'>
+  readonly notes: Prisma.FieldRef<"ApartmentFeePricing", 'String'>
+  readonly billingTiming: Prisma.FieldRef<"ApartmentFeePricing", 'BillingTiming'>
+  readonly hasSpecs: Prisma.FieldRef<"ApartmentFeePricing", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"ApartmentFeePricing", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ApartmentFeePricing", 'DateTime'>
 }
@@ -1523,6 +1773,30 @@ export type ApartmentFeePricingDeleteManyArgs<ExtArgs extends runtime.Types.Exte
    * Limit how many ApartmentFeePricings to delete.
    */
   limit?: number
+}
+
+/**
+ * ApartmentFeePricing.specs
+ */
+export type ApartmentFeePricing$specsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FeePricingSpec
+   */
+  select?: Prisma.FeePricingSpecSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FeePricingSpec
+   */
+  omit?: Prisma.FeePricingSpecOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FeePricingSpecInclude<ExtArgs> | null
+  where?: Prisma.FeePricingSpecWhereInput
+  orderBy?: Prisma.FeePricingSpecOrderByWithRelationInput | Prisma.FeePricingSpecOrderByWithRelationInput[]
+  cursor?: Prisma.FeePricingSpecWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FeePricingSpecScalarFieldEnum | Prisma.FeePricingSpecScalarFieldEnum[]
 }
 
 /**

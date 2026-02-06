@@ -85,6 +85,18 @@ export type UpstreamResponse = {
   upstream: Upstream | null;
 };
 
+// 费用规格类型
+export type FeePricingSpec = {
+  id: string;
+  name: string;
+  description?: string | null;
+  fixedAmountCents?: number | null;
+  unitPriceCents?: number | null;
+  unitName?: string | null;
+  isActive: boolean;
+  sortOrder: number;
+};
+
 // 费用定价类型
 export type FeePricing = {
   id: string;
@@ -93,10 +105,43 @@ export type FeePricing = {
   fixedAmountCents?: number | null;
   unitPriceCents?: number | null;
   unitName?: string | null;
+  notes?: string | null;
+  billingTiming?: 'PREPAID' | 'POSTPAID' | null;
+  hasSpecs: boolean;
+  specs?: FeePricingSpec[];
 };
 
 export type FeePricingResponse = {
   feePricings: FeePricing[];
+};
+
+// 费用项目类型（组织级别）
+export type FeeItemSpec = {
+  id: string;
+  name: string;
+  description?: string | null;
+  fixedAmountCents?: number | null;
+  unitPriceCents?: number | null;
+  unitName?: string | null;
+  isActive: boolean;
+  sortOrder: number;
+};
+
+export type FeeItem = {
+  id: string;
+  organizationId: string;
+  feeType: 'WATER' | 'ELECTRICITY' | 'MANAGEMENT' | 'INTERNET' | 'GAS' | 'OTHER';
+  name: string;
+  mode: 'FIXED' | 'METERED';
+  defaultFixedAmountCents?: number | null;
+  defaultUnitPriceCents?: number | null;
+  defaultUnitName?: string | null;
+  defaultBillingTiming?: 'PREPAID' | 'POSTPAID' | null;
+  hasSpecs: boolean;
+  notes?: string | null;
+  isActive: boolean;
+  sortOrder: number;
+  specs?: FeeItemSpec[];
 };
 
 // 租客相关类型

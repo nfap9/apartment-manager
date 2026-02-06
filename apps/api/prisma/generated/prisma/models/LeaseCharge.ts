@@ -607,10 +607,6 @@ export type NullableEnumFeeTypeFieldUpdateOperationsInput = {
   set?: $Enums.FeeType | null
 }
 
-export type NullableEnumBillingTimingFieldUpdateOperationsInput = {
-  set?: $Enums.BillingTiming | null
-}
-
 export type LeaseChargeCreateNestedOneWithoutInvoiceItemsInput = {
   create?: Prisma.XOR<Prisma.LeaseChargeCreateWithoutInvoiceItemsInput, Prisma.LeaseChargeUncheckedCreateWithoutInvoiceItemsInput>
   connectOrCreate?: Prisma.LeaseChargeCreateOrConnectWithoutInvoiceItemsInput

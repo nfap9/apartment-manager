@@ -13,6 +13,7 @@ import {
   Card,
 } from 'antd';
 import { PlusOutlined, HomeOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -128,7 +129,7 @@ export function ApartmentsPage() {
 
                   {/* 其他信息 */}
                   {(apartment.totalArea != null || apartment.floor != null) && (
-                    <Row gutter={8} className="mt-auto">
+                    <Row gutter={8} className="mb-3">
                       {apartment.totalArea != null && (
                         <Col span={12}>
                           <div className="text-center">
@@ -151,6 +152,20 @@ export function ApartmentsPage() {
                       )}
                     </Row>
                   )}
+
+                  {/* 查看房间按钮 */}
+                  <Button
+                    type="primary"
+                    size="small"
+                    block
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/rooms?apartmentId=${apartment.id}`);
+                    }}
+                    className="mt-auto"
+                  >
+                    查看房间
+                  </Button>
                 </Card>
               </Col>
             ))}

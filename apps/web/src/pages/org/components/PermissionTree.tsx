@@ -39,6 +39,7 @@ export function PermissionTree({
           tenant: '租客管理',
           lease: '租约管理',
           billing: '账单管理',
+          fee: '费用管理',
           notification: '通知管理',
           dashboard: '看板管理',
         };

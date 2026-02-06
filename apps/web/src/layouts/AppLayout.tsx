@@ -10,6 +10,7 @@ import {
   TeamOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  SettingOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Select, Space, Typography, Button, Breadcrumb, Dropdown } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
@@ -102,6 +103,7 @@ export function AppLayout() {
       { key: '/tenants', label: '租客', perm: 'tenant.read', icon: <UserOutlined /> },
       { key: '/leases', label: '租约', perm: 'lease.read', icon: <FileDoneOutlined /> },
       { key: '/invoices', label: '账单', perm: 'billing.read', icon: <DollarOutlined /> },
+      { key: '/fees', label: '费用管理', perm: 'fee.manage', icon: <DollarOutlined /> },
       { key: '/notifications', label: '通知', perm: 'notification.read', icon: <BellOutlined /> },
       { key: '/org', label: '组织与权限', perm: 'org.role.manage', icon: <TeamOutlined /> },
     ];

@@ -63,6 +63,9 @@ export const ModelName = {
   Apartment: 'Apartment',
   ApartmentUpstream: 'ApartmentUpstream',
   ApartmentFeePricing: 'ApartmentFeePricing',
+  FeePricingSpec: 'FeePricingSpec',
+  FeeItem: 'FeeItem',
+  FeeItemSpec: 'FeeItemSpec',
   Room: 'Room',
   RoomFacility: 'RoomFacility',
   RoomPricingPlan: 'RoomPricingPlan',
@@ -231,11 +234,69 @@ export const ApartmentFeePricingScalarFieldEnum = {
   fixedAmountCents: 'fixedAmountCents',
   unitPriceCents: 'unitPriceCents',
   unitName: 'unitName',
+  notes: 'notes',
+  billingTiming: 'billingTiming',
+  hasSpecs: 'hasSpecs',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type ApartmentFeePricingScalarFieldEnum = (typeof ApartmentFeePricingScalarFieldEnum)[keyof typeof ApartmentFeePricingScalarFieldEnum]
+
+
+export const FeePricingSpecScalarFieldEnum = {
+  id: 'id',
+  feePricingId: 'feePricingId',
+  name: 'name',
+  description: 'description',
+  fixedAmountCents: 'fixedAmountCents',
+  unitPriceCents: 'unitPriceCents',
+  unitName: 'unitName',
+  isActive: 'isActive',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeePricingSpecScalarFieldEnum = (typeof FeePricingSpecScalarFieldEnum)[keyof typeof FeePricingSpecScalarFieldEnum]
+
+
+export const FeeItemScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  feeType: 'feeType',
+  name: 'name',
+  mode: 'mode',
+  defaultFixedAmountCents: 'defaultFixedAmountCents',
+  defaultUnitPriceCents: 'defaultUnitPriceCents',
+  defaultUnitName: 'defaultUnitName',
+  defaultBillingTiming: 'defaultBillingTiming',
+  hasSpecs: 'hasSpecs',
+  notes: 'notes',
+  isActive: 'isActive',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeeItemScalarFieldEnum = (typeof FeeItemScalarFieldEnum)[keyof typeof FeeItemScalarFieldEnum]
+
+
+export const FeeItemSpecScalarFieldEnum = {
+  id: 'id',
+  feeItemId: 'feeItemId',
+  name: 'name',
+  description: 'description',
+  fixedAmountCents: 'fixedAmountCents',
+  unitPriceCents: 'unitPriceCents',
+  unitName: 'unitName',
+  isActive: 'isActive',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeeItemSpecScalarFieldEnum = (typeof FeeItemSpecScalarFieldEnum)[keyof typeof FeeItemSpecScalarFieldEnum]
 
 
 export const RoomScalarFieldEnum = {

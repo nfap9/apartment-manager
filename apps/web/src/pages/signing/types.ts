@@ -35,6 +35,15 @@ export type Tenant = {
   idNumber?: string | null;
 };
 
+export type ChargeItemSpec = {
+  id: string;
+  name: string;
+  description?: string | null;
+  fixedAmountCents?: number | null;
+  unitPriceCents?: number | null;
+  unitName?: string | null;
+};
+
 export type ChargeItem = {
   name: string;
   feeType?: string | null;
@@ -42,6 +51,10 @@ export type ChargeItem = {
   fixedAmountCents?: number | null;
   unitPriceCents?: number | null;
   unitName?: string | null;
+  notes?: string | null;
+  billingTiming?: 'PREPAID' | 'POSTPAID' | null;
+  hasSpecs?: boolean;
+  specs?: ChargeItemSpec[];
   billingCycleMonths: number;
   isActive: boolean;
 };
