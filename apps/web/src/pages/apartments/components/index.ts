@@ -9,4 +9,5 @@ export { RoomFacilityModal } from './RoomFacilityModal';
 export { UpstreamForm } from './UpstreamForm';
 export { FeePricingModal } from './FeePricingModal';
 export { FeePricingCard } from './FeePricingCard';
+export { FeePricingTable } from './FeePricingTable';
 export { RoomImportModal } from './RoomImportModal';

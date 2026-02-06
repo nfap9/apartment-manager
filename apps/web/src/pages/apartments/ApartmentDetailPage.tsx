@@ -1,4 +1,4 @@
-import { Space, Tabs, Typography, Button } from 'antd';
+import { Space, Tabs, Typography, Button, message } from 'antd';
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useOrgIdWithError } from '../../hooks/useOrgId';
@@ -117,6 +117,18 @@ export function ApartmentDetailPage() {
     queryClient.invalidateQueries({ queryKey: queryKeys.apartments.detail(orgId, apartmentId) });
   };
 
+  const handleDeleteFeePricing = async (feePricing: any) => {
+    try {
+      const updatedFeePricings = feePricings.filter((fp) => fp.id !== feePricing.id);
+      await apartmentsApi.updateFeePricings(orgId, apartmentId, updatedFeePricings);
+      message.success('已删除');
+      // 刷新费用定价数据
+      await queryClient.invalidateQueries({ queryKey: queryKeys.apartments.feePricings(orgId, apartmentId) });
+    } catch (error) {
+      handleApiError(error, '删除失败');
+    }
+  };
+
   return (
     <div className="page-wrapper">
       <Space direction="vertical" style={{ width: '100%' }} size={16}>
@@ -183,6 +195,7 @@ export function ApartmentDetailPage() {
                 loading={feeLoading}
                 canEdit={canApartmentWrite}
                 onEdit={() => setFeeModalOpen(true)}
+                onDelete={canApartmentWrite ? handleDeleteFeePricing : undefined}
               />
             ),
           },

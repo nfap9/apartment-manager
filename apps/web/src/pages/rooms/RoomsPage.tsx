@@ -1,5 +1,5 @@
 import type { AxiosError } from 'axios';
-import { Tabs, Space, message, Modal, Form, Input, InputNumber, Switch, Typography, Card, Tag, Divider, Table } from 'antd';
+import { Tabs, Space, message, Modal, Form, Input, InputNumber, Switch, Typography } from 'antd';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -9,10 +9,8 @@ import type { ApiErrorResponse } from '../../lib/apiTypes';
 import { useAuthStore } from '../../stores/auth';
 import { usePermissions } from '../../hooks/usePermissions';
 import { apartmentsApi, roomsApi } from '../../lib/api/apartments';
-import type { Apartment, Room, FeePricing } from '../../lib/api/types';
-import { RoomTable, RoomFacilityModal } from '../apartments/components';
-import { FEE_TYPE_NAMES, BILLING_TIMING } from '../../constants/feeTypes';
-import { formatMoney } from '../../utils/format';
+import type { Apartment, Room } from '../../lib/api/types';
+import { RoomTable, RoomFacilityModal, PricingPlanModal } from '../apartments/components';
 
 type ApartmentsResponse = {
   apartments: Apartment[];
@@ -85,19 +83,7 @@ export function RoomsPage() {
     },
   });
 
-  // 获取当前选中公寓的费用配置
-  const feePricingsQuery = useQuery({
-    queryKey: ['feePricings', orgId, activeTab],
-    enabled: !!orgId && !!activeTab,
-    queryFn: async () => {
-      if (!activeTab) return { feePricings: [] };
-      const r = await apartmentsApi.getFeePricings(orgId!, activeTab);
-      return r;
-    },
-  });
-
   const rooms = roomsQuery.data?.rooms ?? [];
-  const feePricings = feePricingsQuery.data?.feePricings ?? [];
 
   // 处理编辑房间
   const handleEdit = (room: Room) => {
@@ -274,98 +260,6 @@ export function RoomsPage() {
             <Switch />
           </Form.Item>
         </Form>
-
-        {feePricings.length > 0 && (
-          <>
-            <Divider />
-            <div>
-              <Typography.Title level={5} style={{ marginBottom: 12 }}>
-                公寓配置的收费项目（只读）
-              </Typography.Title>
-              <Table<FeePricing>
-                size="small"
-                dataSource={feePricings}
-                rowKey="id"
-                pagination={false}
-                columns={[
-                  {
-                    title: '费用类型',
-                    dataIndex: 'feeType',
-                    render: (feeType: string) => FEE_TYPE_NAMES[feeType as keyof typeof FEE_TYPE_NAMES] || feeType,
-                  },
-                  {
-                    title: '计费方式',
-                    dataIndex: 'mode',
-                    render: (mode: string) => (mode === 'FIXED' ? '固定计费' : '按用量计费'),
-                  },
-                  {
-                    title: '结算时机',
-                    dataIndex: 'billingTiming',
-                    render: (timing: string | null | undefined) => {
-                      if (!timing) return '-';
-                      return timing === BILLING_TIMING.PREPAID ? (
-                        <Tag color="blue">周期前</Tag>
-                      ) : (
-                        <Tag color="orange">周期后</Tag>
-                      );
-                    },
-                  },
-                  {
-                    title: '价格',
-                    key: 'price',
-                    render: (_: any, record: FeePricing) => {
-                      if (record.hasSpecs && record.specs && record.specs.length > 0) {
-                        return (
-                          <Tag color="purple">
-                            {record.specs.length} 个规格
-                          </Tag>
-                        );
-                      }
-                      if (record.mode === 'FIXED') {
-                        return record.fixedAmountCents != null ? formatMoney(record.fixedAmountCents) : '-';
-                      }
-                      return record.unitPriceCents != null
-                        ? `${formatMoney(record.unitPriceCents)}/${record.unitName || '单位'}`
-                        : '-';
-                    },
-                  },
-                ]}
-                expandable={{
-                  expandedRowRender: (record: FeePricing) => {
-                    if (!record.hasSpecs || !record.specs || record.specs.length === 0) {
-                      return null;
-                    }
-                    return (
-                      <Table
-                        size="small"
-                        dataSource={record.specs}
-                        rowKey="id"
-                        pagination={false}
-                        columns={[
-                          { title: '规格名称', dataIndex: 'name' },
-                          { title: '描述', dataIndex: 'description', render: (v) => v || '-' },
-                          {
-                            title: '价格',
-                            key: 'price',
-                            render: (_: any, spec: any) => {
-                              if (record.mode === 'FIXED') {
-                                return spec.fixedAmountCents != null ? formatMoney(spec.fixedAmountCents) : '-';
-                              }
-                              return spec.unitPriceCents != null
-                                ? `${formatMoney(spec.unitPriceCents)}/${spec.unitName || '单位'}`
-                                : '-';
-                            },
-                          },
-                        ]}
-                      />
-                    );
-                  },
-                  rowExpandable: (record) => record.hasSpecs && (record.specs?.length ?? 0) > 0,
-                }}
-              />
-            </div>
-          </>
-        )}
       </Modal>
 
       {/* 设施管理Modal */}
@@ -384,19 +278,18 @@ export function RoomsPage() {
         />
       )}
 
-      {/* 价格方案Modal - 暂时留空，后续可以扩展 */}
-      <Modal
+      {/* 价格方案Modal */}
+      <PricingPlanModal
         open={pricingModalOpen}
-        title={`价格方案管理 - ${selectedRoom?.name}`}
-        onCancel={() => {
+        room={selectedRoom}
+        onClose={() => {
           setPricingModalOpen(false);
           setSelectedRoom(null);
         }}
-        footer={null}
-        width={800}
-      >
-        <Typography.Text type="secondary">价格方案管理功能待实现</Typography.Text>
-      </Modal>
+        onSuccess={() => {
+          qc.invalidateQueries({ queryKey: ['rooms', orgId, activeTab] });
+        }}
+      />
     </>
   );
 }
