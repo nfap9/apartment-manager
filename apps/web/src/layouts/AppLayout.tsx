@@ -183,7 +183,7 @@ export function AppLayout() {
         collapsedWidth={80}
         collapsed={collapsed}
         theme="light"
-        className="flex flex-col shadow-md"
+        className="flex flex-col"
       >
         <div
           className={`h-16 flex items-center mb-2 ${
@@ -207,7 +207,7 @@ export function AppLayout() {
             items={menuItems}
             selectedKeys={selectedKeys}
             onClick={menuClickHandler}
-            className="border-r-0"
+            style={{ borderRight: 'none' }}
           />
         </div>
         <div
@@ -225,7 +225,7 @@ export function AppLayout() {
       </Sider>
 
       <Layout className="min-h-0 overflow-hidden">
-        <Header className="bg-white px-6 flex items-center justify-between shadow-md relative z-10">
+        <Header className="bg-white px-6 flex items-center justify-between relative z-10">
           <Space className="flex-1 min-w-0" align="center">
             <Breadcrumb items={breadcrumbItems} className="m-0" />
           </Space>
@@ -266,11 +266,10 @@ export function AppLayout() {
           </Space>
         </Header>
 
-        <Content className="p-0 overflow-hidden min-h-0 flex-1 bg-white shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] flex flex-col">
+        <Content className="p-0 overflow-hidden min-h-0 flex-1 flex flex-col">
           <Outlet />
         </Content>
       </Layout>
     </Layout>
   );
 }
-

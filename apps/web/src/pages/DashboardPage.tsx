@@ -154,11 +154,6 @@ export function DashboardPage() {
             <Statistic
               title={<span className="text-sm text-text-secondary">总房间数</span>}
               value={k?.totalRoomCount ?? 0}
-              valueStyle={{
-                fontSize: 32,
-                fontWeight: 600,
-                color: '#1890ff',
-              }}
             />
           </Spin>
         </Card>
@@ -169,11 +164,6 @@ export function DashboardPage() {
             <Statistic
               title={<span className="text-sm text-text-secondary">已出租</span>}
               value={k?.occupiedRoomCount ?? 0}
-              valueStyle={{
-                fontSize: 32,
-                fontWeight: 600,
-                color: '#52c41a',
-              }}
             />
           </Spin>
         </Card>
@@ -184,11 +174,6 @@ export function DashboardPage() {
             <Statistic
               title={<span className="text-sm text-text-secondary">空房</span>}
               value={vacantCount}
-              valueStyle={{
-                fontSize: 32,
-                fontWeight: 600,
-                color: '#faad14',
-              }}
             />
           </Spin>
         </Card>
@@ -200,11 +185,6 @@ export function DashboardPage() {
               title={<span className="text-sm text-text-secondary">入住率</span>}
               value={occupancyRate}
               suffix="%"
-              valueStyle={{
-                fontSize: 32,
-                fontWeight: 600,
-                color: occupancyRate >= 80 ? '#52c41a' : occupancyRate >= 60 ? '#faad14' : '#ff4d4f',
-              }}
               prefix={occupancyRate >= 80 ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
             />
           </Spin>
@@ -223,7 +203,6 @@ export function DashboardPage() {
               <Statistic
                 title={<span className="text-[13px] text-text-secondary">待交房租</span>}
                 value={rentStatusQuery.data?.pendingCount ?? 0}
-                valueStyle={{ fontSize: 24, fontWeight: 600, color: '#1890ff' }}
               />
               <div className="mt-2 text-sm text-text-tertiary">
                 金额: ¥{((rentStatusQuery.data?.pendingAmount ?? 0) / 100).toFixed(2)}
@@ -233,7 +212,6 @@ export function DashboardPage() {
               <Statistic
                 title={<span className="text-[13px] text-text-secondary">已交房租</span>}
                 value={rentStatusQuery.data?.paidCount ?? 0}
-                valueStyle={{ fontSize: 24, fontWeight: 600, color: '#52c41a' }}
               />
               <div className="mt-2 text-sm text-text-tertiary">
                 金额: ¥{((rentStatusQuery.data?.paidAmount ?? 0) / 100).toFixed(2)}
@@ -243,7 +221,6 @@ export function DashboardPage() {
               <Statistic
                 title={<span className="text-[13px] text-text-secondary">即将到期</span>}
                 value={rentStatusQuery.data?.soonDueCount ?? 0}
-                valueStyle={{ fontSize: 24, fontWeight: 600, color: '#faad14' }}
               />
               <div className="mt-2 text-sm text-text-tertiary">
                 金额: ¥{((rentStatusQuery.data?.soonDueAmount ?? 0) / 100).toFixed(2)}
@@ -253,7 +230,6 @@ export function DashboardPage() {
               <Statistic
                 title={<span className="text-[13px] text-text-secondary">逾期账单</span>}
                 value={k?.invoiceOverdueCount ?? 0}
-                valueStyle={{ fontSize: 24, fontWeight: 600, color: '#ff4d4f' }}
               />
               <div className="mt-2 text-sm text-text-tertiary">
                 金额: ¥{((k?.invoiceOverdueTotalCents ?? 0) / 100).toFixed(2)}
@@ -423,11 +399,6 @@ export function DashboardPage() {
             <Statistic
               title={<span className="text-sm text-text-secondary">公寓数</span>}
               value={k?.apartmentCount ?? 0}
-              valueStyle={{
-                fontSize: 32,
-                fontWeight: 600,
-                color: '#1890ff',
-              }}
             />
           </Spin>
         </Card>
@@ -438,11 +409,6 @@ export function DashboardPage() {
             <Statistic
               title={<span className="text-sm text-text-secondary">房间数</span>}
               value={k?.totalRoomCount ?? 0}
-              valueStyle={{
-                fontSize: 32,
-                fontWeight: 600,
-                color: '#1890ff',
-              }}
             />
           </Spin>
         </Card>
@@ -453,11 +419,6 @@ export function DashboardPage() {
             <Statistic
               title={<span className="text-sm text-text-secondary">已出租</span>}
               value={k?.occupiedRoomCount ?? 0}
-              valueStyle={{
-                fontSize: 32,
-                fontWeight: 600,
-                color: '#52c41a',
-              }}
             />
           </Spin>
         </Card>
@@ -469,11 +430,6 @@ export function DashboardPage() {
               title={<span className="text-sm text-text-secondary">入住率</span>}
               value={occupancyRate}
               suffix="%"
-              valueStyle={{
-                fontSize: 32,
-                fontWeight: 600,
-                color: occupancyRate >= 80 ? '#52c41a' : occupancyRate >= 60 ? '#faad14' : '#ff4d4f',
-              }}
               prefix={occupancyRate >= 80 ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
             />
           </Spin>
@@ -508,7 +464,6 @@ export function DashboardPage() {
               <Statistic
                 title={<span className="text-[13px] text-text-secondary">未结账单数</span>}
                 value={k?.invoiceIssuedCount ?? 0}
-                valueStyle={{ fontSize: 24, fontWeight: 600 }}
               />
             </Col>
             <Col xs={12} sm={12}>
@@ -517,14 +472,12 @@ export function DashboardPage() {
                 value={(k?.invoiceIssuedTotalCents ?? 0) / 100}
                 prefix="¥"
                 precision={2}
-                valueStyle={{ fontSize: 24, fontWeight: 600, color: '#1890ff' }}
               />
             </Col>
             <Col xs={12} sm={12}>
               <Statistic
                 title={<span className="text-[13px] text-text-secondary">逾期账单数</span>}
                 value={k?.invoiceOverdueCount ?? 0}
-                valueStyle={{ fontSize: 24, fontWeight: 600, color: '#ff4d4f' }}
               />
             </Col>
             <Col xs={12} sm={12}>
@@ -533,7 +486,6 @@ export function DashboardPage() {
                 value={(k?.invoiceOverdueTotalCents ?? 0) / 100}
                 prefix="¥"
                 precision={2}
-                valueStyle={{ fontSize: 24, fontWeight: 600, color: '#ff4d4f' }}
               />
             </Col>
           </Row>
