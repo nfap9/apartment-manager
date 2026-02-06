@@ -266,7 +266,7 @@ export function AppLayout() {
           </Space>
         </Header>
 
-        <Content className="p-0 overflow-hidden min-h-0 flex-1 flex flex-col">
+        <Content className="app-content p-0 overflow-hidden min-h-0 flex-1 flex flex-col">
           <Outlet />
         </Content>
       </Layout>

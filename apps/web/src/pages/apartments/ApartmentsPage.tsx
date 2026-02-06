@@ -9,7 +9,6 @@ import {
   Row,
   Col,
   message,
-  Statistic,
   Spin,
   Card,
 } from 'antd';
@@ -83,7 +82,7 @@ export function ApartmentsPage() {
             <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={4}>
               <Card
                 onClick={() => setModalOpen(true)}
-                className="h-full flex flex-col items-center justify-center cursor-pointer transition-all duration-300 min-h-[180px]"
+                className="h-full flex flex-col items-center justify-center cursor-pointer transition-all duration-300 min-h-[180px] rounded-xl shadow-md"
               >
                 <PlusOutlined className="text-[32px] text-primary mb-2" />
                 <Typography.Text type="secondary" className="text-sm">
@@ -95,44 +94,36 @@ export function ApartmentsPage() {
             {/* 公寓卡片列表 */}
             {apartments.map((apartment) => (
               <Col key={apartment.id} xs={24} sm={12} md={8} lg={6} xl={6} xxl={4}>
-                <Card onClick={() => navigate(`/apartments/${apartment.id}`)}>
-                  <div className="mb-2">
+                <Card
+                  onClick={() => navigate(`/apartments/${apartment.id}`)}
+                  className="rounded-xl shadow-md h-full cursor-pointer flex flex-col"
+                  bodyStyle={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '16px' }}
+                >
+                  <div className="mb-3">
                     <Space size={8}>
-                      <HomeOutlined className="text-base text-primary" />
-                      <Typography.Title level={5} className="m-0 text-base">
+                      <HomeOutlined className="text-lg text-primary" />
+                      <Typography.Title level={4} className="m-0 text-lg font-semibold">
                         {apartment.name}
                       </Typography.Title>
                     </Space>
                   </div>
 
-                  <Typography.Text type="secondary" ellipsis className="block mb-2 text-xs">
+                  <Typography.Text type="secondary" ellipsis className="block mb-4 text-xs">
                     {apartment.address}
                   </Typography.Text>
 
                   {/* 房间统计信息 */}
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-2.5 mb-2">
-                    <Row gutter={8}>
-                      <Col span={12}>
-                        <Statistic
-                          title={
-                            <span className="text-[11px] font-medium text-text-secondary">
-                              房间总数
-                            </span>
-                          }
-                          value={apartment.totalRooms ?? 0}
-                        />
-                      </Col>
-                      <Col span={12}>
-                        <Statistic
-                          title={
-                            <span className="text-[11px] font-medium text-text-secondary">
-                              空房数
-                            </span>
-                          }
-                          value={apartment.vacantRooms ?? 0}
-                        />
-                      </Col>
-                    </Row>
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-3 mb-3">
+                    <div className="text-center">
+                      <div className="text-[12px] font-medium text-text-secondary mb-1">
+                        房间情况
+                      </div>
+                      <div className="text-2xl font-bold text-gray-800">
+                        {apartment.vacantRooms ?? 0}
+                        <span className="text-lg text-gray-500 mx-1">/</span>
+                        {apartment.totalRooms ?? 0}
+                      </div>
+                    </div>
                   </div>
 
                   {/* 其他信息 */}
@@ -140,20 +131,22 @@ export function ApartmentsPage() {
                     <Row gutter={8} className="mt-auto">
                       {apartment.totalArea != null && (
                         <Col span={12}>
-                          <Statistic
-                            title={<span className="text-[11px] text-text-tertiary">面积</span>}
-                            value={apartment.totalArea}
-                            suffix="㎡"
-                          />
+                          <div className="text-center">
+                            <div className="text-[10px] text-text-tertiary mb-1">面积</div>
+                            <div className="text-sm font-medium">
+                              {apartment.totalArea}㎡
+                            </div>
+                          </div>
                         </Col>
                       )}
                       {apartment.floor != null && (
                         <Col span={12}>
-                          <Statistic
-                            title={<span className="text-[11px] text-text-tertiary">楼层</span>}
-                            value={apartment.floor}
-                            suffix="层"
-                          />
+                          <div className="text-center">
+                            <div className="text-[10px] text-text-tertiary mb-1">楼层</div>
+                            <div className="text-sm font-medium">
+                              {apartment.floor}层
+                            </div>
+                          </div>
                         </Col>
                       )}
                     </Row>
