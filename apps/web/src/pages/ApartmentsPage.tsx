@@ -1,5 +1,5 @@
 import type { AxiosError } from 'axios';
-import { Button, Form, Input, InputNumber, Modal, Space, Typography, Row, Col, message, Statistic, Empty, Spin } from 'antd';
+import { Form, Input, InputNumber, Modal, Space, Typography, Row, Col, message, Statistic, Spin, Card } from 'antd';
 import { PlusOutlined, HomeOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -65,23 +65,38 @@ export function ApartmentsPage() {
           <Row gutter={[16, 16]} className="m-0">
             {/* 新增公寓卡片 */}
             <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={4}>
-              <div
+              <Card
                 onClick={() => setModalOpen(true)}
-                className="p-3 border border-dashed border-border rounded-xl h-full flex flex-col items-center justify-center cursor-pointer transition-all duration-300 min-h-[180px] hover:border-primary hover:bg-blue-50"
+                className="h-full flex flex-col items-center justify-center cursor-pointer transition-all duration-300 min-h-[180px] hover:border-primary hover:bg-blue-50"
+                style={{ borderStyle: 'dashed' }}
+                bodyStyle={{ 
+                  padding: '12px',
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
               >
                 <PlusOutlined className="text-[32px] text-primary mb-2" />
                 <Typography.Text type="secondary" className="text-sm">
                   新增公寓
                 </Typography.Text>
-              </div>
+              </Card>
             </Col>
 
             {/* 公寓卡片列表 */}
             {apartments.map((apartment) => (
               <Col key={apartment.id} xs={24} sm={12} md={8} lg={6} xl={6} xxl={4}>
-                <div
+                <Card
                   onClick={() => navigate(`/apartments/${apartment.id}`)}
-                  className="p-3 border border-border-light rounded-xl h-full flex flex-col cursor-pointer transition-all duration-300 min-h-[180px] hover:border-primary hover:shadow-[0_2px_8px_rgba(24,144,255,0.15)]"
+                  className="h-full flex flex-col cursor-pointer transition-all duration-300 min-h-[180px] hover:border-primary hover:shadow-[0_2px_8px_rgba(24,144,255,0.15)]"
+                  bodyStyle={{ 
+                    padding: '12px',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
                 >
                   <div className="mb-2">
                     <Space size={8}>
@@ -153,7 +168,7 @@ export function ApartmentsPage() {
                       )}
                     </Row>
                   )}
-                </div>
+                </Card>
               </Col>
             ))}
           </Row>
