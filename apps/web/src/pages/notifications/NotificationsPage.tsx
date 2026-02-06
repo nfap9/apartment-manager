@@ -4,9 +4,9 @@ import { useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { api } from '../lib/api';
-import type { ApiErrorResponse } from '../lib/apiTypes';
-import { useAuthStore } from '../stores/auth';
+import { api } from '../../lib/api';
+import type { ApiErrorResponse } from '../../lib/apiTypes';
+import { useAuthStore } from '../../stores/auth';
 
 type NotificationRow = {
   id: string;
@@ -117,4 +117,3 @@ export function NotificationsPage() {
     </>
   );
 }
-

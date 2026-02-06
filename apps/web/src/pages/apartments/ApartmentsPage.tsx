@@ -18,10 +18,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { api } from '../lib/api';
-import type { ApiErrorResponse } from '../lib/apiTypes';
-import { useAuthStore } from '../stores/auth';
-import type { Apartment } from '../lib/api/types';
+import { api } from '../../lib/api';
+import type { ApiErrorResponse } from '../../lib/apiTypes';
+import { useAuthStore } from '../../stores/auth';
+import type { Apartment } from '../../lib/api/types';
 
 type ApartmentsResponse = {
   apartments: Apartment[];

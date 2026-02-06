@@ -2,17 +2,17 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { RequireAuth } from './components/RequireAuth';
 import { AppLayout } from './layouts/AppLayout';
-import { ApartmentDetailPage } from './pages/ApartmentDetailPage';
-import { ApartmentsPage } from './pages/ApartmentsPage';
-import { DashboardPage } from './pages/DashboardPage';
-import { InvoicesPage } from './pages/InvoicesPage';
-import { LeasesPage } from './pages/LeasesPage';
-import { LoginPage } from './pages/LoginPage';
-import { NotificationsPage } from './pages/NotificationsPage';
-import { OrgPage } from './pages/OrgPage';
-import { RoomsPage } from './pages/RoomsPage';
-import { SigningPage } from './pages/SigningPage';
-import { TenantsPage } from './pages/TenantsPage';
+import { ApartmentDetailPage } from './pages/apartments/ApartmentDetailPage';
+import { ApartmentsPage } from './pages/apartments/ApartmentsPage';
+import { DashboardPage } from './pages/dashboard/DashboardPage';
+import { InvoicesPage } from './pages/invoices/InvoicesPage';
+import { LeasesPage } from './pages/leases/LeasesPage';
+import { LoginPage } from './pages/login/LoginPage';
+import { NotificationsPage } from './pages/notifications/NotificationsPage';
+import { OrgPage } from './pages/org/OrgPage';
+import { RoomsPage } from './pages/rooms/RoomsPage';
+import { SigningPage } from './pages/signing/SigningPage';
+import { TenantsPage } from './pages/tenants/TenantsPage';
 
 export default function App() {
   return (

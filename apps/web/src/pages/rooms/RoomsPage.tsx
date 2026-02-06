@@ -3,13 +3,13 @@ import { Tabs, Space, message, Modal, Form, Input, InputNumber, Switch, Typograp
 import { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { api } from '../lib/api';
-import type { ApiErrorResponse } from '../lib/apiTypes';
-import { useAuthStore } from '../stores/auth';
-import { usePermissions } from '../hooks/usePermissions';
-import { apartmentsApi, roomsApi } from '../lib/api/apartments';
-import type { Apartment, Room } from '../lib/api/types';
-import { RoomTable } from './apartments/components/RoomTable';
+import { api } from '../../lib/api';
+import type { ApiErrorResponse } from '../../lib/apiTypes';
+import { useAuthStore } from '../../stores/auth';
+import { usePermissions } from '../../hooks/usePermissions';
+import { apartmentsApi, roomsApi } from '../../lib/api/apartments';
+import type { Apartment, Room } from '../../lib/api/types';
+import { RoomTable } from '../apartments/components/RoomTable';
 
 type ApartmentsResponse = {
   apartments: Apartment[];

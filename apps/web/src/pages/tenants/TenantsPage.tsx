@@ -4,9 +4,9 @@ import { Button, Form, Input, Modal, Space, Table, Typography, message, Spin } f
 import { useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { api } from '../lib/api';
-import type { ApiErrorResponse } from '../lib/apiTypes';
-import { useAuthStore } from '../stores/auth';
+import { api } from '../../lib/api';
+import type { ApiErrorResponse } from '../../lib/apiTypes';
+import { useAuthStore } from '../../stores/auth';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 
 type Tenant = {
@@ -173,4 +173,3 @@ export function TenantsPage() {
     </>
   );
 }
-

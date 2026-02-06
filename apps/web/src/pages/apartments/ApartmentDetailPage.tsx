@@ -1,8 +1,8 @@
 import { Space, Tabs, Typography } from 'antd';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useOrgIdWithError } from '../hooks/useOrgId';
-import { useApartmentDetail } from './apartments/hooks/useApartmentDetail';
+import { useOrgIdWithError } from '../../hooks/useOrgId';
+import { useApartmentDetail } from './hooks/useApartmentDetail';
 import {
   ApartmentInfoCard,
   RoomTable,
@@ -13,11 +13,11 @@ import {
   FeePricingModal,
   FeePricingCard,
   RoomImportModal,
-} from './apartments/components';
-import { apartmentsApi, handleApiError } from '../lib/api/index';
-import { queryKeys } from '../lib/api/queryKeys';
+} from './components';
+import { apartmentsApi, handleApiError } from '../../lib/api/index';
+import { queryKeys } from '../../lib/api/queryKeys';
 import { useQueryClient } from '@tanstack/react-query';
-import type { Room } from '../lib/api/types';
+import type { Room } from '../../lib/api/types';
 
 export function ApartmentDetailPage() {
   const { apartmentId } = useParams<{ apartmentId: string }>();

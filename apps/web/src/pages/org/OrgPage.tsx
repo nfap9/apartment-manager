@@ -1,12 +1,12 @@
 import { Card, Tabs, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useAuthStore } from '../stores/auth';
-import { usePermissionStore } from '../stores/permissions';
-import { PageContainer } from '../components/PageContainer';
-import { InviteTab, RolesAndPermissionsTab, MembersTab } from './org/components';
-import { api } from '../lib/api';
-import type { Role } from './org/types';
+import { useAuthStore } from '../../stores/auth';
+import { usePermissionStore } from '../../stores/permissions';
+import { PageContainer } from '../../components/PageContainer';
+import { InviteTab, RolesAndPermissionsTab, MembersTab } from './components';
+import { api } from '../../lib/api';
+import type { Role } from './types';
 
 export function OrgPage() {
   const orgId = useAuthStore((s) => s.activeOrgId);
@@ -109,4 +109,3 @@ export function OrgPage() {
     </div>
   );
 }
-

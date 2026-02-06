@@ -5,12 +5,12 @@ import { useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { PlusOutlined } from '@ant-design/icons';
 
-import { api } from '../lib/api';
-import type { ApiErrorResponse } from '../lib/apiTypes';
-import { useAuthStore } from '../stores/auth';
-import { usePermissionStore } from '../stores/permissions';
-import { CreateLeaseModal } from './leases/components/CreateLeaseModal';
-import type { LeaseRow } from './leases/types';
+import { api } from '../../lib/api';
+import type { ApiErrorResponse } from '../../lib/apiTypes';
+import { useAuthStore } from '../../stores/auth';
+import { usePermissionStore } from '../../stores/permissions';
+import { CreateLeaseModal } from './components/CreateLeaseModal';
+import type { LeaseRow } from './types';
 
 export function LeasesPage() {
   const orgId = useAuthStore((s) => s.activeOrgId);
@@ -221,4 +221,3 @@ export function LeasesPage() {
     </>
   );
 }
-

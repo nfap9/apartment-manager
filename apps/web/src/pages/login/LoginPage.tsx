@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { AxiosError } from 'axios';
 
-import { api } from '../lib/api';
-import type { ApiErrorResponse, AuthLoginResponse, AuthMeResponse } from '../lib/apiTypes';
-import { useAuthStore } from '../stores/auth';
+import { api } from '../../lib/api';
+import type { ApiErrorResponse, AuthLoginResponse, AuthMeResponse } from '../../lib/apiTypes';
+import { useAuthStore } from '../../stores/auth';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -76,4 +76,3 @@ export function LoginPage() {
     </div>
   );
 }
-

@@ -1,10 +1,10 @@
 import { Typography, Segmented } from 'antd';
 import { useState } from 'react';
 
-import { ApartmentStatusTab } from './dashboard/components/ApartmentStatusTab';
-import { DataAnalysisTab } from './dashboard/components/DataAnalysisTab';
-import { useDashboardData } from './dashboard/hooks/useDashboardData';
-import type { TabType } from './dashboard/types';
+import { ApartmentStatusTab } from './components/ApartmentStatusTab';
+import { DataAnalysisTab } from './components/DataAnalysisTab';
+import { useDashboardData } from './hooks/useDashboardData';
+import type { TabType } from './types';
 
 export function DashboardPage() {
   const [activeTab, setActiveTab] = useState<TabType>('apartment-status');

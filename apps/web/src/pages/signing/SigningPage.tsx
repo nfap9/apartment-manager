@@ -11,22 +11,22 @@ import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
-import { api } from '../lib/api';
-import type { ApiErrorResponse } from '../lib/apiTypes';
-import { useAuthStore } from '../stores/auth';
+import { api } from '../../lib/api';
+import type { ApiErrorResponse } from '../../lib/apiTypes';
+import { useAuthStore } from '../../stores/auth';
 import {
   TenantSelectionStep,
   RoomSelectionStep,
   LeaseConfigurationStep,
   LeaseConfirmationStep,
-} from './signing/components';
+} from './components';
 import type {
   Tenant,
   AvailableRoom,
   PricingPlan,
   ChargeItem,
   LeaseFormData,
-} from './signing/types';
+} from './types';
 
 export function SigningPage() {
   const orgId = useAuthStore((s) => s.activeOrgId);

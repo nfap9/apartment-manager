@@ -4,14 +4,14 @@ import { Button, Space, Spin, Table, Tabs, Tag, Typography, message } from 'antd
 import { useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { api } from '../lib/api';
-import type { ApiErrorResponse } from '../lib/apiTypes';
-import { StatusTag } from '../components/StatusTag';
-import { useAuthStore } from '../stores/auth';
-import { usePermissionStore } from '../stores/permissions';
+import { api } from '../../lib/api';
+import type { ApiErrorResponse } from '../../lib/apiTypes';
+import { StatusTag } from '../../components/StatusTag';
+import { useAuthStore } from '../../stores/auth';
+import { usePermissionStore } from '../../stores/permissions';
 import { PlayCircleOutlined } from '@ant-design/icons';
-import { InvoiceDetailDrawer, MeterReadingModal } from './invoices/components';
-import type { InvoiceItem, InvoiceRow } from './invoices/types';
+import { InvoiceDetailDrawer, MeterReadingModal } from './components';
+import type { InvoiceItem, InvoiceRow } from './types';
 
 export function InvoicesPage() {
   const orgId = useAuthStore((s) => s.activeOrgId);
@@ -346,5 +346,3 @@ export function InvoicesPage() {
     </>
   );
 }
-
-
